@@ -1,43 +1,80 @@
 {
-  "name": "gz-fe-admin",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.11.56",
-    "@types/react": "^18.0.18",
-    "@types/react-dom": "^18.0.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.8.2",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "gz-fe-admin",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"start": "react-app-rewired start",
+		"build-stg": "react-app-rewired build",
+		"build": "GENERATE_SOURCEMAP=false react-app-rewired build",
+		"lint": "eslint src/**/*.{ts,tsx}",
+		"format": "prettier --write .",
+		"postinstall": "yarn run typechain",
+		"typechain": "typechain --out-dir src/modules/web3/abis/types --target=ethers-v5 \"src/modules/web3/abis/*.json\"",
+		"prepare": "husky install",
+		"deploy": "yarn run build-stg && serve -s build -l 10002"
+	},
+	"dependencies": {
+		"@web3-react/core": "^6.1.9",
+		"@web3-react/injected-connector": "^6.0.7",
+		"antd": "^4.23.0",
+		"axios": "^0.27.2",
+		"bignumber.js": "^9.1.0",
+		"dayjs": "^1.11.5",
+		"ethers": "^5.7.0",
+		"react": "^18.2.0",
+		"react-app-rewired": "^2.2.1",
+		"react-dom": "^18.2.0",
+		"react-query": "^3.39.2",
+		"react-router": "^6.3.0",
+		"react-scripts": "5.0.1",
+		"react-toastify": "^9.0.8",
+		"typescript": "^4.8.2"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.18.13",
+		"@babel/plugin-syntax-flow": "^7.18.6",
+		"@babel/plugin-transform-react-jsx": "^7.18.10",
+		"@ethersproject/abi": "^5.7.0",
+		"@ethersproject/bytes": "^5.7.0",
+		"@ethersproject/providers": "^5.7.0",
+		"@typechain/ethers-v5": "^10.1.0",
+		"@types/node": "^16.11.56",
+		"@types/react": "^18.0.18",
+		"@types/react-dom": "^18.0.6",
+		"@typescript-eslint/eslint-plugin": "^5.36.1",
+		"@typescript-eslint/parser": "^5.36.1",
+		"@web3-react/types": "^8.0.20-beta.0",
+		"commitlint": "^17.1.2",
+		"crypto-browserify": "^3.12.0",
+		"eslint": "^8.23.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-config-react-hooks": "^1.0.0",
+		"eslint-import-resolver-typescript": "^3.5.0",
+		"eslint-plugin-import": "^2.26.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-react": "^7.31.6",
+		"https-browserify": "^1.0.0",
+		"husky": "^8.0.1",
+		"lint-staged": "^13.0.3",
+		"os-browserify": "^0.3.0",
+		"prettier": "^2.7.1",
+		"process": "^0.11.10",
+		"react-app-alias": "^2.2.1",
+		"stream-browserify": "^3.0.0",
+		"stream-http": "^3.2.0",
+		"timers-browserify": "^2.0.12",
+		"typechain": "^8.1.0"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	}
 }

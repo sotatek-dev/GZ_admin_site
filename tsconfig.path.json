@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@common/*": ["src/modules/common/*"],
+			"@web3/*": ["src/modules/web3/*"]
+		}
+	}
+}
