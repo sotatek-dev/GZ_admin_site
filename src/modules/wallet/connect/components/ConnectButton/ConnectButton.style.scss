@@ -1,0 +1,22 @@
+.wallet-button_connect {
+	height: auto;
+	font-size: 1rem;
+	font-weight: bold;
+	border: none;
+	border-radius: 10px;
+	padding: 0.5rem 1.25rem;
+	box-shadow: 0 0 4px #bbb;
+	background-position: left;
+	background: linear-gradient(to right, #fdc830 0%, #f25c11 100%);
+	background-size: 100% auto;
+	transition: 1s;
+
+	&:hover,
+	&:active,
+	&:focus {
+		border: none;
+		box-shadow: 0 0 4px #bbb;
+		background-position: right;
+		background: linear-gradient(to right, #fdc830 0%, #f25c11 100%);
+	}
+}

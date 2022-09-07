@@ -1,0 +1,21 @@
+$bg-color: #23272f;
+$text-color: #fff;
+
+.wallet {
+	min-height: 100vh;
+	background-color: $bg-color;
+
+	&-main {
+		margin-top: 5rem;
+	}
+
+	.ant-typography {
+		color: $text-color;
+	}
+
+	&-text_address.ant-typography {
+		background-color: $text-color;
+		color: $bg-color;
+		padding: 0.5rem 1.5rem;
+	}
+}

@@ -3,7 +3,8 @@
 		"baseUrl": ".",
 		"paths": {
 			"@common/*": ["src/modules/common/*"],
-			"@web3/*": ["src/modules/web3/*"]
+			"@web3/*": ["src/modules/web3/*"],
+			"@wallet/*": ["src/modules/wallet/*"]
 		}
 	}
 }
