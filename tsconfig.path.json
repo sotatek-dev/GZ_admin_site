@@ -4,7 +4,8 @@
 		"paths": {
 			"@common/*": ["src/modules/common/*"],
 			"@web3/*": ["src/modules/web3/*"],
-			"@wallet/*": ["src/modules/wallet/*"]
+			"@wallet/*": ["src/modules/wallet/*"],
+			"@sale-rounds/*": ["src/modules/sale-rounds/*"]
 		}
 	}
 }
