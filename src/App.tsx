@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import Web3Layout from '@common/layouts/Web3';
 import { Web3ActiveReactProvider } from '@web3/contexts/web3ActiveReact';
 import { AppRoutes } from './router/routes';
+import { AuthProvider } from '@common/contexts/authContext';
 
 function App() {
 	const queryClient = new QueryClient({
@@ -23,7 +24,9 @@ function App() {
 			<Web3Layout>
 				<QueryClientProvider client={queryClient}>
 					<BrowserRouter>
-						<AppRoutes />
+						<AuthProvider>
+							<AppRoutes />
+						</AuthProvider>
 					</BrowserRouter>
 				</QueryClientProvider>
 			</Web3Layout>

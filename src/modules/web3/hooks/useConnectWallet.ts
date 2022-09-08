@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { UnsupportedChainIdError } from '@web3-react/core';
 import { UserRejectedRequestError as UserRejectedRequestErrorInjected } from '@web3-react/injected-connector';
 import { toast } from 'react-toastify';
@@ -13,13 +12,11 @@ import { CONNECTOR_KEY } from '@web3/constants/storages';
  */
 export const useConnectWallet = () => {
 	const { activate, deactivate } = useActiveWeb3React();
-	const [isConnecting, setIsConnecting] = useState<boolean>(false);
 
 	async function connectWallet(connectorKey: ConnectorKey) {
 		const connector = connectors[connectorKey];
 
 		try {
-			setIsConnecting(true);
 			activateInjectedProvider(connectorKey);
 
 			await activate(connector, undefined, true);
@@ -44,8 +41,6 @@ export const useConnectWallet = () => {
 			}
 
 			throw error;
-		} finally {
-			setIsConnecting(false);
 		}
 	}
 
@@ -54,7 +49,7 @@ export const useConnectWallet = () => {
 		deactivate();
 	}
 
-	return { connectWallet, disconnectWallet, isConnecting };
+	return { connectWallet, disconnectWallet };
 };
 
 function setStorageWallet(connector: ConnectorKey) {

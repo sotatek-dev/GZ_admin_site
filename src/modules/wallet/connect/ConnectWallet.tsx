@@ -1,13 +1,34 @@
 import './ConnectWallet.style.scss';
+import { useState } from 'react';
 import { ConnectorKey } from '@web3/connectors';
-import { useConnectWallet } from '@web3/hooks';
+import { useActiveWeb3React, useConnectWallet } from '@web3/hooks';
 import { Col, Row, Space, Typography } from '@common/components';
+import { useAuth } from '@common/hooks/useAuth';
+import { useConnectedRedirect } from './ConnectWallet.hooks';
 import { Address, ConnectButton, Logo } from './components';
 
 const { Title } = Typography;
 
 export default function ConnectWallet() {
-	const { connectWallet, isConnecting } = useConnectWallet();
+	const { active } = useActiveWeb3React();
+	const { connectWallet } = useConnectWallet();
+	const { signIn } = useAuth();
+	useConnectedRedirect();
+
+	const [isSignIn, setIsSignIn] = useState(false);
+
+	async function handleConnect() {
+		try {
+			setIsSignIn(true);
+			if (!active) {
+				await connectWallet(ConnectorKey.injected);
+				return;
+			}
+			await signIn(ConnectorKey.injected);
+		} finally {
+			setIsSignIn(false);
+		}
+	}
 
 	return (
 		<div className='wallet'>
@@ -19,8 +40,8 @@ export default function ConnectWallet() {
 					<Space direction='vertical' size={48}>
 						<Address />
 						<ConnectButton
-							onClick={() => connectWallet(ConnectorKey.injected)}
-							loading={isConnecting}
+							onClick={handleConnect}
+							loading={isSignIn}
 							type='primary'
 						>
 							Connect

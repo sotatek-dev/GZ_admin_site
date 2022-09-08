@@ -1,9 +1,8 @@
 import React from 'react';
-import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers';
-import { useLocation } from 'react-router';
-import { toast } from 'react-toastify';
-// import { MESSAGES } from '@common/constants/messages';
-// import { PATHS } from '@common/constants/paths';
+import { useQueryClient } from 'react-query';
+import { Web3Provider } from '@ethersproject/providers';
+import { useLocation, useNavigate } from 'react-router';
+import { PATHS } from '@common/constants/paths';
 import {
 	hasStorageJwtToken,
 	isJwtTokenExpired,
@@ -15,7 +14,7 @@ import {
 	useEagerConnect,
 	useConnectWallet,
 } from '@web3/hooks';
-import { useQueryClient } from 'react-query';
+import { useLogin } from '@common/services/mutations';
 
 export const authContext = React.createContext<
 	| {
@@ -27,18 +26,18 @@ export const authContext = React.createContext<
 	| undefined
 >(undefined);
 
-// interface LocationState {
-// 	returnUrl: string;
-// }
+interface LocationState {
+	returnUrl: string;
+}
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const queryClient = useQueryClient();
-	// let navigate = useNavigate();
+	const navigate = useNavigate();
 	const location = useLocation();
 	const triedEagerConnect = useEagerConnect();
 	const { active } = useActiveWeb3React();
-	const { connectWallet, disconnectWallet } = useConnectWallet();
-	// const { loginAsync } = useLoginMutation();
+	const { disconnectWallet } = useConnectWallet();
+	const { login } = useLogin();
 
 	const isAuth = hasStorageJwtToken() && active;
 	if (triedEagerConnect && !active && hasStorageJwtToken()) {
@@ -47,7 +46,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 	async function signIn(connectorKey: ConnectorKey) {
 		const connector = connectors[connectorKey];
-		await connectWallet(connectorKey);
 
 		// Ignore signing message
 		const isNotSignedIn = !hasStorageJwtToken() || isJwtTokenExpired();
@@ -55,24 +53,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			const provider = await connector.getProvider();
 			const signer = new Web3Provider(provider).getSigner();
 			const account = await signer.getAddress();
-			const message = `${process.env.REACT_APP_AUTH_MESSAGE_SIGN} ${account}`;
-			await signMessage(signer, message);
-			// await loginAsync(account, message, signature);
+			const message = 'sign message';
+			const signature = await signer.signMessage(message);
+			await login(account, message, signature);
 		}
 
 		if (location.state) {
-			// const { returnUrl } = location.state as LocationState;
-			// navigate(returnUrl);
+			const { returnUrl } = location.state as LocationState;
+			navigate(returnUrl);
 			return;
 		}
-		// navigate(PATHS.enterEmail());
+
+		navigate(PATHS.admins.list());
 	}
 
 	function signOut() {
 		removeStorageJwtToken();
 		disconnectWallet();
 		queryClient.clear();
-		// navigate(PATHS.connectWallet());
+		navigate(PATHS.connectWallet());
 	}
 
 	return (
@@ -83,13 +82,3 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		</authContext.Provider>
 	);
 };
-
-async function signMessage(signer: JsonRpcSigner, message: string) {
-	try {
-		const signature = await signer.signMessage(message);
-		return signature;
-	} catch (error) {
-		toast.error('');
-		throw error;
-	}
-}
