@@ -1,0 +1,1 @@
+export { useRedirectBack } from './useRedirectBack';

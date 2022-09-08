@@ -1,0 +1,18 @@
+.sider-admin {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 1.5rem 2rem 1rem;
+
+	.ant-typography {
+		color: #fff;
+	}
+
+	&-icon {
+		display: inline-block;
+		width: 48px;
+		height: 48px;
+		background: #ccc;
+		border-radius: 50%;
+	}
+}

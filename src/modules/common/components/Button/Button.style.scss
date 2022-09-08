@@ -1,0 +1,30 @@
+.app-button {
+	color: #fff;
+	height: auto;
+	border: none;
+	border-radius: 8px;
+	padding: 0.5rem 1.25rem;
+	background-size: 200% auto;
+	background-image: linear-gradient(
+		to right,
+		#c04848 0%,
+		#480048 51%,
+		#c04848 100%
+	);
+	transition: 0.3s;
+
+	&:hover,
+	&:active,
+	&:focus {
+		color: #fff;
+		border: none;
+		box-shadow: 0 0 6px #bbb;
+		background-size: 200% auto;
+		background-image: linear-gradient(
+			to right,
+			#c04848 0%,
+			#480048 51%,
+			#c04848 100%
+		);
+	}
+}

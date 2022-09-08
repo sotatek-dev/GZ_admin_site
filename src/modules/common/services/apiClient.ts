@@ -1,5 +1,8 @@
 import { PATHS } from '@common/constants/paths';
-import { removeAllCookieStorage } from '@common/helpers/storage';
+import {
+	getCookieStorage,
+	removeAllCookieStorage,
+} from '@common/helpers/storage';
 import axios from 'axios';
 
 const axiosClient = axios.create({
@@ -11,6 +14,20 @@ const axiosClient = axios.create({
 		'Content-Type': 'application/json',
 	},
 });
+
+axiosClient.interceptors.request.use(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	async (config: any) => {
+		const accessToken = getCookieStorage('access_token');
+
+		if (accessToken) {
+			config.headers['Authorization'] = `Bearer ${accessToken}`;
+		}
+
+		return config;
+	},
+	(error) => Promise.reject(error)
+);
 
 axiosClient.interceptors.response.use(
 	async (response) => {
@@ -27,8 +44,8 @@ axiosClient.interceptors.response.use(
 
 		switch (error.response?.status) {
 			case 401:
-				removeAllCookieStorage(['access_token', 'expire_token']);
-				window.location.replace(PATHS.connectWallet());
+				// removeAllCookieStorage(['access_token', 'expire_token']);
+				// window.location.replace(PATHS.connectWallet());
 				break;
 			case 403:
 				if (error.response.data?.code === 403) {

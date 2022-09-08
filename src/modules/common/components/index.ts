@@ -6,4 +6,15 @@ message.config({
 	rtl: true,
 });
 
-export { Typography, Button, Space, Row, Col, Spin, message } from 'antd';
+export {
+	Typography,
+	Space,
+	Row,
+	Col,
+	Spin,
+	message,
+	Card,
+	Form,
+	Input,
+} from 'antd';
+export { default as Button } from './Button';

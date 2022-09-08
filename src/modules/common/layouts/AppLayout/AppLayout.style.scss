@@ -9,11 +9,12 @@ $sider-bg-color: #23272f;
 	background-color: $sider-bg-color;
 
 	&-menu.ant-menu.ant-menu-dark {
-		padding: 8px 8px 0;
+		padding: 0 0.5rem;
 		border-right: 0;
 		background: #23272f;
 
 		li {
+			font-size: 16px;
 			border-radius: 8px;
 
 			&.ant-menu-item-selected {
@@ -30,4 +31,5 @@ $sider-bg-color: #23272f;
 
 .app-content {
 	background-color: $bg-color;
+	padding: 2rem;
 }

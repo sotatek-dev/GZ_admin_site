@@ -39,6 +39,7 @@
 		"@babel/core": "^7.18.13",
 		"@babel/plugin-syntax-flow": "^7.18.6",
 		"@babel/plugin-transform-react-jsx": "^7.18.10",
+		"@commitlint/config-conventional": "^17.1.0",
 		"@ethersproject/abi": "^5.7.0",
 		"@ethersproject/bytes": "^5.7.0",
 		"@ethersproject/providers": "^5.7.0",
