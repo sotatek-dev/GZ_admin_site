@@ -2,7 +2,11 @@ import { PATHS } from '@common/constants/paths';
 import { matchPath, useLocation } from 'react-router';
 
 type MenuKey = string;
-const MENUS: MenuKey[] = [PATHS.admins.list(), PATHS.saleRounds()];
+const MENUS: MenuKey[] = [
+	PATHS.admins.list(),
+	PATHS.saleRounds(),
+	PATHS.settings.nftMint(),
+];
 
 export const useActiveMenuKey = () => {
 	const location = useLocation();
