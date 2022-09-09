@@ -42,7 +42,9 @@ const AdminList = () => {
 
 	return (
 		<>
-			<Button>CREATE NEW ADMIN</Button>
+			<Button onClick={() => navigate(PATHS.admins.new())}>
+				CREATE NEW ADMIN
+			</Button>
 			<Table
 				columns={columns}
 				dataSource={data?.list}

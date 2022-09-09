@@ -1,22 +1,23 @@
-import { useNavigate, useParams } from 'react-router';
-import LoadingPage from 'src/router/components/LoadingPage';
+import { useParams } from 'react-router';
 import { Button } from '@common/components';
-import { useGetAdminById, useUpdateAdmin } from '@admins/common/services';
+import { useRedirectBack } from '@common/hooks';
+import {
+	useDeleteAdmin,
+	useGetAdminById,
+	useUpdateAdmin,
+} from '@admins/common/services';
 import { AdminForm } from '@admins/common/components';
 import type { Admin } from '@admins/common/types';
+import { DeleteButton } from '@admins/edit/components';
 
 export default function EditAdmin() {
-	const navigate = useNavigate();
-	const goBack = () => navigate(-1);
+	const goBack = useRedirectBack();
 	const { id } = useParams<{ id: string }>();
 	const adminId = id as string;
 
 	const { data, isLoading } = useGetAdminById(id);
 	const { updateAdmin } = useUpdateAdmin();
-
-	if (isLoading) {
-		return <LoadingPage />;
-	}
+	const { deleteAdmin } = useDeleteAdmin();
 
 	const handleSubmitUpdate = (values: Omit<Admin, '_id'>) => {
 		updateAdmin({ _id: adminId, ...values });
@@ -25,10 +26,14 @@ export default function EditAdmin() {
 	return (
 		<>
 			<Button onClick={goBack}>Back</Button>
+			<DeleteButton htmlType='submit' onClick={() => deleteAdmin(adminId)}>
+				Delete Admin
+			</DeleteButton>
 			<AdminForm
 				title='EDIT ADMIN'
 				admin={data}
 				handleSubmit={handleSubmitUpdate}
+				loading={isLoading}
 			/>
 		</>
 	);

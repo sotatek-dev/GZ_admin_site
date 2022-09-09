@@ -18,3 +18,4 @@ export {
 	Input,
 } from 'antd';
 export { default as Button } from './Button';
+export { default as Loading } from './Loading';

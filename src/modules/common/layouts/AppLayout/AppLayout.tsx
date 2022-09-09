@@ -1,12 +1,12 @@
 import './AppLayout.style.scss';
-import { useLocation } from 'react-router';
-import { matchPath } from 'react-router';
 import type { MenuProps } from 'antd';
 import { Layout, Menu } from 'antd';
 import { Outlet } from 'react-router';
 import { Link } from 'react-router-dom';
 import { PATHS } from '@common/constants/paths';
+import { useActiveMenuKey } from './AppLayout.hooks';
 import AdminLogo from './CurrentAdmin';
+import { useAuth } from '@common/hooks/useAuth';
 
 const { Sider, Content } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
@@ -23,32 +23,24 @@ function getItem(
 	} as MenuItem;
 }
 
-const items: MenuItem[] = [
-	getItem(<Link to={PATHS.saleRounds()}>Sale Round</Link>, PATHS.saleRounds()),
-	getItem('Setting Mint NFT', '2'),
-	getItem('List User', '3'),
-	getItem(
-		<Link to={PATHS.admins.list()}>List Admin</Link>,
-		PATHS.admins.list()
-	),
-	getItem('Setting', '5'),
-	getItem('Logout', '6'),
-];
-
-const MENUS = [PATHS.admins.list(), PATHS.saleRounds()];
-
-const useActiveMenuKey = () => {
-	const location = useLocation();
-
-	const activeKey = MENUS.filter((path) => {
-		const match = matchPath(path, location.pathname);
-		return !!match;
-	});
-
-	return activeKey;
-};
-
 export default function AppLayout() {
+	const { signOut } = useAuth();
+
+	const items: MenuItem[] = [
+		getItem(
+			<Link to={PATHS.saleRounds()}>Sale Round</Link>,
+			PATHS.saleRounds()
+		),
+		getItem('Setting Mint NFT', '2'),
+		getItem('List User', '3'),
+		getItem(
+			<Link to={PATHS.admins.list()}>List Admin</Link>,
+			PATHS.admins.list()
+		),
+		getItem('Setting', '5'),
+		getItem(<div onClick={signOut}>Logout</div>, PATHS.connectWallet()),
+	];
+
 	const activePathKey = useActiveMenuKey();
 
 	return (
