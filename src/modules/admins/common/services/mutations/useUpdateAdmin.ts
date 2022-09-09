@@ -1,6 +1,7 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { axiosClient } from '@common/services/apiClient';
 import { Admin } from '@admins/common/types';
+import { ADMIN_APIS } from '../apis';
 
 const APIs = {
 	updateAdmin: (id: string) => `/admin/${id}`,
@@ -20,11 +21,13 @@ async function updateFn(rqBody: Admin) {
 }
 
 export const useUpdateAdmin = () => {
+	const queryClient = useQueryClient();
 	const updateMutation = useMutation(updateFn);
 
 	const updateAdmin = async (newAdmin: Admin) => {
-		updateMutation.mutateAsync(newAdmin);
+		await updateMutation.mutateAsync(newAdmin);
+		await queryClient.invalidateQueries([ADMIN_APIS.getAll()]);
 	};
 
-	return { updateAdmin };
+	return { updateAdmin, isUpdateAdmin: updateMutation.isLoading };
 };

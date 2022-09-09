@@ -27,9 +27,9 @@ const columns: ColumnsType<Admin> = [
 	},
 	{
 		title: 'Name',
-		dataIndex: 'username',
+		dataIndex: 'full_name',
 		sorter: {
-			compare: (prev, next) => prev.username.localeCompare(next.username),
+			compare: (prev, next) => prev.full_name.localeCompare(next.full_name),
 			multiple: 3,
 		},
 	},

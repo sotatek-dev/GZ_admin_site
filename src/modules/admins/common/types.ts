@@ -5,9 +5,10 @@ export interface Admin {
 	wallet_address: string;
 	email: string;
 	username: string;
-	first_name: string;
-	last_name: string;
+	firstname: string;
+	lastname: string;
 	role: string;
+	full_name: string; // infer type field = firstname + lastname
 }
 
 export interface Pagination {

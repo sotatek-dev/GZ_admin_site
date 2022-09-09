@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 import { axiosClient } from '@common/services/apiClient';
-import { Admin } from '../types';
+import { Admin } from '../../types';
 
 const APIs = {
 	getAdminById: (id: string) => `/admin/${id}`,
@@ -17,7 +17,13 @@ const fetcher = (id: string) => {
 };
 
 export const useGetAdminById = (id?: string) => {
-	return useQuery([APIs.getAdminById], () => fetcher(id as string), {
-		enabled: !!id,
-	});
+	const adminId = id as string;
+
+	return useQuery(
+		[APIs.getAdminById(adminId), adminId],
+		() => fetcher(adminId),
+		{
+			enabled: !!id,
+		}
+	);
 };

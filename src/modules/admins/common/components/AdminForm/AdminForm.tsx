@@ -4,18 +4,21 @@ import { Admin } from '@admins/common/types';
 
 interface Props {
 	title: string;
-	admin?: Admin;
-	handleSubmit: (formValues: Omit<Admin, '_id'>) => void;
-	loading?: boolean;
+	initData?: {
+		admin?: Admin;
+		isGetAdmin: boolean;
+	};
+	finish: {
+		onSubmit: (formValues: Omit<Admin, '_id'>) => void;
+		isSubmitting: boolean;
+	};
 }
 
-export default function AdminForm({
-	title,
-	admin,
-	handleSubmit,
-	loading,
-}: Props) {
-	if (loading) {
+export default function AdminForm({ title, initData, finish }: Props) {
+	const { admin, isGetAdmin } = initData || {};
+	const { onSubmit, isSubmitting } = finish;
+
+	if (isGetAdmin) {
 		return <Loading />;
 	}
 
@@ -26,7 +29,7 @@ export default function AdminForm({
 					layout='vertical'
 					name='basic'
 					autoComplete='off'
-					onFinish={handleSubmit}
+					onFinish={onSubmit}
 				>
 					<Form.Item
 						initialValue={admin?.wallet_address}
@@ -47,21 +50,23 @@ export default function AdminForm({
 						<Input />
 					</Form.Item>
 					<Form.Item
-						initialValue={admin?.first_name}
+						initialValue={admin?.firstname}
 						label='First Name'
-						name='first_name'
+						name='firstname'
 					>
 						<Input />
 					</Form.Item>
 					<Form.Item
-						initialValue={admin?.last_name}
+						initialValue={admin?.lastname}
 						label='Last Name'
-						name='last_name'
+						name='lastname'
 					>
 						<Input />
 					</Form.Item>
 					<Form.Item style={{ textAlign: 'center' }}>
-						<Button htmlType='submit'>Submit</Button>
+						<Button loading={isSubmitting} htmlType='submit'>
+							Submit
+						</Button>
 					</Form.Item>
 				</Form>
 			</Card>

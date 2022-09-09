@@ -1,27 +1,30 @@
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { Button } from '@common/components';
 import { useRedirectBack } from '@common/hooks';
 import {
 	useDeleteAdmin,
 	useGetAdminById,
 	useUpdateAdmin,
-} from '@admins/common/services';
+} from '@admins/common/services/mutations';
 import { AdminForm } from '@admins/common/components';
 import type { Admin } from '@admins/common/types';
 import { DeleteButton } from '@admins/edit/components';
+import { PATHS } from '@common/constants/paths';
 
 export default function EditAdmin() {
+	const navigate = useNavigate();
 	const goBack = useRedirectBack();
 	const { id } = useParams<{ id: string }>();
 	const adminId = id as string;
 
 	const { data, isLoading } = useGetAdminById(id);
-	const { updateAdmin } = useUpdateAdmin();
+	const { updateAdmin, isUpdateAdmin } = useUpdateAdmin();
 	const { deleteAdmin } = useDeleteAdmin();
 
-	const handleSubmitUpdate = (values: Omit<Admin, '_id'>) => {
-		updateAdmin({ _id: adminId, ...values });
-	};
+	async function handleUpdate(values: Omit<Admin, '_id'>) {
+		await updateAdmin({ _id: adminId, ...values });
+		navigate(PATHS.admins.list());
+	}
 
 	return (
 		<>
@@ -31,9 +34,14 @@ export default function EditAdmin() {
 			</DeleteButton>
 			<AdminForm
 				title='EDIT ADMIN'
-				admin={data}
-				handleSubmit={handleSubmitUpdate}
-				loading={isLoading}
+				initData={{
+					admin: data,
+					isGetAdmin: isLoading,
+				}}
+				finish={{
+					onSubmit: handleUpdate,
+					isSubmitting: isUpdateAdmin,
+				}}
 			/>
 		</>
 	);
