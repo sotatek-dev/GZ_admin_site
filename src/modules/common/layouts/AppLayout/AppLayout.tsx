@@ -40,7 +40,10 @@ export default function AppLayout() {
 			<Link to={PATHS.admins.list()}>List Admin</Link>,
 			PATHS.admins.list()
 		),
-		getItem('Setting', '5'),
+		getItem(
+			<Link to={PATHS.settings.system()}>Setting</Link>,
+			PATHS.settings.system()
+		),
 		getItem(<div onClick={signOut}>Logout</div>, PATHS.connectWallet()),
 	];
 
