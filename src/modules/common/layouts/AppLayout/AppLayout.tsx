@@ -32,7 +32,7 @@ export default function AppLayout() {
 			PATHS.saleRounds()
 		),
 		getItem(
-			<Link to={PATHS.settings.nftMint()}>Setting Mint NFT</Link>,
+			<Link to={PATHS.settings.nftMint()}>Setting mint NFT</Link>,
 			PATHS.settings.nftMint()
 		),
 		getItem('List User', '3'),

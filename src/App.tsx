@@ -10,7 +10,7 @@ import { AuthProvider } from '@common/contexts/authContext';
 function App() {
 	const queryClient = new QueryClient({
 		defaultOptions: {
-			queries: { retry: false },
+			queries: { retry: false, refetchOnWindowFocus: false },
 		},
 	});
 

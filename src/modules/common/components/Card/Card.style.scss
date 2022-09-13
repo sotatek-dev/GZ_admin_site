@@ -1,0 +1,17 @@
+.app-card {
+	.ant-card-head .ant-tabs-tab {
+		font-size: 14px;
+
+		&:hover {
+			color: #c04848;
+		}
+
+		&.ant-tabs-tab-active .ant-tabs-tab-btn {
+			color: #c04848;
+		}
+	}
+
+	.ant-tabs-ink-bar {
+		background: #c04848;
+	}
+}

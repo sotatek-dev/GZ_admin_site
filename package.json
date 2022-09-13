@@ -27,6 +27,7 @@
 		"react": "^18.2.0",
 		"react-app-rewired": "^2.2.1",
 		"react-dom": "^18.2.0",
+		"react-papaparse": "^4.1.0",
 		"react-query": "^3.39.2",
 		"react-router": "^6.3.0",
 		"react-router-dom": "^6.3.0",
