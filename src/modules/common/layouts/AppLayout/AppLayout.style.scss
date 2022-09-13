@@ -3,10 +3,17 @@ $sider-bg-color: #23272f;
 
 .app-layout {
 	min-height: 100vh;
+	margin-left: 250px;
 }
 
 .app-sider {
 	background-color: $sider-bg-color;
+	position: fixed;
+	overflow: auto;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	height: 100vh;
 
 	&-menu.ant-menu.ant-menu-dark {
 		padding: 0 0.5rem;
@@ -19,8 +26,8 @@ $sider-bg-color: #23272f;
 
 			&.ant-menu-item-selected {
 				background: #23272f; /* fallback for old browsers */
-				background: linear-gradient(to right, #dc2a2a, #23272f);
-				box-shadow: 0px 2px 4px rgba(138, 146, 166, 0.3);
+				background: linear-gradient(to right, #dc2a2a 30%, #23272f 70%);
+				box-shadow: 0px 0px 4px rgba(138, 146, 166, 0.3);
 			}
 		}
 	}

@@ -1,0 +1,21 @@
+.setting-nft {
+	.ant-tabs-nav {
+		flex-direction: row-reverse;
+		justify-content: space-between;
+
+		.ant-tabs-nav-wrap {
+			justify-content: flex-end;
+		}
+	}
+
+	&-button_group {
+		display: flex;
+		gap: 3rem;
+		margin: 1.5rem 0;
+
+		button {
+			flex: 1;
+			padding: 1rem 0;
+		}
+	}
+}

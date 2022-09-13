@@ -44,8 +44,8 @@ axiosClient.interceptors.response.use(
 
 		switch (error.response?.status) {
 			case 401:
-				// removeAllCookieStorage(['access_token', 'expire_token']);
-				// window.location.replace(PATHS.connectWallet());
+				removeAllCookieStorage(['access_token', 'expire_token']);
+				window.location.replace(PATHS.connectWallet());
 				break;
 			case 403:
 				if (error.response.data?.code === 403) {

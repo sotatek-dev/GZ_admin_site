@@ -6,7 +6,8 @@
 			"@web3/*": ["src/modules/web3/*"],
 			"@wallet/*": ["src/modules/wallet/*"],
 			"@sale-rounds/*": ["src/modules/sale-rounds/*"],
-			"@admins/*": ["src/modules/admins/*"]
+			"@admins/*": ["src/modules/admins/*"],
+			"@settings/*": ["src/modules/settings/*"]
 		}
 	}
 }

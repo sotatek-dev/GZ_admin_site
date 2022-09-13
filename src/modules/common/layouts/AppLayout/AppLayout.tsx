@@ -31,7 +31,10 @@ export default function AppLayout() {
 			<Link to={PATHS.saleRounds()}>Sale Round</Link>,
 			PATHS.saleRounds()
 		),
-		getItem('Setting Mint NFT', '2'),
+		getItem(
+			<Link to={PATHS.settings.nftMint()}>Setting mint NFT</Link>,
+			PATHS.settings.nftMint()
+		),
 		getItem('List User', '3'),
 		getItem(
 			<Link to={PATHS.admins.list()}>List Admin</Link>,

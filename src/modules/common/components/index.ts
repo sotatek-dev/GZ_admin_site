@@ -13,9 +13,12 @@ export {
 	Col,
 	Spin,
 	message,
-	Card,
 	Form,
 	Input,
+	InputNumber,
+	Table,
 } from 'antd';
 export { default as Button } from './Button';
 export { default as Loading } from './Loading';
+export { default as Card } from './Card';
+export { default as DatePicker } from './DatePicker';

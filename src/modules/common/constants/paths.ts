@@ -6,5 +6,8 @@ export const PATHS = {
 		new: () => '/admins/new',
 		edit: (id = ':id') => `/admins/edit/${id}`,
 	},
+	settings: {
+		nftMint: () => '/nft-mint',
+	},
 	notFound: () => '/404',
 };
