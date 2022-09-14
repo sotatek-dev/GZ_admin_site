@@ -1,10 +1,13 @@
 import './SystemSetting.style.scss';
 import { Button, Card, Col, DatePicker, Form, Input } from '@common/components';
+import { useRedirectBack } from '@common/hooks';
 
 export default function SystemSetting() {
+	const goBack = useRedirectBack();
+
 	return (
 		<>
-			<Button>Back</Button>
+			<Button onClick={goBack}>Back</Button>
 			<Col span={12} offset={6} className='system-setting'>
 				<Card
 					size='small'
