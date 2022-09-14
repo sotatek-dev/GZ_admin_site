@@ -6,6 +6,9 @@ const MENUS: MenuKey[] = [
 	PATHS.admins.list(),
 	PATHS.saleRounds(),
 	PATHS.settings.nftMint(),
+	PATHS.users(),
+	PATHS.settings.nftMint(),
+	PATHS.settings.system(),
 ];
 
 export const useActiveMenuKey = () => {

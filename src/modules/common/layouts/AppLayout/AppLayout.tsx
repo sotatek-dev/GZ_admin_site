@@ -35,12 +35,15 @@ export default function AppLayout() {
 			<Link to={PATHS.settings.nftMint()}>Setting mint NFT</Link>,
 			PATHS.settings.nftMint()
 		),
-		getItem('List User', '3'),
+		getItem(<Link to={PATHS.users()}>List User</Link>, PATHS.users()),
 		getItem(
 			<Link to={PATHS.admins.list()}>List Admin</Link>,
 			PATHS.admins.list()
 		),
-		getItem('Setting', '5'),
+		getItem(
+			<Link to={PATHS.settings.system()}>Setting</Link>,
+			PATHS.settings.system()
+		),
 		getItem(<div onClick={signOut}>Logout</div>, PATHS.connectWallet()),
 	];
 

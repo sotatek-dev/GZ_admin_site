@@ -1,13 +1,15 @@
 export const PATHS = {
 	connectWallet: () => '/connect-wallet',
 	saleRounds: () => '/sale-rounds',
+	users: () => '/users',
 	admins: {
 		list: () => '/admins',
 		new: () => '/admins/new',
 		edit: (id = ':id') => `/admins/edit/${id}`,
 	},
 	settings: {
-		nftMint: () => '/nft-mint',
+		system: () => '/setting/system',
+		nftMint: () => '/setting/nft-mint',
 	},
 	notFound: () => '/404',
 };

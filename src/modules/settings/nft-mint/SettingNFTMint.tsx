@@ -1,6 +1,6 @@
 import './SettingNFTMint.style.scss';
 import dayjs from 'dayjs';
-import { Button, Form } from '@common/components';
+import { Button, Col, Form } from '@common/components';
 import NFTInfo from './components/NFTInfo';
 import UserList from './components/UserList';
 import { useState } from 'react';
@@ -8,8 +8,10 @@ import { MintPhase, NFTInfoFormValue } from './types';
 import NFTInfoForm from './components/NFTInfoForm';
 import { useNFTMintPhaseSetting } from './SettingNFTMint.query';
 import { useUpdateNFTMintSetting } from './services/useUpdateNFTMintSetting';
+import { useRedirectBack } from '@common/hooks';
 
 export default function SettingNFTMint() {
+	const goBack = useRedirectBack();
 	const [currentPhase, setCurrentPhase] = useState<MintPhase>(
 		MintPhase.WhiteList
 	);
@@ -45,8 +47,8 @@ export default function SettingNFTMint() {
 	}
 
 	return (
-		<div className='setting-nft'>
-			<Button>Back</Button>
+		<Col className='setting-nft'>
+			<Button onClick={goBack}>Back</Button>
 			<NFTInfo
 				form={
 					<NFTInfoForm
@@ -72,6 +74,6 @@ export default function SettingNFTMint() {
 					Save
 				</Button>
 			</div>
-		</div>
+		</Col>
 	);
 }
