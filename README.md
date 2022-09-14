@@ -1,4 +1,4 @@
-# Galatix Zone Admin Frontend
+# Galatix Zone Admin Frontend (Updated)
 
 ## Available Scripts
 
