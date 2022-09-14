@@ -46,6 +46,7 @@ const AdminList = () => {
 				CREATE NEW ADMIN
 			</Button>
 			<Table
+				bordered
 				columns={columns}
 				dataSource={data?.list}
 				onRow={(admin) => {

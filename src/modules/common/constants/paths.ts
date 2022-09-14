@@ -1,6 +1,7 @@
 export const PATHS = {
 	connectWallet: () => '/connect-wallet',
 	saleRounds: () => '/sale-rounds',
+	users: () => '/users',
 	admins: {
 		list: () => '/admins',
 		new: () => '/admins/new',

@@ -1,7 +1,7 @@
-.admin-form {
-	display: flex;
-	overflow: hidden;
-	margin-top: 2rem;
+.system-setting {
+	&-form {
+		margin-top: 2rem;
+	}
 
 	.ant-card-head {
 		color: #fff;

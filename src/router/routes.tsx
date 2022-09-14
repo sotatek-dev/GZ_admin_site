@@ -7,6 +7,7 @@ import EditAdmin from '@admins/edit';
 import CreateAdmin from '@admins/new';
 import SettingNFTMint from '@settings/nft-mint';
 import SystemSetting from '@settings/system';
+import Users from '@users/index';
 import NotFoundPage from './components/404';
 import { PrivateRoute } from './components/PrivateRoute';
 
@@ -14,6 +15,7 @@ export const AppRoutes = () => {
 	return (
 		<Routes>
 			<Route path={PATHS.connectWallet()} element={<ConnectWallet />} />
+			<Route path='/' element={<Navigate to={PATHS.admins.list()} />} />
 			<Route
 				path='/'
 				element={
@@ -25,10 +27,10 @@ export const AppRoutes = () => {
 				<Route path={PATHS.admins.list()} element={<AdminList />} />
 				<Route path={PATHS.admins.edit()} element={<EditAdmin />} />
 				<Route path={PATHS.admins.new()} element={<CreateAdmin />} />
+				<Route path={PATHS.users()} element={<Users />} />
 				<Route path={PATHS.settings.nftMint()} element={<SettingNFTMint />} />
 				<Route path={PATHS.settings.system()} element={<SystemSetting />} />
 			</Route>
-			<Route path='/' element={<Navigate to={PATHS.admins.list()} />} />
 			<Route path='*' element={<NotFoundPage />} />
 		</Routes>
 	);
