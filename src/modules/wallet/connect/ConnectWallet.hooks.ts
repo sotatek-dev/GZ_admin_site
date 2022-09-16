@@ -9,7 +9,7 @@ export const useConnectedRedirect = () => {
 
 	useEffect(() => {
 		if (isAuth) {
-			navigate(PATHS.admins.list());
+			navigate(PATHS.saleRounds());
 		}
 	}, [isAuth]);
 };

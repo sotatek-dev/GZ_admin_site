@@ -31,8 +31,8 @@ export default function NFTInfoForm({ form, onFinish, phaseSetting }: Props) {
 			autoComplete='off'
 		>
 			<Form.Item
+				wrapperCol={{ span: 12 }}
 				initialValue={price}
-				wrapperCol={{ span: 10 }}
 				label='Price'
 				name='price'
 				rules={[{ required: true, message: 'Please input price!' }]}
@@ -40,8 +40,8 @@ export default function NFTInfoForm({ form, onFinish, phaseSetting }: Props) {
 				<InputNumber addonAfter='BUSD' min={0} />
 			</Form.Item>
 			<Form.Item
+				wrapperCol={{ span: 12 }}
 				initialValue={price_after_24h}
-				wrapperCol={{ span: 10 }}
 				label='Price after 24h'
 				name='price_after_24h'
 				rules={[{ required: true, message: 'Please input price!' }]}
@@ -49,7 +49,7 @@ export default function NFTInfoForm({ form, onFinish, phaseSetting }: Props) {
 				<InputNumber addonAfter='BUSD' min={0} />
 			</Form.Item>
 			<Form.Item
-				wrapperCol={{ span: 10 }}
+				wrapperCol={{ span: 12 }}
 				initialValue={nft_mint_limit}
 				label='NFT Mint Limit'
 				name='nft_mint_limit'
@@ -62,7 +62,6 @@ export default function NFTInfoForm({ form, onFinish, phaseSetting }: Props) {
 					start_mint_time && dayjs.unix(start_mint_time),
 					end_mint_time && dayjs.unix(end_mint_time),
 				]}
-				wrapperCol={{ span: 20 }}
 				label='Mint Time'
 				name='mint_time'
 				rules={[{ required: true, message: 'Please input price!' }]}

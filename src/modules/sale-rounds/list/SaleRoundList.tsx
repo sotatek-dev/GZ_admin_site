@@ -1,34 +1,63 @@
-import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import { Table } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
 import { useNavigate } from 'react-router';
 import { Button, Space } from '@common/components';
 import { PATHS } from '@common/constants/paths';
 import { useGetSaleRounds } from './SaleRoundList.query';
+import { SaleRoundStatusLabel } from './SaleRoundList.constants';
 import { SaleRound } from './types';
 
 const columns: ColumnsType<SaleRound> = [
 	{
-		title: 'Wallet',
-		dataIndex: 'wallet_address',
-	},
-	{
-		title: 'Created At',
-		dataIndex: 'created_at',
-		render(value) {
-			return dayjs(value).format('HH:mm YYYY/MM/DD');
+		title: 'Round Name',
+		dataIndex: 'name',
+		sorter: {
+			compare: (prev, next) => prev.name.localeCompare(next.name),
+			multiple: 1,
 		},
 	},
 	{
-		title: 'Key Holding',
-		dataIndex: 'key_holding',
-		render(value) {
-			return value ? 'Yes' : 'No';
+		title: 'Start',
+		dataIndex: ['buy_time', 'start_time'],
+		render(value: SaleRound['buy_time']['start_time']) {
+			return dayjs.unix(value).format('HH:mm YYYY/MM/DD');
+		},
+		sorter: {
+			compare: (prev, next) =>
+				prev.buy_time.start_time - next.buy_time.start_time,
+			multiple: 2,
 		},
 	},
 	{
-		title: 'Number of dNFT Holding',
-		dataIndex: 'nft_holding',
+		title: 'Finish',
+		dataIndex: ['buy_time', 'end_time'],
+		render(value: SaleRound['buy_time']['end_time']) {
+			return dayjs.unix(value).format('HH:mm YYYY/MM/DD');
+		},
+		sorter: {
+			compare: (prev, next) => prev.buy_time.end_time - next.buy_time.end_time,
+			multiple: 3,
+		},
+	},
+	{
+		title: 'Token Symbol',
+		dataIndex: 'token_info',
+		render(value: SaleRound['token_info']) {
+			return value.symbol;
+		},
+		sorter: {
+			compare: (prev, next) =>
+				prev.token_info.symbol.localeCompare(next.token_info.symbol),
+			multiple: 4,
+		},
+	},
+	{
+		title: 'Status',
+		dataIndex: 'status',
+		render(value: SaleRound['status']) {
+			return SaleRoundStatusLabel[value];
+		},
 	},
 ];
 
@@ -41,9 +70,8 @@ const AdminList = () => {
 		<>
 			<Space>
 				<Button onClick={() => navigate(PATHS.admins.new())}>
-					Export to CSV
+					Create new sale round
 				</Button>
-				<Button onClick={() => navigate(PATHS.admins.new())}>Reload all</Button>
 			</Space>
 			<Table
 				bordered
