@@ -59,8 +59,8 @@ export default function NFTInfoForm({ form, onFinish, phaseSetting }: Props) {
 			</Form.Item>
 			<Form.Item
 				initialValue={[
-					start_mint_time && dayjs(start_mint_time),
-					end_mint_time && dayjs(end_mint_time),
+					start_mint_time && dayjs.unix(start_mint_time),
+					end_mint_time && dayjs.unix(end_mint_time),
 				]}
 				wrapperCol={{ span: 20 }}
 				label='Mint Time'
