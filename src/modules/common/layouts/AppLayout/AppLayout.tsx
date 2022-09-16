@@ -28,8 +28,8 @@ export default function AppLayout() {
 
 	const items: MenuItem[] = [
 		getItem(
-			<Link to={PATHS.saleRounds()}>Sale Round</Link>,
-			PATHS.saleRounds()
+			<Link to={PATHS.saleRounds.list()}>Sale Round</Link>,
+			PATHS.saleRounds.list()
 		),
 		getItem(
 			<Link to={PATHS.settings.nftMint()}>Setting mint NFT</Link>,
@@ -56,7 +56,7 @@ export default function AppLayout() {
 				<Menu
 					mode='inline'
 					theme='dark'
-					defaultSelectedKeys={[PATHS.saleRounds()]}
+					defaultSelectedKeys={[PATHS.saleRounds.list()]}
 					items={items}
 					className='app-sider-menu'
 					selectedKeys={activePathKey}

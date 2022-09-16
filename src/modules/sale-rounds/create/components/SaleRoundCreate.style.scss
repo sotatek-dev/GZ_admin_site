@@ -1,0 +1,43 @@
+.sale-round-container {
+	// background-color: red;
+	flex: 1 1;
+	padding-left: 55px;
+	padding-right: 79px;
+	padding-top: 42px;
+	padding-bottom: 105px;
+
+	.sale-round-mid {
+		width: 100%;
+		height: 100%;
+	}
+
+	.MuiInputLabel-root {
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 175%;
+		color: #001f4d !important;
+		padding-left: 34px;
+	}
+
+	.sale-round-title {
+		font-weight: 600;
+		font-size: 16px;
+		line-height: 175%;
+		color: #001f4d;
+		padding-top: 20.54px;
+		padding-left: 27px;
+	}
+
+	.css-sptymy-MuiGrid2-root {
+		padding-right: 41px;
+	}
+
+	.css-sptymy-MuiGrid2-root:last-child {
+		padding-right: 0px;
+	}
+
+	.css-1nrlq1o-MuiFormControl-root {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+}

@@ -6,34 +6,23 @@ import { styled } from '@mui/material/styles';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
 	'label + &': {
-		marginTop: theme.spacing(3),
+		marginTop: theme.spacing(2),
 	},
 	'& .MuiInputBase-input': {
-		borderRadius: 4,
+		borderRadius: '10px',
 		position: 'relative',
 		backgroundColor: theme.palette.mode === 'light' ? '#fcfcfb' : '#2b2b2b',
-		border: '1px solid #ced4da',
+		border: '1px solid #001F4D',
 		fontSize: 16,
-		width: 'auto',
-		padding: '10px 12px',
+		width: '100%',
+		height: '44.65px',
 		transition: theme.transitions.create([
 			'border-color',
 			'background-color',
 			'box-shadow',
 		]),
 		// Use the system font instead of the default Roboto font.
-		fontFamily: [
-			'-apple-system',
-			'BlinkMacSystemFont',
-			'"Segoe UI"',
-			'Roboto',
-			'"Helvetica Neue"',
-			'Arial',
-			'sans-serif',
-			'"Apple Color Emoji"',
-			'"Segoe UI Emoji"',
-			'"Segoe UI Symbol"',
-		].join(','),
+		fontFamily: ['-apple-system', 'BlinkMacSystemFont'].join(','),
 	},
 }));
 
@@ -45,15 +34,18 @@ export default function SaleRoundList() {
 				noValidate
 				sx={{
 					display: 'grid',
-					gridTemplateColumns: { sm: '1fr 1fr' },
-					gap: 2,
+					gridTemplateRows: { sm: '97.33px 244.67px' },
+					gap: 0,
+					border: '1px solid #000000',
+					borderRadius: '15px',
 				}}
 			>
+				<div className={'sale-round-title'}>Sale Round general info</div>
 				<FormControl variant='standard'>
-					<InputLabel shrink htmlFor='bootstrap-input'>
-						Bootstrap
+					<InputLabel shrink htmlFor='fullWidth'>
+						Sale Round name *
 					</InputLabel>
-					<BootstrapInput defaultValue='react-bootstrap' id='bootstrap-input' />
+					<BootstrapInput defaultValue='react-bootstrap' id='fullWidth' />
 				</FormControl>
 			</Box>
 		</>
