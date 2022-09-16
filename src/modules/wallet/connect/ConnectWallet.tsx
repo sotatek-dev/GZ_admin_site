@@ -10,10 +10,11 @@ import { Address, ConnectButton, Logo } from './components';
 const { Title } = Typography;
 
 export default function ConnectWallet() {
+	useConnectedRedirect();
+
 	const { active } = useActiveWeb3React();
 	const { connectWallet } = useConnectWallet();
 	const { signIn } = useAuth();
-	useConnectedRedirect();
 
 	const [isSignIn, setIsSignIn] = useState(false);
 
