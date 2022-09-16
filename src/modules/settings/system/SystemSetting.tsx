@@ -35,13 +35,14 @@ export default function SystemSetting() {
 							<Input />
 						</Form.Item>
 						<Form.Item
+							wrapperCol={{ span: 24 }}
 							label='Key Price'
 							name='key_price'
 							rules={[
 								{ required: true, message: 'Please input your key price!' },
 							]}
 						>
-							<InputNumber controls={false} />
+							<InputNumber />
 						</Form.Item>
 						<Form.Item
 							label='Rescue Price'
@@ -50,7 +51,7 @@ export default function SystemSetting() {
 								{ required: true, message: 'Please input your rescue price!' },
 							]}
 						>
-							<InputNumber controls={false} />
+							<InputNumber />
 						</Form.Item>
 						<Form.Item
 							label='Users may mint key for the first (x) days of the month'
@@ -59,7 +60,7 @@ export default function SystemSetting() {
 								{ required: true, message: 'Please input time to mint key!' },
 							]}
 						>
-							<Input />
+							<InputNumber />
 						</Form.Item>
 						<Form.Item
 							label='User must have minimum (x) token to mint key'
@@ -68,7 +69,7 @@ export default function SystemSetting() {
 								{ required: true, message: 'Please input your minimum token!' },
 							]}
 						>
-							<InputNumber controls={false} />
+							<InputNumber />
 						</Form.Item>
 						<Form.Item style={{ textAlign: 'center' }}>
 							<Button htmlType='submit'>Update</Button>

@@ -29,7 +29,11 @@ export default function EditAdmin() {
 	return (
 		<>
 			<Button onClick={goBack}>Back</Button>
-			<DeleteButton htmlType='submit' onClick={() => deleteAdmin(adminId)}>
+			<DeleteButton
+				danger
+				htmlType='submit'
+				onClick={() => deleteAdmin(adminId)}
+			>
 				Delete Admin
 			</DeleteButton>
 			<AdminForm
