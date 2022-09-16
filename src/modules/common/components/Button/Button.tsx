@@ -6,5 +6,5 @@ import classNames from 'classnames';
 export default function Button({ className, ...props }: ButtonProps) {
 	const cln = classNames('app-button', className);
 
-	return <AntButton className={cln} {...props} />;
+	return <AntButton type='primary' className={cln} {...props} />;
 }

@@ -1,13 +1,9 @@
-$bg-color: rgb(249, 249, 249);
-$sider-bg-color: #23272f;
-
 .app-layout {
 	min-height: 100vh;
 	margin-left: 250px;
 }
 
 .app-sider {
-	background-color: $sider-bg-color;
 	position: fixed;
 	overflow: auto;
 	top: 0;
@@ -18,26 +14,15 @@ $sider-bg-color: #23272f;
 	&-menu.ant-menu.ant-menu-dark {
 		padding: 0 0.5rem;
 		border-right: 0;
-		background: #23272f;
 
 		li {
 			font-size: 16px;
 			border-radius: 8px;
-
-			&.ant-menu-item-selected {
-				background: #23272f; /* fallback for old browsers */
-				background: linear-gradient(to right, #dc2a2a 30%, #23272f 70%);
-				box-shadow: 0px 0px 4px rgba(138, 146, 166, 0.3);
-			}
 		}
-	}
-	.ant-layout-sider-trigger {
-		background: #23272f;
 	}
 }
 
 .app-content {
 	position: relative;
-	background-color: $bg-color;
 	padding: 2rem;
 }

@@ -63,7 +63,7 @@ export default function SettingNFTMint() {
 			/>
 			<UserList />
 			<div className='setting-nft-button_group'>
-				<Button onClick={() => forms[currentPhase].resetFields()}>
+				<Button danger onClick={() => forms[currentPhase].resetFields()}>
 					Cancel
 				</Button>
 				<Button

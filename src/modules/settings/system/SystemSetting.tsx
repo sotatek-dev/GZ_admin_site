@@ -1,5 +1,12 @@
 import './SystemSetting.style.scss';
-import { Button, Card, Col, DatePicker, Form, Input } from '@common/components';
+import {
+	Button,
+	Card,
+	Col,
+	Form,
+	Input,
+	InputNumber,
+} from '@common/components';
 import { useRedirectBack } from '@common/hooks';
 
 export default function SystemSetting() {
@@ -34,7 +41,7 @@ export default function SystemSetting() {
 								{ required: true, message: 'Please input your key price!' },
 							]}
 						>
-							<Input />
+							<InputNumber controls={false} />
 						</Form.Item>
 						<Form.Item
 							label='Rescue Price'
@@ -43,21 +50,16 @@ export default function SystemSetting() {
 								{ required: true, message: 'Please input your rescue price!' },
 							]}
 						>
-							<Input />
+							<InputNumber controls={false} />
 						</Form.Item>
 						<Form.Item
-							label='When to mint key'
+							label='Users may mint key for the first (x) days of the month'
 							name='mint_time'
 							rules={[
 								{ required: true, message: 'Please input time to mint key!' },
 							]}
 						>
-							<DatePicker.RangePicker
-								showTime
-								format='YYYY/MM/DD HH:mm'
-								style={{ width: '100%' }}
-								placeholder={['Start mint time', 'End mint time']}
-							/>
+							<Input />
 						</Form.Item>
 						<Form.Item
 							label='User must have minimum (x) token to mint key'
@@ -66,7 +68,7 @@ export default function SystemSetting() {
 								{ required: true, message: 'Please input your minimum token!' },
 							]}
 						>
-							<Input />
+							<InputNumber controls={false} />
 						</Form.Item>
 						<Form.Item style={{ textAlign: 'center' }}>
 							<Button htmlType='submit'>Update</Button>
