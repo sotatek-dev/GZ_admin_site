@@ -1,4 +1,5 @@
 import { useMutation } from 'react-query';
+import { message } from '@common/components';
 import { axiosClient } from '@common/services/apiClient';
 import { NftMintSetting } from '../types';
 
@@ -23,7 +24,12 @@ export const useUpdateNFTMintSetting = () => {
 	const updateMutation = useMutation(updateFn);
 
 	const updateNftMintSetting = async (newSetting: Request) => {
-		await updateMutation.mutateAsync(newSetting);
+		try {
+			await updateMutation.mutateAsync(newSetting);
+			message.success('Update succeed');
+		} catch (error) {
+			message.error('Update failed');
+		}
 	};
 
 	return {

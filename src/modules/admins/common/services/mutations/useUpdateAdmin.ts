@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from 'react-query';
+import { message } from '@common/components';
 import { axiosClient } from '@common/services/apiClient';
 import { Admin } from '@admins/common/types';
 import { ADMIN_APIS } from '../apis';
@@ -25,8 +26,13 @@ export const useUpdateAdmin = () => {
 	const updateMutation = useMutation(updateFn);
 
 	const updateAdmin = async (newAdmin: Admin) => {
-		await updateMutation.mutateAsync(newAdmin);
-		await queryClient.invalidateQueries([ADMIN_APIS.getAll()]);
+		try {
+			await updateMutation.mutateAsync(newAdmin);
+			await queryClient.invalidateQueries([ADMIN_APIS.getAll()]);
+			message.success('Update succeed');
+		} catch (error) {
+			message.error('Update failed');
+		}
 	};
 
 	return { updateAdmin, isUpdateAdmin: updateMutation.isLoading };

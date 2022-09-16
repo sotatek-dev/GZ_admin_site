@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { PATHS } from '@common/constants/paths';
 import AppLayout from '@common/layouts/AppLayout';
 import ConnectWallet from '@wallet/connect/ConnectWallet';
+import SaleRoundList from '@sale-rounds/list';
 import AdminList from '@admins/list';
 import EditAdmin from '@admins/edit';
 import CreateAdmin from '@admins/new';
@@ -24,6 +25,7 @@ export const AppRoutes = () => {
 					</PrivateRoute>
 				}
 			>
+				<Route path={PATHS.saleRounds()} element={<SaleRoundList />} />
 				<Route path={PATHS.admins.list()} element={<AdminList />} />
 				<Route path={PATHS.admins.edit()} element={<EditAdmin />} />
 				<Route path={PATHS.admins.new()} element={<CreateAdmin />} />
