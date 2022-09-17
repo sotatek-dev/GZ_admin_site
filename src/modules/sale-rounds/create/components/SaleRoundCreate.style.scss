@@ -17,6 +17,32 @@
 		line-height: 175%;
 		color: #001f4d !important;
 		padding-left: 34px;
+		font-family: 'Open Sans';
+	}
+
+	.MuiInputBase-root {
+		font-family: 'Open Sans !important';
+		width: 100%;
+	}
+
+	.MuiTypography-root {
+		font-family: 'Open Sans !important';
+	}
+
+	.MuiSvgIcon-root {
+		font-size: 14px;
+	}
+
+	.MuiRadio-root {
+		padding: 4px;
+	}
+
+	.sr-detail-box-radio {
+		padding-top: 12px;
+	}
+
+	.MuiTooltip-tooltipArrow {
+		margin-top: 3.13px !important;
 	}
 
 	.sale-round-title {
@@ -26,6 +52,17 @@
 		color: #001f4d;
 		padding-top: 20.54px;
 		padding-left: 27px;
+	}
+
+	.SR-contents-title {
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 175%;
+		color: #001f4d;
+	}
+
+	.sale-round-contents {
+		padding-left: 26px;
 	}
 
 	.css-sptymy-MuiGrid2-root {
@@ -40,4 +77,43 @@
 		padding-left: 20px;
 		padding-right: 20px;
 	}
+	.btn-sale-round-create {
+		background: linear-gradient(
+			90deg,
+			#61009d 0%,
+			rgba(90, 231, 240, 0.64) 100%
+		);
+		box-shadow: 0px 2px 4px rgba(138, 146, 166, 0.3);
+		border-radius: 10px;
+		color: #ffffff;
+		cursor: pointer;
+	}
+	.btn-claim-create {
+		width: 100px;
+		height: 44px;
+		padding: 8px 24px;
+	}
+}
+
+.d-flex {
+	display: flex;
+}
+.pt-10 {
+	padding-top: 10px;
+}
+.pb-10 {
+	padding-bottom: 10px;
+}
+.pr-4 {
+	padding-right: 4.12px;
+	align-items: center;
+}
+.h-100 {
+	height: 100% !important;
+}
+.w-100 {
+	width: 100%;
+}
+.align-items-center {
+	align-items: center;
 }

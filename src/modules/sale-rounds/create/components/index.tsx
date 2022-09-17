@@ -2,6 +2,8 @@ import './SaleRoundCreate.style.scss';
 import Grid from '@mui/material/Unstable_Grid2';
 import Box from '@mui/material/Box';
 import Generalinfor from './Generalinfor';
+import SrDetails from './SrDetails';
+import SrClaimConfig from './SrClaimConfig';
 
 export default function SaleRoundList() {
 	return (
@@ -14,10 +16,19 @@ export default function SaleRoundList() {
 							<Grid xs={6}>
 								<Generalinfor />
 							</Grid>
-							<Grid xs={6}>Sale Round details</Grid>
+							<Grid xs={6}>
+								<SrDetails />
+							</Grid>
 						</Grid>
-						<Grid container>
-							<Grid xs={6}>Claim Configuration</Grid>
+						<Grid
+							sx={{
+								paddingTop: '41px',
+							}}
+							container
+						>
+							<Grid xs={6}>
+								<SrClaimConfig />
+							</Grid>
 							<Grid xs={6}>Token Info</Grid>
 						</Grid>
 						<Grid container>

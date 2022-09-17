@@ -11,10 +11,10 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 	'& .MuiInputBase-input': {
 		borderRadius: '10px',
 		position: 'relative',
-		backgroundColor: theme.palette.mode === 'light' ? '#fcfcfb' : '#2b2b2b',
 		border: '1px solid #001F4D',
 		fontSize: 16,
 		width: '100%',
+		padding: 0,
 		height: '44.65px',
 		transition: theme.transitions.create([
 			'border-color',
@@ -22,7 +22,6 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 			'box-shadow',
 		]),
 		// Use the system font instead of the default Roboto font.
-		fontFamily: ['-apple-system', 'BlinkMacSystemFont'].join(','),
 	},
 }));
 
