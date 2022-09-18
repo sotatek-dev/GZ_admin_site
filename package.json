@@ -14,9 +14,6 @@
 		"deploy": "yarn run build-stg && serve -s build -l 10002"
 	},
 	"dependencies": {
-		"@emotion/react": "^11.10.4",
-		"@emotion/styled": "^11.10.4",
-		"@mui/material": "^5.10.5",
 		"@web3-react/core": "^6.1.9",
 		"@web3-react/injected-connector": "^6.0.7",
 		"antd": "^4.23.0",

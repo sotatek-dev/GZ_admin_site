@@ -1,107 +1,41 @@
-import InputBase from '@mui/material/InputBase';
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
-
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
-	'label + &': {
-		marginTop: theme.spacing(2),
-	},
-	'& .MuiInputBase-input': {
-		borderRadius: '10px',
-		position: 'relative',
-		border: '1px solid #001F4D',
-		fontSize: 16,
-		width: '92px',
-		height: '25px',
-		padding: 0,
-		transition: theme.transitions.create([
-			'border-color',
-			'background-color',
-			'box-shadow',
-		]),
-		// Use the system font instead of the default Roboto font.
-	},
-}));
-
-const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
-	<Tooltip {...props} arrow classes={{ popper: className }} />
-))(() => ({
-	[`& .${tooltipClasses.arrow}`]: {
-		color: 'rgba(0, 0, 0, 0.75)',
-	},
-	[`& .${tooltipClasses.tooltip}`]: {
-		backgroundColor: 'rgba(0, 0, 0, 0.75)',
-		marginTop: '9.39px !important',
-		height: '34px',
-		borderRadius: '2px',
-		lineHeight: '22px',
-	},
-}));
+import { Tooltip } from 'antd';
+import { Input } from 'antd';
+import { Radio } from 'antd';
 
 export default function SaleRoundBoxDetails() {
 	return (
 		<>
-			<Box
-				component='form'
-				noValidate
-				sx={{
-					display: 'grid',
-					gridTemplateRows: { sm: '60px 283px' },
-					gap: 0,
-					border: '1px solid #000000',
-					borderRadius: '15px',
-				}}
-			>
-				<div className={'sale-round-title'}>Sale Round details</div>
-				<div className={'sale-round-contents'}>
+			<div className='box-sale-round'>
+				<div
+					style={{
+						height: '60px',
+					}}
+					className={'sale-round-title'}
+				>
+					Sale Round details
+				</div>
+				<div
+					style={{
+						height: '283px',
+					}}
+					className='px-20 sale-round-contents'
+				>
 					<div className={'sr-detail-box-radio'}>
 						<div className='SR-contents-title'>Network available</div>
-						<RadioGroup
-							sx={{
-								paddingTop: '6px',
-								paddingLeft: '12px',
-							}}
-							row
-							aria-labelledby='demo-radio-buttons-group-label'
-							defaultValue='female'
-							name='radio-buttons-group'
-						>
-							<FormControlLabel
-								sx={{ lineHeight: '175%' }}
-								value='female'
-								control={<Radio />}
-								label='Female'
-							/>
-							<FormControlLabel
-								sx={{ lineHeight: '175%' }}
-								value='male'
-								control={<Radio />}
-								label='Male'
-							/>
-							<FormControlLabel
-								sx={{ lineHeight: '175%' }}
-								value='other'
-								control={<Radio />}
-								label='Other'
-							/>
-						</RadioGroup>
+						<Radio.Group name='radiogroup' defaultValue={1}>
+							<Radio value={1}>A</Radio>
+							<Radio value={2}>B</Radio>
+							<Radio value={3}>C</Radio>
+							<Radio value={4}>D</Radio>
+						</Radio.Group>
 					</div>
 					<div>
 						<div className='SR-contents-title d-flex pt-10 pb-10'>
 							<span className={'pr-4'}>Buy Limit (BUSD)</span>
 							<div className={'d-flex align-items-center'}>
-								<BootstrapTooltip
-									title={
-										<>
-											<div className={'d-flex h-100 align-items-center'}>
-												<span>Set this value to 0 for no limitation</span>
-											</div>
-										</>
-									}
+								<Tooltip
+									placement='bottom'
+									title={'Set this value to 0 for no limitation'}
 								>
 									<svg
 										width='16'
@@ -115,13 +49,16 @@ export default function SaleRoundBoxDetails() {
 											fill='#002E58'
 										/>
 									</svg>
-								</BootstrapTooltip>
+								</Tooltip>
 							</div>
 						</div>
-						<BootstrapInput defaultValue='react-bootstrap' id='fullWidth' />
+						<Input
+							className='ip-sale-round-general'
+							placeholder='Basic usage'
+						/>
 					</div>
 				</div>
-			</Box>
+			</div>
 		</>
 	);
 }

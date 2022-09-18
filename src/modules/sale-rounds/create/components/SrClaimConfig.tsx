@@ -1,83 +1,92 @@
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { useState } from 'react';
+import DialogClaim from './DialogClaim';
 
-function createData(
-	name: string,
-	calories: number,
-	fat: number,
-	carbs: number,
-	protein: number
-) {
-	return { name, calories, fat, carbs, protein };
+function createData(id: number, startTime: string, maxClaim: number) {
+	return { id, startTime, maxClaim };
 }
 
 const rows = [
-	createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-	createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-	createData('Eclair', 262, 16.0, 24, 6.0),
-	createData('Cupcake', 305, 3.7, 67, 4.3),
+	createData(1, 'Frozen yoghurt', 159),
+	createData(2, 'Ice cream sandwich', 237),
+	createData(3, 'Eclair', 262),
+	createData(4, 'Cupcake', 305),
 ];
 
 export default function SaleRoundBoxDetails() {
+	const [open, setOpen] = useState<boolean>(() => false);
+
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
 	return (
 		<>
-			<Box
-				component='form'
-				noValidate
-				sx={{
-					display: 'grid',
-					gridTemplateRows: { sm: '56px 381px' },
-					gap: 0,
-					border: '1px solid #000000',
-					borderRadius: '15px',
-				}}
-			>
-				<div className={'sale-round-title'}>Claim Configuration</div>
-				<div className={'sale-round-contents'}>
+			<div className='box-sale-round'>
+				<div
+					style={{
+						height: '56px',
+					}}
+					className={'sale-round-title'}
+				>
+					Claim Configuration
+				</div>
+				<div
+					style={{
+						height: '381px',
+					}}
+					className='sale-round-contents'
+				>
 					<div className={'sr-detail-box-radio'}>
-						<div className={'btn-sale-round-create btn-claim-create'}>
+						<div
+							className={'btn-sale-round-create btn-claim-create'}
+							onClick={handleClickOpen}
+						>
 							<span>Create</span>
 						</div>
 					</div>
-					<div>
-						<TableContainer component={Paper}>
-							<Table sx={{ minWidth: 650 }} aria-label='simple table'>
-								<TableHead>
-									<TableRow>
-										<TableCell>Dessert (100g serving)</TableCell>
-										<TableCell align='right'>Calories</TableCell>
-										<TableCell align='right'>Fat&nbsp;(g)</TableCell>
-										<TableCell align='right'>Carbs&nbsp;(g)</TableCell>
-										<TableCell align='right'>Protein&nbsp;(g)</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{rows.map((row) => (
-										<TableRow
-											key={row.name}
-											sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-										>
-											<TableCell component='th' scope='row'>
-												{row.name}
-											</TableCell>
-											<TableCell align='right'>{row.calories}</TableCell>
-											<TableCell align='right'>{row.fat}</TableCell>
-											<TableCell align='right'>{row.carbs}</TableCell>
-											<TableCell align='right'>{row.protein}</TableCell>
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						</TableContainer>
+					<div className='claim-table'>
+						<div className='claim-table-header d-flex claim-table-row-style'>
+							<div className='td-datetime d-flex align-items-center'>
+								<span className='pl-59'>Start Time</span>
+							</div>
+							<div className='td-maxclaim d-flex align-items-center justify-content-center'>
+								<span>Max Claim (%)</span>
+							</div>
+							<div className='td-actions d-flex align-items-center justify-content-center'>
+								<span>Actions</span>
+							</div>
+						</div>
+						<div className='claim-table-body'>
+							{rows.map((el, index) => (
+								<>
+									<div
+										key={`table-claim-rows-${index}`}
+										className='claim-table-row d-flex claim-table-row-style'
+									>
+										<div className='td-datetime d-flex align-items-center'>
+											<span className='pl-16'>{el.startTime}</span>
+										</div>
+										<div className='td-maxclaim d-flex align-items-center justify-content-center'>
+											<span>{el.maxClaim}</span>
+										</div>
+										<div className='td-actions d-flex align-items-center justify-content-center'>
+											<div className='d-flex align-items-center justify-content-center'>
+												<div className='pr-16'>Edit</div>
+												<div>Remove</div>
+											</div>
+										</div>
+									</div>
+								</>
+							))}
+						</div>
 					</div>
 				</div>
-			</Box>
+			</div>
+			<DialogClaim open={open} selectedValue={'ahihi'} onClose={handleClose} />
 		</>
 	);
 }

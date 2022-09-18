@@ -1,9 +1,8 @@
 import './SaleRoundCreate.style.scss';
-import Grid from '@mui/material/Unstable_Grid2';
-import Box from '@mui/material/Box';
 import Generalinfor from './Generalinfor';
 import SrDetails from './SrDetails';
 import SrClaimConfig from './SrClaimConfig';
+import { Col, Row } from 'antd';
 
 export default function SaleRoundList() {
 	return (
@@ -11,33 +10,26 @@ export default function SaleRoundList() {
 			<div className='sale-round-container'>
 				<div className=''>Top</div>
 				<div className='sale-round-mid'>
-					<Box sx={{ flexGrow: 1 }}>
-						<Grid container>
-							<Grid xs={6}>
-								<Generalinfor />
-							</Grid>
-							<Grid xs={6}>
-								<SrDetails />
-							</Grid>
-						</Grid>
-						<Grid
-							sx={{
-								paddingTop: '41px',
-							}}
-							container
-						>
-							<Grid xs={6}>
-								<SrClaimConfig />
-							</Grid>
-							<Grid xs={6}>Token Info</Grid>
-						</Grid>
-						<Grid container>
-							<Grid xs={6}>Exchange Rates</Grid>
-							<Grid xs={6}>Start/End Buy Time</Grid>
-						</Grid>
-						<Grid xs={12}>About the Sale Round</Grid>
-						<Grid xs={12}>List User</Grid>
-					</Box>
+					<Row gutter={41}>
+						<Col span={12}>
+							<Generalinfor />
+						</Col>
+						<Col span={12}>
+							<SrDetails />
+						</Col>
+					</Row>
+					<Row className='pt-41'>
+						<Col span={12}>
+							<SrClaimConfig />
+						</Col>
+						<Col span={12}>Token Info</Col>
+					</Row>
+					<Row>
+						<Col span={12}>Exchange Rates</Col>
+						<Col span={12}>Start/End Buy Time</Col>
+					</Row>
+					<Row>About the Sale Round</Row>
+					<Row>List User</Row>
 				</div>
 				<div>Bot</div>
 			</div>
