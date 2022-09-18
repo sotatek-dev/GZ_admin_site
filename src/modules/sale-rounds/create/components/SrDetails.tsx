@@ -52,10 +52,7 @@ export default function SaleRoundBoxDetails() {
 								</Tooltip>
 							</div>
 						</div>
-						<Input
-							className='ip-sale-round-general'
-							placeholder='Basic usage'
-						/>
+						<Input className='ip-sale-round-detail' placeholder='Basic usage' />
 					</div>
 				</div>
 			</div>
