@@ -12,11 +12,18 @@ const rows = [
 	createData(4, 'Cupcake', 305),
 ];
 
-export default function SaleRoundBoxDetails() {
+export default function SaleRoundClaimConfig() {
 	const [open, setOpen] = useState<boolean>(() => false);
+	const [objectConfig, setobjectConfig] = useState<string>(() => '');
 
 	const handleClickOpen = () => {
 		setOpen(true);
+		setobjectConfig('');
+	};
+
+	const handleClickEdit = () => {
+		setOpen(true);
+		setobjectConfig('ahihi');
 	};
 
 	const handleClose = () => {
@@ -75,8 +82,13 @@ export default function SaleRoundBoxDetails() {
 										</div>
 										<div className='td-actions d-flex align-items-center justify-content-center'>
 											<div className='d-flex align-items-center justify-content-center'>
-												<div className='pr-16'>Edit</div>
-												<div>Remove</div>
+												<div
+													className='pr-16 cursor-pointer'
+													onClick={handleClickEdit}
+												>
+													Edit
+												</div>
+												<div className='cursor-pointer'>Remove</div>
 											</div>
 										</div>
 									</div>
@@ -86,7 +98,11 @@ export default function SaleRoundBoxDetails() {
 					</div>
 				</div>
 			</div>
-			<DialogClaim open={open} selectedValue={'ahihi'} onClose={handleClose} />
+			<DialogClaim
+				open={open}
+				selectedValue={objectConfig}
+				onClose={handleClose}
+			/>
 		</>
 	);
 }
