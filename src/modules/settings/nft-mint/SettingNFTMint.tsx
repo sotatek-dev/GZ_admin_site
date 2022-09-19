@@ -6,7 +6,7 @@ import UserList from './components/UserList';
 import { useState } from 'react';
 import { MintPhase, NFTInfoFormValue } from './types';
 import NFTInfoForm from './components/NFTInfoForm';
-import { useNFTMintPhaseSetting } from './SettingNFTMint.query';
+import { useNFTMintPhaseSetting } from './services/useGetSettingNFTMint';
 import { useUpdateNFTMintSetting } from './services/useUpdateNFTMintSetting';
 import { useRedirectBack } from '@common/hooks';
 
@@ -63,7 +63,7 @@ export default function SettingNFTMint() {
 			/>
 			<UserList />
 			<div className='setting-nft-button_group'>
-				<Button onClick={() => forms[currentPhase].resetFields()}>
+				<Button danger onClick={() => forms[currentPhase].resetFields()}>
 					Cancel
 				</Button>
 				<Button

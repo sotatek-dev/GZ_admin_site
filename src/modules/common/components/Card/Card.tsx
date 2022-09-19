@@ -6,5 +6,5 @@ import classNames from 'classnames';
 export default function Card({ className, ...props }: CardProps) {
 	const cln = classNames('app-card', className);
 
-	return <AntCard className={cln} {...props} />;
+	return <AntCard bordered className={cln} {...props} />;
 }

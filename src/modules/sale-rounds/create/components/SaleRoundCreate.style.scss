@@ -181,6 +181,35 @@
 		padding-left: 8px;
 		padding-right: 17px;
 	}
+	.ant-pagination-item-active {
+		background: #001f4d;
+		border: 1px solid #001f4d;
+		border-radius: 6px;
+
+		a {
+			color: #ffffff !important;
+			font-weight: 500;
+			font-size: 14px;
+		}
+	}
+	.ant-pagination-item {
+		border: 1px solid #001f4d;
+		border-radius: 6px;
+
+		a {
+			color: #001f4d;
+		}
+	}
+	.ant-table-cell {
+		font-weight: 400;
+		font-size: 16px;
+		line-height: 175%;
+
+		color: #001f4d;
+
+		opacity: 0.6;
+		padding: 4.5px !important;
+	}
 }
 .ant-modal-content {
 	border-radius: 15px;
@@ -191,35 +220,6 @@
 
 	border: 1px solid #001f4d;
 	border-radius: 6px;
-}
-.ant-pagination-item-active {
-	background: #001f4d;
-	border: 1px solid #001f4d;
-	border-radius: 6px;
-
-	a {
-		color: #ffffff !important;
-		font-weight: 500;
-		font-size: 14px;
-	}
-}
-.ant-pagination-item {
-	border: 1px solid #001f4d;
-	border-radius: 6px;
-
-	a {
-		color: #001f4d;
-	}
-}
-.ant-table-cell {
-	font-weight: 400;
-	font-size: 16px;
-	line-height: 175%;
-
-	color: #001f4d;
-
-	opacity: 0.6;
-	padding: 4.5px !important;
 }
 
 .btn-sale-round-create {

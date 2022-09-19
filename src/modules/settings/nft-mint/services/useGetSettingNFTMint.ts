@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 import { axiosClient } from '@common/services/apiClient';
-import { MintPhase, NftMintSetting } from './types';
+import { MintPhase, NftMintSetting } from '../types';
 
 const API_SETTING_MINT_NFT = '/setting-mint';
 

@@ -1,5 +1,13 @@
 import './AppLayout.style.scss';
 import type { MenuProps } from 'antd';
+import {
+	TagsOutlined,
+	PictureOutlined,
+	SolutionOutlined,
+	TeamOutlined,
+	SettingOutlined,
+	LogoutOutlined,
+} from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { Outlet } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -29,22 +37,34 @@ export default function AppLayout() {
 	const items: MenuItem[] = [
 		getItem(
 			<Link to={PATHS.saleRounds.list()}>Sale Round</Link>,
-			PATHS.saleRounds.list()
+			PATHS.saleRounds.list(),
+			<TagsOutlined />
 		),
 		getItem(
 			<Link to={PATHS.settings.nftMint()}>Setting mint NFT</Link>,
-			PATHS.settings.nftMint()
+			PATHS.settings.nftMint(),
+			<PictureOutlined />
 		),
-		getItem(<Link to={PATHS.users()}>List User</Link>, PATHS.users()),
+		getItem(
+			<Link to={PATHS.users()}>List User</Link>,
+			PATHS.users(),
+			<TeamOutlined />
+		),
 		getItem(
 			<Link to={PATHS.admins.list()}>List Admin</Link>,
-			PATHS.admins.list()
+			PATHS.admins.list(),
+			<SolutionOutlined />
 		),
 		getItem(
 			<Link to={PATHS.settings.system()}>Setting</Link>,
-			PATHS.settings.system()
+			PATHS.settings.system(),
+			<SettingOutlined />
 		),
-		getItem(<div onClick={signOut}>Logout</div>, PATHS.connectWallet()),
+		getItem(
+			<div onClick={signOut}>Logout</div>,
+			PATHS.connectWallet(),
+			<LogoutOutlined />
+		),
 	];
 
 	const activePathKey = useActiveMenuKey();
