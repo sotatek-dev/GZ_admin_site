@@ -60,30 +60,28 @@ export default function SaleRoundClaimConfig() {
 						</div>
 						<div className='claim-table-body'>
 							{rows.map((el, index) => (
-								<>
-									<div
-										key={`table-claim-rows-${index}`}
-										className='claim-table-row d-flex claim-table-row-style'
-									>
-										<div className='td-datetime d-flex align-items-center'>
-											<span className='pl-16'>{el.startTime}</span>
-										</div>
-										<div className='td-maxclaim d-flex align-items-center justify-content-center'>
-											<span>{el.maxClaim}</span>
-										</div>
-										<div className='td-actions d-flex align-items-center justify-content-center'>
-											<div className='d-flex align-items-center justify-content-center'>
-												<div
-													className='pr-16 cursor-pointer'
-													onClick={handleClickEdit}
-												>
-													Edit
-												</div>
-												<div className='cursor-pointer'>Remove</div>
+								<div
+									key={`table-claim-rows-${index}`}
+									className='claim-table-row d-flex claim-table-row-style'
+								>
+									<div className='td-datetime d-flex align-items-center'>
+										<span className='pl-16'>{el.startTime}</span>
+									</div>
+									<div className='td-maxclaim d-flex align-items-center justify-content-center'>
+										<span>{el.maxClaim}</span>
+									</div>
+									<div className='td-actions d-flex align-items-center justify-content-center'>
+										<div className='d-flex align-items-center justify-content-center'>
+											<div
+												className='pr-16 cursor-pointer'
+												onClick={handleClickEdit}
+											>
+												Edit
 											</div>
+											<div className='cursor-pointer'>Remove</div>
 										</div>
 									</div>
-								</>
+								</div>
 							))}
 						</div>
 					</div>

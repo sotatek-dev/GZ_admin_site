@@ -10,8 +10,16 @@ import BoxTime from './BoxTime';
 import AboutSaleRaound from './AboutSaleRaound';
 import ListUser from './ListUser';
 import { Col, Row } from 'antd';
+import { ISaleRoundCreateForm } from './types';
+import { useState } from 'react';
 
 export default function SaleRoundList() {
+	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>({
+		name: 'ahihihi',
+	});
+	const handlerNameChange = (value: string) => {
+		setSaleroundForm({ name: value });
+	};
 	return (
 		<>
 			<div className='sale-round-container'>
@@ -23,7 +31,10 @@ export default function SaleRoundList() {
 				<div className='sale-round-mid'>
 					<Row gutter={41}>
 						<Col span={12}>
-							<Generalinfor />
+							<Generalinfor
+								srName={saleroundForm.name}
+								onChange={handlerNameChange}
+							/>
 						</Col>
 						<Col span={12}>
 							<SrDetails />
@@ -57,7 +68,7 @@ export default function SaleRoundList() {
 					</Row>
 				</div>
 				<div className='d-flex justify-content-space pt-153'>
-					<div className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center cursor-pointer'>
+					<div className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center cursor-pointer mr-41'>
 						<span>Deploy the round</span>
 					</div>
 					<div className='btn-sale-round-create btn-update-round d-flex align-items-center justify-content-center'>
