@@ -16,12 +16,18 @@ type Response = {
 
 const API = '/user/view';
 
-const fetcher = async (rqBody: Request = { limit: 10, page: 1 }) => {
+const fetcher = async (
+	rqBody: Request = {
+		limit: 10,
+		page: 1,
+		query: '0xd08cCb8D4706da47A2e960750C8181e1eaDA5947',
+	}
+) => {
 	return await axiosClient.get<Request, Response>(API, {
 		params: rqBody,
 	});
 };
 
-export const useGetUsers = () => {
-	return useQuery([API], () => fetcher());
+export const useGetUsers = (query: string) => {
+	return useQuery([API, query], () => fetcher({ query }));
 };
