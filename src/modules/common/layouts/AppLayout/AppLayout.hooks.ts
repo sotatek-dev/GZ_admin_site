@@ -4,7 +4,7 @@ import { matchPath, useLocation } from 'react-router';
 type MenuKey = string;
 const MENUS: MenuKey[] = [
 	PATHS.admins.list(),
-	PATHS.saleRounds(),
+	PATHS.saleRounds.list(),
 	PATHS.settings.nftMint(),
 	PATHS.users(),
 	PATHS.settings.nftMint(),
