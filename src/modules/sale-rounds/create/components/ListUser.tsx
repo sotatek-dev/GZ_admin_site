@@ -1,3 +1,4 @@
+import './scss/ListUser.style.scss';
 import { Checkbox } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { ColumnsType } from 'antd/es/table';
@@ -110,12 +111,11 @@ const itemRender: PaginationProps['itemRender'] = (
 export default function SaleRoundListUser() {
 	return (
 		<>
-			<div className='box-sale-round'>
+			<div className='sr-block-contents'>
 				<div
-					style={{
-						height: '74px',
-					}}
-					className={'sale-round-title d-flex justify-content-space'}
+					className={
+						'sale-round-title sr-listuser-title--h d-flex justify-content-space'
+					}
 				>
 					<div className='d-flex'>
 						<span className='pr-18'>List User</span>
@@ -136,17 +136,8 @@ export default function SaleRoundListUser() {
 						</div>
 					</div>
 				</div>
-				<div
-					style={{
-						height: '439px',
-					}}
-					className='px-20'
-				>
-					<div
-						style={{
-							height: '390px',
-						}}
-					>
+				<div className='px-20 sr-listuser-showip--h'>
+					<div className='sr-listuser-table--h'>
 						<Table
 							bordered={false}
 							columns={columns}

@@ -1,4 +1,6 @@
-import './SaleRoundCreate.style.scss';
+import './scss/SaleRoundCreate.style.scss';
+import './scss/DialogClaim.style.scss';
+
 import Generalinfor from './Generalinfor';
 import SrDetails from './SrDetails';
 import SrClaimConfig from './SrClaimConfig';

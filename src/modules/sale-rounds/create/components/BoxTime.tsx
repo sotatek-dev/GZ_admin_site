@@ -1,23 +1,14 @@
+import './scss/BoxTime.style.scss';
 import { DatePicker } from 'antd';
 
 export default function SaleRoundBoxTime() {
 	return (
 		<>
-			<div className='box-sale-round'>
-				<div
-					style={{
-						height: '53px',
-					}}
-					className={'sale-round-title'}
-				>
+			<div className='sr-block-contents'>
+				<div className={'sale-round-title sr-datetime-title--h'}>
 					Start/End Buy Time
 				</div>
-				<div
-					style={{
-						height: '137px',
-					}}
-					className='pt-16 px-20 d-flex w-100'
-				>
+				<div className='pt-16 px-20 d-flex w-100 sr-datetime-showip--h'>
 					<div className='w-100 pr-20'>
 						<div className='ip-sale-round-general-label'>Start Buy Time</div>
 						<DatePicker

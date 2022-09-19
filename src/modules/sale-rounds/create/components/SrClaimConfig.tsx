@@ -1,3 +1,4 @@
+import './scss/SrClaimConfig.style.scss';
 import { useState } from 'react';
 import DialogClaim from './DialogClaim';
 
@@ -32,21 +33,11 @@ export default function SaleRoundClaimConfig() {
 
 	return (
 		<>
-			<div className='box-sale-round'>
-				<div
-					style={{
-						height: '56px',
-					}}
-					className={'sale-round-title'}
-				>
+			<div className='sr-block-contents'>
+				<div className={'sale-round-title sr-claimconfig-title--h'}>
 					Claim Configuration
 				</div>
-				<div
-					style={{
-						height: '381px',
-					}}
-					className='sale-round-contents'
-				>
+				<div className='sale-round-contents sr-claimconfig-showip--h'>
 					<div className={'sr-detail-box-radio'}>
 						<div
 							className={'btn-sale-round-create btn-claim-create'}

@@ -1,23 +1,14 @@
+import './scss/TokenInfor.style.scss';
 import { Input } from 'antd';
 
 export default function SaleRoundTokenInfor() {
 	return (
 		<>
-			<div className='box-sale-round'>
-				<div
-					style={{
-						height: '49px',
-					}}
-					className={'sale-round-title'}
-				>
+			<div className='sr-block-contents'>
+				<div className={'sale-round-title sr-tokeninfor-title--h'}>
 					Token Info
 				</div>
-				<div
-					style={{
-						height: '521px',
-					}}
-					className='px-20'
-				>
+				<div className='px-20 sr-tokeninfor-showip--h'>
 					<div className='pt-11'>
 						<div className='ip-sale-round-general-label'>
 							Sale Round name <span className='ip-requirement'>*</span>
