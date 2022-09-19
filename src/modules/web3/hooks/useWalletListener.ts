@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useEffect } from 'react';
 import { useActiveWeb3React } from './useActiveWeb3React';
 
@@ -14,7 +13,6 @@ export function useWalletListener() {
 
 		if (connector && connector.on && !error) {
 			const update = () => {};
-
 			connector.on('Web3ReactUpdate', update);
 
 			return () => {

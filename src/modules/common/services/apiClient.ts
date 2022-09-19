@@ -1,9 +1,11 @@
+import axios from 'axios';
+import { MESSAGES } from '@common/constants/messages';
 import { PATHS } from '@common/constants/paths';
 import {
 	getCookieStorage,
 	removeAllCookieStorage,
 } from '@common/helpers/storage';
-import axios from 'axios';
+import { message } from '@common/components';
 
 const axiosClient = axios.create({
 	baseURL: process.env.REACT_APP_BASE_API_URL,
@@ -38,7 +40,8 @@ axiosClient.interceptors.response.use(
 		return response;
 	},
 	(error) => {
-		if (!error.response) {
+		if (!error.response || !error.response.data) {
+			message.error(MESSAGES.MC0);
 			return Promise.reject(error);
 		}
 
@@ -54,7 +57,7 @@ axiosClient.interceptors.response.use(
 				break;
 
 			case 404:
-				// window.location.href = PATHS.notFound();
+				window.location.href = PATHS.notFound();
 				break;
 
 			case 500:
