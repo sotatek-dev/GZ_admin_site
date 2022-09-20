@@ -1,18 +1,27 @@
-import { Modal } from 'antd';
-import { DatePicker } from 'antd';
-import { Input } from 'antd';
+import { Modal, Form, DatePicker, Input } from 'antd';
+import { IDialogClaimConfigProps } from './types';
 
-export interface SimpleDialogProps {
-	open: boolean;
-	selectedValue: string;
-	onClose: (value: string) => void;
-}
-
-export default function DialogClaim(props: SimpleDialogProps) {
+export default function DialogClaim(props: IDialogClaimConfigProps) {
 	const { onClose, selectedValue, open } = props;
+	const [form] = Form.useForm();
 
 	const handleClose = () => {
+		form.resetFields();
 		onClose(selectedValue);
+	};
+
+	const handlerSubmit = () => {
+		form.submit();
+	};
+
+	const handlerFinish = () => {
+		const start_time = form.getFieldValue('claim_start_time').format('x');
+		const max_claim = form.getFieldValue('max_claim') || 10000;
+		onClose({
+			max_claim,
+			start_time,
+		});
+		form.resetFields();
 	};
 
 	return (
@@ -35,24 +44,38 @@ export default function DialogClaim(props: SimpleDialogProps) {
 					<div className='dl-claim-title'>
 						{selectedValue ? 'Edit claim' : 'Create a claim'}
 					</div>
-					<div className='pt-16'>
-						<div className='dialog-claim-contents-title'>Start Time</div>
-						<div>
+					<Form
+						form={form}
+						layout='vertical'
+						name='srDialogClaim'
+						onFinish={handlerFinish}
+					>
+						<Form.Item
+							name='claim_start_time'
+							label='Start Time'
+							className='pt-16'
+							rules={[{ required: true }]}
+						>
 							<DatePicker
 								className={'dialog-claim-datetime'}
 								renderExtraFooter={() => 'extra footer'}
 								showTime
 							/>
-						</div>
-					</div>
-					<div className='pt-33 '>
-						<div className='dialog-claim-contents-title'>Max Claim (%)</div>
-						<div>
+						</Form.Item>
+						<Form.Item
+							name='max_claim'
+							label='Max Claim (%)'
+							className='pt-33'
+							rules={[{ required: true }]}
+						>
 							<Input className='ipdl-claim-max' placeholder='Basic usage' />
-						</div>
-					</div>
+						</Form.Item>
+					</Form>
 					<div className='d-flex dl-claim-btn-bot'>
-						<div className='btn-sale-round-create btn-apply d-flex align-items-center justify-content-center'>
+						<div
+							onClick={handlerSubmit}
+							className='btn-sale-round-create btn-apply d-flex align-items-center justify-content-center'
+						>
 							<span>Apply</span>
 						</div>
 						<div

@@ -1,7 +1,11 @@
 import './scss/TokenInfor.style.scss';
-import { Input } from 'antd';
+import { Input, Form } from 'antd';
+import { SRTokenInfor } from './types';
 
-export default function SaleRoundTokenInfor() {
+export default function SaleRoundTokenInfor(props: SRTokenInfor) {
+	const { data, form } = props;
+	console.log(data);
+
 	return (
 		<>
 			<div className='sr-block-contents'>
@@ -9,32 +13,48 @@ export default function SaleRoundTokenInfor() {
 					Token Info
 				</div>
 				<div className='px-20 sr-tokeninfor-showip--h'>
-					<div className='pt-11'>
-						<div className='ip-sale-round-general-label'>
-							Sale Round name <span className='ip-requirement'>*</span>
-						</div>
-						<Input className='ip-sr-token-infor' placeholder='Basic usage' />
-					</div>
-					<div className='pt-22'>
-						<div className='ip-sale-round-general-label'>Token Symbol</div>
-						<Input className='ip-sr-token-infor' placeholder='Basic usage' />
-					</div>
-					<div className='pt-22'>
-						<div className='ip-sale-round-general-label'>
-							Address (Recieve Money)
-						</div>
-						<Input className='ip-sr-token-infor' placeholder='Basic usage' />
-					</div>
-					<div className='pt-22'>
-						<div className='ip-sale-round-general-label'>
-							Total Sold Coin <span className='ip-requirement'>*</span>
-						</div>
-						<Input className='ip-sr-token-infor' placeholder='Basic usage' />
-					</div>
-					<div className='pt-22'>
-						<div className='ip-sale-round-general-label'>Token Icon</div>
-						<Input className='ip-sr-token-infor' placeholder='Basic usage' />
-					</div>
+					<Form form={form} layout='vertical' name='srTokenInfor'>
+						<Form.Item
+							name='sr_name'
+							className='pt-11 mb-0'
+							label='Sale Round name'
+							rules={[{ required: true }]}
+						>
+							<Input className='ip-sr-token-infor' placeholder='Basic usage' />
+						</Form.Item>
+						<Form.Item
+							name='symbol'
+							className='pt-22 mb-0'
+							label='Token Symbol'
+							rules={[{ required: true }]}
+						>
+							<Input className='ip-sr-token-infor' placeholder='Basic usage' />
+						</Form.Item>
+						<Form.Item
+							name='address'
+							className='pt-22 mb-0'
+							label='Address (Recieve Money)'
+							rules={[{ required: true }]}
+						>
+							<Input className='ip-sr-token-infor' placeholder='Basic usage' />
+						</Form.Item>
+						<Form.Item
+							name='total_sold_coin'
+							className='pt-22 mb-0'
+							label='Total Sold Coin'
+							rules={[{ required: true }]}
+						>
+							<Input className='ip-sr-token-infor' placeholder='Basic usage' />
+						</Form.Item>
+						<Form.Item
+							name='token_icon'
+							className='pt-22 mb-0'
+							label='Token Icon'
+							rules={[{ required: true }]}
+						>
+							<Input className='ip-sr-token-infor' placeholder='Basic usage' />
+						</Form.Item>
+					</Form>
 				</div>
 			</div>
 		</>

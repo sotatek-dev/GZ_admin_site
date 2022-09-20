@@ -4,3 +4,13 @@
 .sr-showdetail-showip--h {
 	height: 283px;
 }
+#srDetailForm {
+	.ant-form-item-label {
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 175%;
+		color: #001f4d;
+		padding-bottom: 3px;
+		padding-left: 0px;
+	}
+}

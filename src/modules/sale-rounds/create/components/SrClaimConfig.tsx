@@ -1,34 +1,65 @@
 import './scss/SrClaimConfig.style.scss';
 import { useState } from 'react';
 import DialogClaim from './DialogClaim';
+import { IDataClaimConfig } from './types';
+import dayjs from 'dayjs';
+import { rowsTableClaim } from './types';
 
-function createData(id: number, startTime: string, maxClaim: number) {
-	return { id, startTime, maxClaim };
+function createData(val: rowsTableClaim): rowsTableClaim {
+	return val;
 }
 
-const rows = [
-	createData(1, 'Frozen yoghurt', 159),
-	createData(2, 'Ice cream sandwich', 237),
-	createData(3, 'Eclair', 262),
-	createData(4, 'Cupcake', 305),
-];
+const removeItem = (arr: Array<rowsTableClaim>, item: number) =>
+	arr.filter((e) => e.id !== item);
 
-export default function SaleRoundClaimConfig() {
+export default function SaleRoundClaimConfig(props: {
+	onSubmitClaimConfig: (val: rowsTableClaim[]) => void;
+}) {
 	const [open, setOpen] = useState<boolean>(() => false);
-	const [objectConfig, setobjectConfig] = useState<string>(() => '');
+	const [rows, setRows] = useState<Array<rowsTableClaim>>([]);
+	const [dialogClaim, setDialogClaim] = useState<Array<rowsTableClaim>>([]);
+	const [objectConfig, setobjectConfig] = useState<IDataClaimConfig>(() => ({
+		start_time: 0,
+		max_claim: 0,
+	}));
+	const { onSubmitClaimConfig } = props;
+	const [idConut, setIdcount] = useState<number>(0);
 
 	const handleClickOpen = () => {
 		setOpen(true);
-		setobjectConfig('');
 	};
 
 	const handleClickEdit = () => {
 		setOpen(true);
-		setobjectConfig('ahihi');
 	};
 
-	const handleClose = () => {
+	const handleClose = (val: IDataClaimConfig) => {
 		setOpen(false);
+		if (!val.start_time) return;
+
+		setobjectConfig(val);
+		const row: rowsTableClaim = {
+			id: idConut,
+			startTime: dayjs(val.start_time).format('YYYY-MM-DD HH:mm:ss'),
+			maxClaim: val.max_claim,
+		};
+		rows.push(createData(row));
+
+		const claimData: rowsTableClaim = {
+			id: idConut,
+			startTime: val.start_time,
+			maxClaim: val.max_claim,
+		};
+
+		dialogClaim.push(claimData);
+
+		onSubmitClaimConfig(dialogClaim);
+		setIdcount(idConut + 1);
+	};
+	const handlerRemove = (val: number) => {
+		setRows(removeItem(rows, val));
+		setDialogClaim(removeItem(dialogClaim, val));
+		onSubmitClaimConfig(dialogClaim);
 	};
 
 	return (
@@ -59,30 +90,36 @@ export default function SaleRoundClaimConfig() {
 							</div>
 						</div>
 						<div className='claim-table-body'>
-							{rows.map((el, index) => (
-								<div
-									key={`table-claim-rows-${index}`}
-									className='claim-table-row d-flex claim-table-row-style'
-								>
-									<div className='td-datetime d-flex align-items-center'>
-										<span className='pl-16'>{el.startTime}</span>
-									</div>
-									<div className='td-maxclaim d-flex align-items-center justify-content-center'>
-										<span>{el.maxClaim}</span>
-									</div>
-									<div className='td-actions d-flex align-items-center justify-content-center'>
-										<div className='d-flex align-items-center justify-content-center'>
-											<div
-												className='pr-16 cursor-pointer'
-												onClick={handleClickEdit}
-											>
-												Edit
+							{rows.length > 0 &&
+								rows.map((el, index) => (
+									<div
+										key={`table-claim-rows-${index}`}
+										className='claim-table-row d-flex claim-table-row-style'
+									>
+										<div className='td-datetime d-flex align-items-center'>
+											<span className='pl-16'>{el.startTime}</span>
+										</div>
+										<div className='td-maxclaim d-flex align-items-center justify-content-center'>
+											<span>{el.maxClaim}</span>
+										</div>
+										<div className='td-actions d-flex align-items-center justify-content-center'>
+											<div className='d-flex align-items-center justify-content-center'>
+												<div
+													className='pr-16 cursor-pointer'
+													onClick={handleClickEdit}
+												>
+													Edit
+												</div>
+												<div
+													className='cursor-pointer'
+													onClick={() => handlerRemove(el.id)}
+												>
+													Remove
+												</div>
 											</div>
-											<div className='cursor-pointer'>Remove</div>
 										</div>
 									</div>
-								</div>
-							))}
+								))}
 						</div>
 					</div>
 				</div>
