@@ -13,15 +13,37 @@ import { Col, Row, Form } from 'antd';
 import { ISaleRoundCreateForm } from './types';
 import { useState } from 'react';
 import { SaleRoundCreateForm, rowsTableClaim } from './types';
+// import { createSaleRound } from './services/saleRoundUpdate'
 
 export default function SaleRoundList() {
 	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>({
-		name: 'ahihihi',
+		name: 'name',
 		details: {
-			network: '',
-			buy_limit: '',
+			network: 'network',
+			buy_limit: 9,
 		},
+		claim_configs: [
+			{
+				start_time: 1,
+				max_claim: 2,
+			},
+		],
+		have_list_user: true,
+		description: 'string',
+		token_info: {
+			address: '0xb237546A3706bde802B016131fa97df94D358FfF',
+			token_address: 'string',
+			symbol: 'BSC',
+			token_icon: 'BSC',
+			total_sold_coin: 99,
+		},
+		buy_time: {
+			start_time: 0,
+			end_time: 1,
+		},
+		exchange_rate: 1,
 	});
+	let debounceCreate: any;
 
 	const [claimConfig, setClaimConfig] = useState<rowsTableClaim[]>([]);
 
@@ -31,6 +53,7 @@ export default function SaleRoundList() {
 		[SaleRoundCreateForm.SR_TOKEN_INFOR]: Form.useForm()[0],
 		[SaleRoundCreateForm.SR_EXCHANGE_RATE]: Form.useForm()[0],
 		[SaleRoundCreateForm.SR_BOX_TIME]: Form.useForm()[0],
+		[SaleRoundCreateForm.SR_ABOUNT]: Form.useForm()[0],
 	};
 
 	const handlerSubClaimConfig = (val: rowsTableClaim[]) => {
@@ -41,20 +64,24 @@ export default function SaleRoundList() {
 
 	const handlerSubmitUpdate = () => {
 		formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR].submit();
+		formsSaleRound[SaleRoundCreateForm.SR_ABOUNT].submit();
+		formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_DETAIL].submit();
+		formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE].submit();
+		formsSaleRound[SaleRoundCreateForm.SR_TOKEN_INFOR].submit();
 
 		console.log('pass submit', saleroundForm);
 	};
 
-	const handlerSubmitFinish = () => {
+	const handlerSubmitFinish = (name1: string, { values, forms }: any) => {
 		const name =
 			formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR].getFieldValue('name') ||
 			'';
-		const buy_limit =
+		const buy_limit: number =
 			formsSaleRound[SaleRoundCreateForm.SR_DETAIL].getFieldValue(
 				'buy_limit'
 			) || 0;
-		const network =
+		const network: string =
 			formsSaleRound[SaleRoundCreateForm.SR_DETAIL].getFieldValue('network') ||
 			'BSC';
 		setSaleroundForm({
@@ -63,8 +90,30 @@ export default function SaleRoundList() {
 				network,
 				buy_limit,
 			},
+			claim_configs: claimConfig.map((e) => ({
+				start_time: Number(e.startTime),
+				max_claim: e.maxClaim,
+			})),
+			have_list_user: true,
+			description: 'string',
+			token_info: {
+				address: '0xb237546A3706bde802B016131fa97df94D358FfF',
+				token_address: 'string',
+				symbol: 'BSC',
+				token_icon: 'BSC',
+				total_sold_coin: 99,
+			},
+			buy_time: {
+				start_time: 0,
+				end_time: 1,
+			},
+			exchange_rate: 1,
 		});
-		console.log('form finish', saleroundForm, claimConfig);
+		clearTimeout(debounceCreate);
+		debounceCreate = setTimeout(() => {
+			console.log('form finish', saleroundForm, name1, values, forms);
+			// createSaleRound(saleroundForm)
+		}, 500);
 	};
 	return (
 		<>
@@ -121,7 +170,9 @@ export default function SaleRoundList() {
 						</Row>
 						<Row className='pt-41'>
 							<Col span={24}>
-								<AboutSaleRaound />
+								<AboutSaleRaound
+									form={formsSaleRound[SaleRoundCreateForm.SR_ABOUNT]}
+								/>
 							</Col>
 						</Row>
 						<Row className='pt-41'>

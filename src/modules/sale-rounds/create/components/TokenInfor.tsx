@@ -15,14 +15,6 @@ export default function SaleRoundTokenInfor(props: SRTokenInfor) {
 				<div className='px-20 sr-tokeninfor-showip--h'>
 					<Form form={form} layout='vertical' name='srTokenInfor'>
 						<Form.Item
-							name='sr_name'
-							className='pt-11 mb-0'
-							label='Sale Round name'
-							rules={[{ required: true }]}
-						>
-							<Input className='ip-sr-token-infor' placeholder='Basic usage' />
-						</Form.Item>
-						<Form.Item
 							name='symbol'
 							className='pt-22 mb-0'
 							label='Token Symbol'
@@ -48,7 +40,7 @@ export default function SaleRoundTokenInfor(props: SRTokenInfor) {
 						</Form.Item>
 						<Form.Item
 							name='token_icon'
-							className='pt-22 mb-0'
+							className='pt-22'
 							label='Token Icon'
 							rules={[{ required: true }]}
 						>
