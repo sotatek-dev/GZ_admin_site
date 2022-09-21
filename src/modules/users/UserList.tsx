@@ -1,21 +1,26 @@
 import { useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
+import type { PaginationProps } from 'antd/es/pagination';
 import { Table } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useDebounce } from '@common/hooks';
 import { Button, Input, Space, Col } from '@common/components';
-import { elipsisAddressText } from '@common/helpers/formats';
+import { ellipsisAddressText } from '@common/helpers/formats';
 import { useGetUsers } from './UserList.query';
 import { User } from './types';
 import { Typography } from '@common/components';
 
 const UserList = () => {
 	const [searchVal, setSearchVal] = useState('');
+	const [page, setPage] = useState(1);
 	const debounceSearchVal = useDebounce(searchVal);
-	const { isLoading, data } = useGetUsers(debounceSearchVal);
+	const { isLoading, data } = useGetUsers(page, debounceSearchVal);
 
 	const resetSearch = () => setSearchVal('');
+	const onPageChange: PaginationProps['onChange'] = (current) => {
+		setPage(current);
+	};
 
 	return (
 		<>
@@ -37,8 +42,10 @@ const UserList = () => {
 				dataSource={data?.list}
 				loading={isLoading}
 				pagination={{
-					current: data?.pagination.page,
+					defaultCurrent: 1,
+					pageSize: data?.pagination.limit,
 					total: data?.pagination.total,
+					onChange: onPageChange,
 				}}
 				className='admins-table'
 			/>
@@ -50,10 +57,11 @@ const columns: ColumnsType<User> = [
 	{
 		title: 'Wallet',
 		dataIndex: 'wallet_address',
+		width: '30%',
 		render(data: string) {
 			return (
 				<Typography.Paragraph copyable={{ text: data }}>
-					{elipsisAddressText(data)}
+					{ellipsisAddressText(data)}
 				</Typography.Paragraph>
 			);
 		},
@@ -61,6 +69,7 @@ const columns: ColumnsType<User> = [
 	{
 		title: 'Created At',
 		dataIndex: 'created_at',
+		width: '30%',
 		render(value) {
 			return dayjs(value).format('HH:mm YYYY/MM/DD');
 		},
@@ -68,6 +77,7 @@ const columns: ColumnsType<User> = [
 	{
 		title: 'Key Holding',
 		dataIndex: 'key_holding',
+		width: '20%',
 		render(value) {
 			return renderKeyHolding(value);
 		},
@@ -75,6 +85,7 @@ const columns: ColumnsType<User> = [
 	{
 		title: 'Number of dNFT Holding',
 		dataIndex: 'nft_holding',
+		width: '20%',
 	},
 ];
 

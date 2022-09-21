@@ -8,9 +8,11 @@ import {
 	InputNumber,
 } from '@common/components';
 import { useRedirectBack } from '@common/hooks';
+import { useGetSystemSetting } from './services/useGetSystemSetting';
 
 export default function SystemSetting() {
 	const goBack = useRedirectBack();
+	const { data: setting = {} } = useGetSystemSetting();
 
 	return (
 		<>
@@ -21,7 +23,12 @@ export default function SystemSetting() {
 					title='System Setting'
 					className='system-setting-form'
 				>
-					<Form layout='vertical' name='basic' autoComplete='off'>
+					<Form
+						layout='vertical'
+						name='basic'
+						autoComplete='off'
+						initialValues={setting}
+					>
 						<Form.Item
 							label='Treasury Address'
 							name='treasury_address'
@@ -55,7 +62,7 @@ export default function SystemSetting() {
 						</Form.Item>
 						<Form.Item
 							label='Users may mint key for the first (x) days of the month'
-							name='mint_time'
+							name='mint_days'
 							rules={[
 								{ required: true, message: 'Please input time to mint key!' },
 							]}
