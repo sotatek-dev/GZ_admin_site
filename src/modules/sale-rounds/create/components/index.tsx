@@ -4,7 +4,6 @@ import './scss/DialogClaim.style.scss';
 import Generalinfor from './Generalinfor';
 import SrDetails from './SrDetails';
 import SrClaimConfig from './SrClaimConfig';
-import TokenInfor from './TokenInfor';
 import ExchangeRate from './ExchangeRate';
 import BoxTime from './BoxTime';
 import AboutSaleRaound from './AboutSaleRaound';
@@ -50,7 +49,6 @@ export default function SaleRoundList() {
 	const formsSaleRound = {
 		[SaleRoundCreateForm.GENERAL_INFOR]: Form.useForm()[0],
 		[SaleRoundCreateForm.SR_DETAIL]: Form.useForm()[0],
-		[SaleRoundCreateForm.SR_TOKEN_INFOR]: Form.useForm()[0],
 		[SaleRoundCreateForm.SR_EXCHANGE_RATE]: Form.useForm()[0],
 		[SaleRoundCreateForm.SR_BOX_TIME]: Form.useForm()[0],
 		[SaleRoundCreateForm.SR_ABOUNT]: Form.useForm()[0],
@@ -68,7 +66,6 @@ export default function SaleRoundList() {
 		formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_DETAIL].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE].submit();
-		formsSaleRound[SaleRoundCreateForm.SR_TOKEN_INFOR].submit();
 
 		console.log('pass submit', saleroundForm);
 	};
@@ -127,45 +124,38 @@ export default function SaleRoundList() {
 					<Form.Provider onFormFinish={handlerSubmitFinish}>
 						<Row gutter={41}>
 							<Col span={12}>
-								<Generalinfor
-									form={formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]}
-									srName={saleroundForm.name}
-								/>
+								<div className='w-100'>
+									<Generalinfor
+										form={formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]}
+										srName={saleroundForm.name}
+									/>
+								</div>
+								<div className='w-100 pt-42'>
+									<SrClaimConfig onSubmitClaimConfig={handlerSubClaimConfig} />
+								</div>
 							</Col>
 							<Col span={12}>
-								<SrDetails
-									data={{
-										buy_limit: 0,
-										network: 'BSC',
-									}}
-									form={formsSaleRound[SaleRoundCreateForm.SR_DETAIL]}
-								/>
-							</Col>
-						</Row>
-						<Row className='pt-41' gutter={41}>
-							<Col span={12}>
-								<SrClaimConfig onSubmitClaimConfig={handlerSubClaimConfig} />
-							</Col>
-							<Col span={12}>
-								<TokenInfor
-									form={formsSaleRound[SaleRoundCreateForm.SR_TOKEN_INFOR]}
-									data={{
-										buy_limit: 0,
-										network: '0',
-									}}
-								/>
-							</Col>
-						</Row>
-						<Row className='pt-41' gutter={41}>
-							<Col span={12}>
-								<ExchangeRate
-									form={formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE]}
-								/>
-							</Col>
-							<Col span={12}>
-								<BoxTime
-									form={formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]}
-								/>
+								<div>
+									<SrDetails
+										data={{
+											buy_limit: 0,
+											network: 'BSC',
+											address: '0xb237546A3706bde802B016131fa97df94D358FfF',
+											tottal_sold_coin: 0,
+										}}
+										form={formsSaleRound[SaleRoundCreateForm.SR_DETAIL]}
+									/>
+								</div>
+								<div className='pt-15'>
+									<ExchangeRate
+										form={formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE]}
+									/>
+								</div>
+								<div className='pt-19'>
+									<BoxTime
+										form={formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]}
+									/>
+								</div>
 							</Col>
 						</Row>
 						<Row className='pt-41'>

@@ -11,7 +11,7 @@ export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
 				<div className={'sale-round-title sr-generalinfor-title--h'}>
 					Sale Round general info
 				</div>
-				<div className='px-20 sr-generalinfor-showip--h'>
+				<div className='px-20 pt-31 sr-generalinfor-showip--h'>
 					<Form form={form} layout='vertical' name='generalInforForm'>
 						<Form.Item
 							name='name'

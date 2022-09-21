@@ -10,7 +10,7 @@ export default function SaleRoundBoxTime(props: ISRBoxTimeProps) {
 				<div className={'sale-round-title sr-datetime-title--h'}>
 					Start/End Buy Time
 				</div>
-				<div className='pt-16 px-20 sr-datetime-showip--h'>
+				<div className='pt-5 px-20 sr-datetime-showip--h'>
 					<Form
 						form={form}
 						layout='vertical'
