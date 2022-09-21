@@ -1,7 +1,7 @@
 import { message } from 'antd';
 
 message.config({
-	top: 50,
+	top: 20,
 	duration: 3,
 	rtl: true,
 });

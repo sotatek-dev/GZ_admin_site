@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { ExternalProvider } from '@ethersproject/providers';
 import { toast } from 'react-toastify';
-import { ETH_CHAIN_ID } from '../constants/envs';
 import { SUPPORTED_NETWORKS } from '../constants/networks';
 
 /**
@@ -13,9 +12,12 @@ export const setupNetwork = async (
 	externalProvider?: ExternalProvider,
 	chainNetworkId?: string
 ): Promise<boolean> => {
+	// eslint-disable-next-line no-debugger
+	debugger;
 	const provider = externalProvider || window.ethereum;
 	const chainId =
-		(chainNetworkId && parseInt(chainNetworkId, 10)) || ETH_CHAIN_ID;
+		(chainNetworkId && parseInt(chainNetworkId, 10)) ||
+		(process.env.REACT_APP_BSC_CHAIN_ID as string);
 
 	if (!SUPPORTED_NETWORKS[chainId]) {
 		toast.error('Not support network!');
@@ -26,7 +28,7 @@ export const setupNetwork = async (
 		try {
 			await provider.request({
 				method: 'wallet_switchEthereumChain',
-				params: [{ chainId: `0x${chainId.toString(16)}` }],
+				params: [{ chainId: SUPPORTED_NETWORKS[chainId].chainIdHex }],
 			});
 
 			return true;
@@ -43,7 +45,7 @@ export const setupNetwork = async (
 						method: 'wallet_addEthereumChain',
 						params: [
 							{
-								chainId: `0x${chainId.toString(16)}`,
+								chainId: SUPPORTED_NETWORKS[chainId].chainIdHex,
 								chainName: SUPPORTED_NETWORKS[chainId].chainName,
 								nativeCurrency: SUPPORTED_NETWORKS[chainId].nativeCurrency,
 								rpcUrls: SUPPORTED_NETWORKS[chainId].rpcUrls,
