@@ -17,7 +17,6 @@ export const AppRoutes = () => {
 	return (
 		<Routes>
 			<Route path={PATHS.connectWallet()} element={<ConnectWallet />} />
-			<Route path={PATHS.saleRounds.create()} element={<SaleRoundCreate />} />
 			<Route path='/' element={<Navigate to={PATHS.admins.list()} />} />
 			<Route
 				path='/'
@@ -28,6 +27,7 @@ export const AppRoutes = () => {
 				}
 			>
 				<Route path={PATHS.saleRounds.list()} element={<SaleRoundList />} />
+				<Route path={PATHS.saleRounds.create()} element={<SaleRoundCreate />} />
 				<Route path={PATHS.admins.list()} element={<AdminList />} />
 				<Route path={PATHS.admins.edit()} element={<EditAdmin />} />
 				<Route path={PATHS.admins.new()} element={<CreateAdmin />} />

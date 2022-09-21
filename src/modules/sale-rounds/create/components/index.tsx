@@ -12,9 +12,12 @@ import { Col, Row, Form } from 'antd';
 import { ISaleRoundCreateForm } from './types';
 import { useState } from 'react';
 import { SaleRoundCreateForm, rowsTableClaim } from './types';
+import { useNavigate } from 'react-router';
+import { PATHS } from '@common/constants/paths';
 // import { createSaleRound } from './services/saleRoundUpdate'
 
 export default function SaleRoundList() {
+	const navigate = useNavigate();
 	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>({
 		name: 'name',
 		details: {
@@ -116,7 +119,10 @@ export default function SaleRoundList() {
 		<>
 			<div className='sale-round-container'>
 				<div className='pb-62'>
-					<div className='btn-sale-round-create btn-back d-flex align-items-center justify-content-center'>
+					<div
+						className='btn-sale-round-create btn-back d-flex align-items-center justify-content-center'
+						onClick={() => navigate(PATHS.saleRounds.list())}
+					>
 						<span>Back</span>
 					</div>
 				</div>
