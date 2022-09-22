@@ -9,6 +9,7 @@ import CreateAdmin from '@admins/new';
 import SettingNFTMint from '@settings/nft-mint';
 import SystemSetting from '@settings/system';
 import Users from '@users/index';
+import Profile from 'src/modules/profile';
 import SaleRoundCreate from '@sale-rounds/create';
 import NotFoundPage from './components/404';
 import { PrivateRoute } from './components/PrivateRoute';
@@ -26,6 +27,7 @@ export const AppRoutes = () => {
 					</PrivateRoute>
 				}
 			>
+				<Route path={PATHS.profile()} element={<Profile />} />
 				<Route path={PATHS.saleRounds.list()} element={<SaleRoundList />} />
 				<Route path={PATHS.saleRounds.create()} element={<SaleRoundCreate />} />
 				<Route path={PATHS.admins.list()} element={<AdminList />} />

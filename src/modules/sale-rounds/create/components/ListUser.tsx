@@ -10,6 +10,7 @@ import nextImgae from './icons/next-icons.svg';
 import copyIcon from './icons/copy-icon.svg';
 
 const onChange = (e: CheckboxChangeEvent) => {
+	// eslint-disable-next-line no-console
 	console.log(`checked = ${e.target.checked}`);
 };
 

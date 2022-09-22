@@ -53,9 +53,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			const provider = await connector.getProvider();
 			const signer = new Web3Provider(provider).getSigner();
 			const account = await signer.getAddress();
-			const message = 'sign message';
-			const signature = await signer.signMessage(message);
-			await login(account, message, signature);
+			const signMessage = 'sign message';
+			const signature = await signer.signMessage(signMessage);
+			await login(account, signMessage, signature);
 		}
 
 		if (location.state) {

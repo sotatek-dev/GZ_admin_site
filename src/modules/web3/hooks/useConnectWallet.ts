@@ -1,10 +1,12 @@
 import { UnsupportedChainIdError } from '@web3-react/core';
 import { UserRejectedRequestError as UserRejectedRequestErrorInjected } from '@web3-react/injected-connector';
-import { toast } from 'react-toastify';
 import { useActiveWeb3React } from '@web3/hooks/useActiveWeb3React';
-import { activateInjectedProvider } from '../helpers/activateInjectedProvider';
 import { ConnectorKey, connectors } from '@web3/connectors';
 import { CONNECTOR_KEY } from '@web3/constants/storages';
+import { MESSAGES } from '@common/constants/messages';
+import { message } from '@common/components';
+import { activateInjectedProvider } from '../helpers/activateInjectedProvider';
+import { setupNetwork } from '@web3/helpers/setupNetwork';
 
 /**
  * Hook for connect/disconnect to a wallet
@@ -22,22 +24,19 @@ export const useConnectWallet = () => {
 			await activate(connector, undefined, true);
 			setStorageWallet(connectorKey);
 		} catch (error) {
-			if (
-				error instanceof UserRejectedRequestErrorInjected ||
-				(error instanceof Error &&
-					error.message === 'User denied account authorization') // Coinbase wallet
-			) {
-				toast.error('');
+			if (error instanceof UserRejectedRequestErrorInjected) {
+				message.error(MESSAGES.MC1);
 			}
 
 			if (error instanceof UnsupportedChainIdError) {
-				// const provider = await connector.getProvider();
-				toast.error('');
-				// const hasSetup = await setupNetwork(library?.provider);
-				// if (hasSetup) {
-				//   await activate(connector);
-				//   throw error;
-				// }
+				message.error({ content: MESSAGES.MC2, key: MESSAGES.MC2 });
+				const provider = await connector.getProvider();
+
+				const hasSetup = await setupNetwork(provider);
+				if (hasSetup) {
+					await activate(connector);
+					return;
+				}
 			}
 
 			throw error;
