@@ -1,6 +1,5 @@
 import './scss/ListUser.style.scss';
 import { Checkbox } from 'antd';
-import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { ColumnsType } from 'antd/es/table';
 import { Space, Table } from 'antd';
 import { Pagination } from 'antd';
@@ -8,11 +7,6 @@ import type { PaginationProps } from 'antd';
 import prevImgae from './icons/prev-icon.svg';
 import nextImgae from './icons/next-icons.svg';
 import copyIcon from './icons/copy-icon.svg';
-
-const onChange = (e: CheckboxChangeEvent) => {
-	// eslint-disable-next-line no-console
-	console.log(`checked = ${e.target.checked}`);
-};
 
 interface DataType {
 	key: string;
@@ -121,7 +115,7 @@ export default function SaleRoundListUser() {
 					<div className='d-flex'>
 						<span className='pr-18'>List User</span>
 						<div>
-							<Checkbox className='sr-checkbox-user' onChange={onChange}>
+							<Checkbox className='sr-checkbox-user'>
 								Everyone can join
 							</Checkbox>
 						</div>

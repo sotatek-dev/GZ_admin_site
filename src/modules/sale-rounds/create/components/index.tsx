@@ -45,6 +45,7 @@ export default function SaleRoundList() {
 		},
 		exchange_rate: 1,
 	});
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let debounceCreate: any;
 
 	const [claimConfig, setClaimConfig] = useState<rowsTableClaim[]>([]);
@@ -58,8 +59,6 @@ export default function SaleRoundList() {
 	};
 
 	const handlerSubClaimConfig = (val: rowsTableClaim[]) => {
-		console.log('handlerSubClaimConfig', val);
-
 		setClaimConfig(val);
 	};
 
@@ -69,8 +68,6 @@ export default function SaleRoundList() {
 		formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_DETAIL].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE].submit();
-
-		console.log('pass submit', saleroundForm);
 	};
 
 	const handlerSubmitFinish = () => {
@@ -100,7 +97,7 @@ export default function SaleRoundList() {
 			have_list_user: true,
 			description: 'string',
 			token_info: {
-				address: '0xb237546A3706bde802B016131fa97df94D358FfF',
+				address: address,
 				token_address: 'string',
 				symbol: 'BSC',
 				token_icon: 'BSC',
@@ -114,7 +111,6 @@ export default function SaleRoundList() {
 		});
 		clearTimeout(debounceCreate);
 		debounceCreate = setTimeout(() => {
-			console.log('form finish', saleroundForm, address);
 			// createSaleRound(saleroundForm)
 		}, 500);
 	};
