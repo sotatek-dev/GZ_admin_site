@@ -4,4 +4,5 @@ export const MESSAGES = {
 	MC2: 'Please switch network',
 	MC3: 'Login successfully',
 	MC4: 'Login failed',
+	MC5: 'Refresh successfully',
 };
