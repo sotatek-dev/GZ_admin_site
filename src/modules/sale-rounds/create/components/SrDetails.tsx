@@ -1,10 +1,14 @@
 import './scss/SrDetails.style.scss';
 import aboutIcon from './icons/about-icon.svg';
 import { Input, Radio, Form, Tooltip } from 'antd';
-import { SRDetailProps } from './types';
+import { SRDetailProps, MessageValidations } from './types';
+import React, { useState } from 'react';
+import NumericInput from './NumericInput';
 
 export default function SaleRoundBoxDetails(props: SRDetailProps) {
 	const { data, form } = props;
+	const [buyLimit, setBuyLimit] = useState<string>('');
+	const [totalSoldCoin, setTotalSoldCoin] = useState<string>('');
 
 	return (
 		<>
@@ -43,9 +47,10 @@ export default function SaleRoundBoxDetails(props: SRDetailProps) {
 							className='pt-14 mb-9'
 							initialValue={data.buy_limit}
 						>
-							<Input
+							<NumericInput
 								className='ip-sale-round-detail'
-								placeholder='Basic usage'
+								value={buyLimit}
+								onChange={setBuyLimit}
 							/>
 						</Form.Item>
 						<Form.Item
@@ -53,6 +58,7 @@ export default function SaleRoundBoxDetails(props: SRDetailProps) {
 							className='mb-22'
 							label='Address (Recieve Money)'
 							initialValue={data.address}
+							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 						>
 							<Input className='ip-sr-token-infor' placeholder='Basic usage' />
 						</Form.Item>
@@ -60,10 +66,14 @@ export default function SaleRoundBoxDetails(props: SRDetailProps) {
 							name='otal_sold_coin'
 							className='mb-22'
 							label='Total Sold Coin'
-							rules={[{ required: true }]}
+							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 							initialValue={data.tottal_sold_coin}
 						>
-							<Input className='ip-sr-token-infor' placeholder='Basic usage' />
+							<NumericInput
+								className='ip-sr-token-infor'
+								value={totalSoldCoin}
+								onChange={setTotalSoldCoin}
+							/>
 						</Form.Item>
 					</Form>
 				</div>

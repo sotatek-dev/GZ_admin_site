@@ -8,6 +8,11 @@ export enum SaleRoundCreateForm {
 	SR_ABOUNT = 'SR_ABOUNT',
 }
 
+export enum MessageValidations {
+	MSC_1_15 = 'This field is required',
+	MSC_1_16 = 'Total Max Claim (%) must be equal to 100%',
+}
+
 export interface GeneralInforProps {
 	srName: string;
 	form: FormInstance;

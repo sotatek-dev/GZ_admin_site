@@ -73,7 +73,7 @@ export default function SaleRoundList() {
 		console.log('pass submit', saleroundForm);
 	};
 
-	const handlerSubmitFinish = (name1: string, { values, forms }: any) => {
+	const handlerSubmitFinish = () => {
 		const name =
 			formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR].getFieldValue('name') ||
 			'';
@@ -84,6 +84,9 @@ export default function SaleRoundList() {
 		const network: string =
 			formsSaleRound[SaleRoundCreateForm.SR_DETAIL].getFieldValue('network') ||
 			'BSC';
+		const address: string =
+			formsSaleRound[SaleRoundCreateForm.SR_DETAIL].getFieldValue('address') ||
+			'';
 		setSaleroundForm({
 			name,
 			details: {
@@ -111,7 +114,7 @@ export default function SaleRoundList() {
 		});
 		clearTimeout(debounceCreate);
 		debounceCreate = setTimeout(() => {
-			console.log('form finish', saleroundForm, name1, values, forms);
+			console.log('form finish', saleroundForm, address);
 			// createSaleRound(saleroundForm)
 		}, 500);
 	};
