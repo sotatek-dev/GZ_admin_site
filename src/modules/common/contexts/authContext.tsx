@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			return;
 		}
 
-		navigate(PATHS.admins.list());
+		navigate(PATHS.saleRounds.list());
 	}
 
 	function signOut() {
