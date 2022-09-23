@@ -1,7 +1,11 @@
 import './AdminForm.style.scss';
 import { Button, Card, Form, Input, Loading, Space } from '@common/components';
 import { Admin } from '@admins/common/types';
-import { addressValidator, emailValidator } from '@common/helpers/validate';
+import {
+	addressValidator,
+	emailValidator,
+	requiredValidate,
+} from '@common/helpers/validate';
 import { MESSAGES } from '@common/constants/messages';
 import { NAME_REGEX } from '@admins/common/constants';
 
@@ -39,7 +43,7 @@ export default function AdminForm({ title, initData, finish }: Props) {
 						label='Wallet Address'
 						name='wallet_address'
 						rules={[
-							{ required: true, message: MESSAGES.MSC115 },
+							requiredValidate(),
 							{
 								validator: addressValidator,
 							},
@@ -52,7 +56,7 @@ export default function AdminForm({ title, initData, finish }: Props) {
 						label='Email'
 						name='email'
 						rules={[
-							{ required: true, message: MESSAGES.MSC115 },
+							requiredValidate(),
 							{
 								validator: emailValidator,
 							},
