@@ -1,7 +1,9 @@
 import { Input } from 'antd';
+import { ReactNode } from 'react';
 
 interface NumericInputProps {
 	className: string;
+	suffix: ReactNode | string;
 	value: string;
 	onChange: (value: string) => void;
 }
@@ -19,7 +21,7 @@ export default function NumericInput(props: NumericInputProps) {
 		temp = temp.replace(/,/g, '');
 
 		if (reg.test(temp) || temp === '') {
-			if (inputValue.charAt(value.length) === '.') {
+			if (inputValue.charAt(inputValue.length - 1) === '.') {
 				onChange(inputValue);
 				return;
 			}
@@ -27,6 +29,7 @@ export default function NumericInput(props: NumericInputProps) {
 				onChange('');
 				return;
 			}
+
 			onChange(formatNumber(Number(temp)));
 		}
 	};
@@ -34,6 +37,7 @@ export default function NumericInput(props: NumericInputProps) {
 	// '.' at the end or only '-' in the input box.
 	const handleBlur = () => {
 		let valueTemp = value;
+		if (!value) return;
 		if (value.charAt(value.length - 1) === '.' || value === '-') {
 			valueTemp = value.slice(0, -1);
 		}

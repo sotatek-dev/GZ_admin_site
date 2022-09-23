@@ -1,22 +1,42 @@
-import { Modal, Form, DatePicker, Input } from 'antd';
-import { IDialogClaimConfigProps } from './types';
+import { Modal, Form, DatePicker } from 'antd';
+import {
+	DataClaimConfig,
+	MessageValidations,
+	FORMAT_DATETIME_SALEROUND,
+} from './types';
+import NumericInput from './NumericInput';
+import { useState } from 'react';
 
-export default function DialogClaim(props: IDialogClaimConfigProps) {
+interface DialogClaimConfigProps {
+	open: boolean;
+	selectedValue: DataClaimConfig;
+	onClose: (value: DataClaimConfig) => void;
+}
+
+export default function DialogClaim(props: DialogClaimConfigProps) {
 	const { onClose, selectedValue, open } = props;
 	const [form] = Form.useForm();
+	const [maxClaimIp, setMaxClaimIp] = useState<string>('');
 
 	const handleClose = () => {
 		form.resetFields();
-		onClose(selectedValue);
+		onClose({
+			max_claim: 0,
+			start_time: 0,
+		});
 	};
 
 	const handlerSubmit = () => {
 		form.submit();
 	};
 
-	const handlerFinish = () => {
-		const start_time = form.getFieldValue('claim_start_time').format('x');
-		const max_claim = form.getFieldValue('max_claim') || 10000;
+	const handlerFinish = (values: {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		claim_start_time: any;
+		max_claim: number;
+	}) => {
+		const start_time = values.claim_start_time.format('x');
+		const max_claim = values.max_claim || 10000;
 		onClose({
 			max_claim,
 			start_time,
@@ -54,11 +74,11 @@ export default function DialogClaim(props: IDialogClaimConfigProps) {
 							name='claim_start_time'
 							label='Start Time'
 							className='pt-16'
-							rules={[{ required: true }]}
+							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 						>
 							<DatePicker
-								className={'dialog-claim-datetime'}
-								renderExtraFooter={() => 'extra footer'}
+								format={FORMAT_DATETIME_SALEROUND}
+								className='dialog-claim-datetime'
 								showTime
 							/>
 						</Form.Item>
@@ -66,9 +86,14 @@ export default function DialogClaim(props: IDialogClaimConfigProps) {
 							name='max_claim'
 							label='Max Claim (%)'
 							className='pt-33'
-							rules={[{ required: true }]}
+							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 						>
-							<Input className='ipdl-claim-max' placeholder='Basic usage' />
+							<NumericInput
+								className='ipdl-claim-max'
+								suffix=''
+								value={maxClaimIp}
+								onChange={setMaxClaimIp}
+							/>
 						</Form.Item>
 					</Form>
 					<div className='d-flex dl-claim-btn-bot'>

@@ -57,7 +57,7 @@ axiosClient.interceptors.response.use(
 				break;
 
 			case 404:
-				window.location.href = PATHS.notFound();
+				// window.location.href = PATHS.notFound();
 				break;
 
 			case 500:

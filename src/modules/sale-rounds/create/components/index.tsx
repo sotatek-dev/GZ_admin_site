@@ -9,9 +9,12 @@ import BoxTime from './BoxTime';
 import AboutSaleRaound from './AboutSaleRaound';
 import ListUser from './ListUser';
 import { Col, Row, Form } from 'antd';
-import { ISaleRoundCreateForm } from './types';
+import {
+	ISaleRoundCreateForm,
+	SaleRoundCreateForm,
+	rowsTableClaim,
+} from './types';
 import { useState } from 'react';
-import { SaleRoundCreateForm, rowsTableClaim } from './types';
 import { useNavigate } from 'react-router';
 import { PATHS } from '@common/constants/paths';
 // import { createSaleRound } from './services/saleRoundUpdate'
@@ -49,6 +52,9 @@ export default function SaleRoundList() {
 	let debounceCreate: any;
 
 	const [claimConfig, setClaimConfig] = useState<rowsTableClaim[]>([]);
+	const [messageErrClaimConfig, setMessageErrClaimConfig] =
+		useState<string>('');
+	const [totalMaxClaim, setTotalMaxClaim] = useState<number>(0);
 
 	const formsSaleRound = {
 		[SaleRoundCreateForm.GENERAL_INFOR]: Form.useForm()[0],
@@ -84,6 +90,13 @@ export default function SaleRoundList() {
 		const address: string =
 			formsSaleRound[SaleRoundCreateForm.SR_DETAIL].getFieldValue('address') ||
 			'';
+		claimConfig.forEach((el) => {
+			setTotalMaxClaim(totalMaxClaim + el.maxClaim);
+		});
+		if (totalMaxClaim < 100 || totalMaxClaim > 100) {
+			setMessageErrClaimConfig('');
+			return;
+		}
 		setSaleroundForm({
 			name,
 			details: {
@@ -136,7 +149,10 @@ export default function SaleRoundList() {
 									/>
 								</div>
 								<div className='w-100 pt-42'>
-									<SrClaimConfig onSubmitClaimConfig={handlerSubClaimConfig} />
+									<SrClaimConfig
+										message={messageErrClaimConfig}
+										onSubmitClaimConfig={handlerSubClaimConfig}
+									/>
 								</div>
 							</Col>
 							<Col span={12}>
@@ -185,7 +201,7 @@ export default function SaleRoundList() {
 						className='btn-sale-round-create btn-update-round d-flex align-items-center justify-content-center'
 						onClick={handlerSubmitUpdate}
 					>
-						<span>Update the Round</span>
+						<span>Create the round</span>
 					</div>
 				</div>
 			</div>

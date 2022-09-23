@@ -1,6 +1,6 @@
 import './scss/AboutSaleRaound.style.scss';
 import { Input, Form } from 'antd';
-import { ISRAboutProps } from './types';
+import { ISRAboutProps, MessageValidations } from './types';
 
 const { TextArea } = Input;
 
@@ -22,7 +22,13 @@ export default function AboutSaleRound(props: ISRAboutProps) {
 						<Form.Item
 							name='description'
 							className='w-100 mb-0'
-							rules={[{ required: true }]}
+							rules={[
+								{
+									required: true,
+									max: 500,
+									message: MessageValidations.MSC_1_4__M500,
+								},
+							]}
 						>
 							<TextArea className='about-sr-textarea' rows={13} />
 						</Form.Item>

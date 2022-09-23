@@ -11,7 +11,10 @@ export enum SaleRoundCreateForm {
 export enum MessageValidations {
 	MSC_1_15 = 'This field is required',
 	MSC_1_16 = 'Total Max Claim (%) must be equal to 100%',
+	MSC_1_4__M500 = 'Please enter less than 500!',
 }
+
+export const FORMAT_DATETIME_SALEROUND = 'YYYY-MM-DD hh:mm';
 
 export interface GeneralInforProps {
 	srName: string;
@@ -47,7 +50,7 @@ export interface SRBoxTime {
 	start_time: number;
 	end_time: number;
 }
-export interface IDataClaimConfig {
+export interface DataClaimConfig {
 	start_time: number;
 	max_claim: number;
 }
@@ -57,18 +60,12 @@ export interface ISaleRoundCreateForm {
 		network: string;
 		buy_limit: number;
 	};
-	claim_configs: IDataClaimConfig[];
+	claim_configs: DataClaimConfig[];
 	have_list_user: boolean;
 	description: string;
 	token_info: SRTokenInforForm;
 	buy_time: SRBoxTime;
 	exchange_rate: number;
-}
-
-export interface IDialogClaimConfigProps {
-	open: boolean;
-	selectedValue: IDataClaimConfig;
-	onClose: (value: IDataClaimConfig) => void;
 }
 
 export interface rowsTableClaim {
