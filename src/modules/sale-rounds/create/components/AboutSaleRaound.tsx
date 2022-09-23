@@ -9,7 +9,7 @@ export default function AboutSaleRound(props: ISRAboutProps) {
 	return (
 		<>
 			<div className='sr-block-contents'>
-				<div className={'sale-round-title sr-about-title--h'}>
+				<div className='sale-round-title sr-about-title--h'>
 					About the Sale Round
 				</div>
 				<div className='px-20 sr-about-show-ip--h'>
@@ -24,7 +24,6 @@ export default function AboutSaleRound(props: ISRAboutProps) {
 							className='w-100 mb-0'
 							rules={[
 								{
-									required: true,
 									max: 500,
 									message: MessageValidations.MSC_1_4__M500,
 								},

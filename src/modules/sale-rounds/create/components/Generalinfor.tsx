@@ -8,7 +8,7 @@ export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
 	return (
 		<>
 			<div className='sr-block-contents'>
-				<div className={'sale-round-title sr-generalinfor-title--h'}>
+				<div className='sale-round-title sr-generalinfor-title--h'>
 					Sale Round general info
 				</div>
 				<div className='px-20 pt-31 sr-generalinfor-showip--h'>

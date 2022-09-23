@@ -107,11 +107,7 @@ export default function SaleRoundListUser() {
 	return (
 		<>
 			<div className='sr-block-contents'>
-				<div
-					className={
-						'sale-round-title sr-listuser-title--h d-flex justify-content-space'
-					}
-				>
+				<div className='sale-round-title sr-listuser-title--h d-flex justify-content-space'>
 					<div className='d-flex'>
 						<span className='pr-18'>List User</span>
 						<div>

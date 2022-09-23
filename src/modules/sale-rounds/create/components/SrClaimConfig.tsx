@@ -80,7 +80,7 @@ export default function SaleRoundClaimConfig(props: {
 					Claim Configuration
 				</div>
 				<div className='sale-round-contents sr-claimconfig-showip--h'>
-					<div className={'sr-detail-box-radio'}>
+					<div className='sr-detail-box-radio'>
 						<div
 							className={`${
 								isDisableBtnCreate
