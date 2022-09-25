@@ -25,7 +25,6 @@ export default function SaleRoundExchangeRate(props: ISRExchangeRateProps) {
 						name='ex_rate_have'
 						className='w-45'
 						label='You have'
-						rules={[{ required: true }]}
 						initialValue='1'
 					>
 						<Input disabled className='ip-sr-exchange-rate' suffix='BUSD' />

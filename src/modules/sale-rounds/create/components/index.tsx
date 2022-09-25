@@ -17,12 +17,13 @@ import {
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { PATHS } from '@common/constants/paths';
+import { MessageValidations } from './types';
 // import { createSaleRound } from './services/saleRoundUpdate'
 
 export default function SaleRoundList() {
 	const navigate = useNavigate();
 	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>({
-		name: 'name',
+		name: 'nadfgfdgme',
 		details: {
 			network: 'network',
 			buy_limit: 9,
@@ -54,7 +55,7 @@ export default function SaleRoundList() {
 	const [claimConfig, setClaimConfig] = useState<rowsTableClaim[]>([]);
 	const [messageErrClaimConfig, setMessageErrClaimConfig] =
 		useState<string>('');
-	const [totalMaxClaim, setTotalMaxClaim] = useState<number>(0);
+	const [isEvryCanJoin, setEveryCanJoin] = useState<boolean>(false);
 
 	const formsSaleRound = {
 		[SaleRoundCreateForm.GENERAL_INFOR]: Form.useForm()[0],
@@ -68,15 +69,67 @@ export default function SaleRoundList() {
 		setClaimConfig(val);
 	};
 
-	const handlerSubmitUpdate = () => {
+	const handlerSubmitUpdate = async () => {
 		formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_ABOUNT].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_DETAIL].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE].submit();
-	};
 
-	const handlerSubmitFinish = () => {
+		let satusValidate = true;
+
+		await formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]
+			.validateFields()
+			.then((data: any) => {
+				console.log('GENERAL_INFOR', data);
+			})
+			.catch((err: any) => {
+				console.log('GENERAL_INFOR err', err, err.errorFields.length);
+				satusValidate = false;
+			});
+
+		await formsSaleRound[SaleRoundCreateForm.SR_ABOUNT]
+			.validateFields()
+			.then((data: any) => {
+				console.log('SR_ABOUNT', data);
+			})
+			.catch((err: any) => {
+				console.log('SR_ABOUNT err', err);
+				satusValidate = false;
+			});
+
+		await formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
+			.validateFields()
+			.then((data: any) => {
+				console.log('SR_BOX_TIME', data);
+			})
+			.catch((err: any) => {
+				console.log('SR_BOX_TIME err', err);
+				satusValidate = false;
+			});
+
+		await formsSaleRound[SaleRoundCreateForm.SR_DETAIL]
+			.validateFields()
+			.then((data: any) => {
+				console.log('SR_DETAIL', data);
+			})
+			.catch((err: any) => {
+				console.log('SR_DETAIL err', err);
+				satusValidate = false;
+			});
+
+		await formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE]
+			.validateFields()
+			.then((data: any) => {
+				console.log('SR_EXCHANGE_RATE', data);
+			})
+			.catch((err: any) => {
+				console.log('SR_EXCHANGE_RATE err', err);
+				satusValidate = false;
+			});
+
+		if (!satusValidate) return;
+
 		const name =
 			formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR].getFieldValue('name') ||
 			'';
@@ -90,43 +143,80 @@ export default function SaleRoundList() {
 		const address: string =
 			formsSaleRound[SaleRoundCreateForm.SR_DETAIL].getFieldValue('address') ||
 			'';
+		const total_sold_coin: number =
+			formsSaleRound[SaleRoundCreateForm.SR_DETAIL].getFieldValue(
+				'total_sold_coin'
+			);
+
+		const ex_rate_get: number =
+			formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE].getFieldValue(
+				'ex_rate_get'
+			);
+		const exchange_rate: number = (1 / ex_rate_get) | 1;
+		const buy_time = {
+			start_time: 0,
+			end_time: 0,
+		};
+		buy_time.start_time = formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
+			.getFieldValue('start_time')
+			.unix();
+		buy_time.end_time = formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
+			.getFieldValue('end_time')
+			.unix();
+
+		const claim_configs: {
+			start_time: number;
+			max_claim: number;
+		}[] = [];
+		let totalMaxClaim = 0;
 		claimConfig.forEach((el) => {
-			setTotalMaxClaim(totalMaxClaim + el.maxClaim);
+			claim_configs.push({
+				start_time: Number(el.startTime),
+				max_claim: Number(el.maxClaim) * 100,
+			});
+
+			totalMaxClaim += Number(el.maxClaim);
+			console.log(123, totalMaxClaim);
 		});
-		if (totalMaxClaim < 100 || totalMaxClaim > 100) {
-			setMessageErrClaimConfig('');
-			return;
+		if (claimConfig.length === 0) {
+			claim_configs.push({
+				start_time: buy_time.start_time + 1000,
+				max_claim: 10000,
+			});
 		}
-		setSaleroundForm({
+		console.log('claimConfig', claim_configs, totalMaxClaim);
+
+		if (totalMaxClaim < 100 || totalMaxClaim > 100) {
+			setMessageErrClaimConfig(MessageValidations.MSC_1_16);
+			// return;
+		} else setMessageErrClaimConfig('');
+		const payload = {
 			name,
 			details: {
 				network,
 				buy_limit,
 			},
-			claim_configs: claimConfig.map((e) => ({
-				start_time: Number(e.startTime),
-				max_claim: e.maxClaim,
-			})),
-			have_list_user: true,
+			claim_configs,
+			have_list_user: isEvryCanJoin,
 			description: 'string',
 			token_info: {
 				address: address,
 				token_address: 'string',
 				symbol: 'BSC',
 				token_icon: 'BSC',
-				total_sold_coin: 99,
+				total_sold_coin,
 			},
-			buy_time: {
-				start_time: 0,
-				end_time: 1,
-			},
-			exchange_rate: 1,
-		});
+			buy_time,
+			exchange_rate,
+		};
+		setSaleroundForm(payload);
 		clearTimeout(debounceCreate);
 		debounceCreate = setTimeout(() => {
 			// createSaleRound(saleroundForm)
+			console.log(saleroundForm);
 		}, 500);
 	};
+
 	return (
 		<>
 			<div className='sale-round-container'>
@@ -139,7 +229,7 @@ export default function SaleRoundList() {
 					</div>
 				</div>
 				<div className='sale-round-mid'>
-					<Form.Provider onFormFinish={handlerSubmitFinish}>
+					<Form.Provider>
 						<Row gutter={41}>
 							<Col span={12}>
 								<div className='w-100'>
@@ -188,7 +278,7 @@ export default function SaleRoundList() {
 						</Row>
 						<Row className='pt-41'>
 							<Col span={24}>
-								<ListUser />
+								<ListUser isEveryCanJoin={setEveryCanJoin} />
 							</Col>
 						</Row>
 					</Form.Provider>

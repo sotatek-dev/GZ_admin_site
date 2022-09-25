@@ -5,6 +5,7 @@ import {
 	MessageValidations,
 	FORMAT_DATETIME_SALEROUND,
 } from './types';
+import dayjs from 'dayjs';
 
 export default function SaleRoundBoxTime(props: ISRBoxTimeProps) {
 	const { form } = props;
@@ -13,6 +14,10 @@ export default function SaleRoundBoxTime(props: ISRBoxTimeProps) {
 	const handlerStartDateChange = ({ getFieldValue }: any) => ({
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		validator(_: any, value: any) {
+			if (value && dayjs() > dayjs(value.format()))
+				return Promise.reject(
+					new Error('Start buy time must be after current')
+				);
 			if (
 				!value ||
 				!getFieldValue('end_time') ||
@@ -30,10 +35,12 @@ export default function SaleRoundBoxTime(props: ISRBoxTimeProps) {
 	const handlerEndDateChange = ({ getFieldValue }: any) => ({
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		validator(_: any, value: any) {
+			if (value && dayjs() > dayjs(value.format()))
+				return Promise.reject(new Error('End buy time must be after current'));
 			if (
 				!value ||
 				!getFieldValue('start_time') ||
-				getFieldValue('start_time') >= value
+				getFieldValue('start_time') < value
 			) {
 				return Promise.resolve();
 			}
@@ -53,7 +60,7 @@ export default function SaleRoundBoxTime(props: ISRBoxTimeProps) {
 					<Form
 						form={form}
 						layout='vertical'
-						name='srExchangeRate'
+						name='srBoxTimeForm'
 						className='d-flex w-100'
 					>
 						<Form.Item

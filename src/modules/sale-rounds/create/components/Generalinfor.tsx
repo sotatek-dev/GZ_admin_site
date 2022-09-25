@@ -1,6 +1,12 @@
 import './scss/Generalinfor.style.scss';
 import { Input, Form } from 'antd';
-import { GeneralInforProps } from './types';
+import type { FormInstance } from 'antd/es/form/Form';
+import { MessageValidations } from './types';
+
+interface GeneralInforProps {
+	srName: string;
+	form: FormInstance;
+}
 
 export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
 	const { srName, form } = props;
@@ -17,7 +23,7 @@ export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
 							name='name'
 							label='Sale Round name'
 							initialValue={srName}
-							rules={[{ required: true }]}
+							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 						>
 							<Input className='ip-sale-round-general' name='name' />
 						</Form.Item>

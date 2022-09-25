@@ -16,10 +16,6 @@ export enum MessageValidations {
 
 export const FORMAT_DATETIME_SALEROUND = 'YYYY-MM-DD hh:mm';
 
-export interface GeneralInforProps {
-	srName: string;
-	form: FormInstance;
-}
 export interface SRDetailsForm {
 	network: string;
 	buy_limit: number;
