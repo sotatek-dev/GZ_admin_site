@@ -77,92 +77,80 @@ export default function SaleRoundList() {
 		formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE].submit();
 
 		let satusValidate = true;
+		const payload = {
+			name: '',
+			details: {
+				network: '',
+				buy_limit: 0,
+			},
+			claim_configs: [],
+			have_list_user: isEvryCanJoin,
+			description: '',
+			token_info: {
+				address: '',
+				token_address: '',
+				symbol: '',
+				token_icon: '',
+				total_sold_coin: 0,
+			},
+			buy_time: {
+				start_time: 0,
+				end_time: 0,
+			},
+			exchange_rate: 1,
+		};
 
 		await formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]
 			.validateFields()
 			.then((data: any) => {
-				console.log('GENERAL_INFOR', data);
+				payload.name = data.name;
 			})
-			.catch((err: any) => {
-				console.log('GENERAL_INFOR err', err, err.errorFields.length);
+			.catch(() => {
 				satusValidate = false;
 			});
 
 		await formsSaleRound[SaleRoundCreateForm.SR_ABOUNT]
 			.validateFields()
 			.then((data: any) => {
-				console.log('SR_ABOUNT', data);
+				payload.description = data.description;
 			})
-			.catch((err: any) => {
-				console.log('SR_ABOUNT err', err);
+			.catch(() => {
 				satusValidate = false;
 			});
 
 		await formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
 			.validateFields()
 			.then((data: any) => {
-				console.log('SR_BOX_TIME', data);
+				payload.buy_time.start_time = data.start_time.unix();
+				payload.buy_time.end_time = data.end_time.unix();
 			})
-			.catch((err: any) => {
-				console.log('SR_BOX_TIME err', err);
+			.catch(() => {
 				satusValidate = false;
 			});
 
 		await formsSaleRound[SaleRoundCreateForm.SR_DETAIL]
 			.validateFields()
 			.then((data: any) => {
-				console.log('SR_DETAIL', data);
+				payload.token_info.address = data.address;
+				payload.details.network = data.network;
+				payload.details.buy_limit = data.buy_limit;
+				payload.token_info.symbol = data.network;
+				payload.token_info.total_sold_coin = data.total_sold_coin;
 			})
-			.catch((err: any) => {
-				console.log('SR_DETAIL err', err);
+			.catch(() => {
 				satusValidate = false;
 			});
 
 		await formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE]
 			.validateFields()
 			.then((data: any) => {
-				console.log('SR_EXCHANGE_RATE', data);
+				payload.exchange_rate = (1 / Number(data.ex_rate_get)) | 1;
 			})
-			.catch((err: any) => {
-				console.log('SR_EXCHANGE_RATE err', err);
+			.catch(() => {
 				satusValidate = false;
 			});
 
 		if (!satusValidate) return;
-
-		const name =
-			formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR].getFieldValue('name') ||
-			'';
-		const buy_limit: number =
-			formsSaleRound[SaleRoundCreateForm.SR_DETAIL].getFieldValue(
-				'buy_limit'
-			) || 0;
-		const network: string =
-			formsSaleRound[SaleRoundCreateForm.SR_DETAIL].getFieldValue('network') ||
-			'BSC';
-		const address: string =
-			formsSaleRound[SaleRoundCreateForm.SR_DETAIL].getFieldValue('address') ||
-			'';
-		const total_sold_coin: number =
-			formsSaleRound[SaleRoundCreateForm.SR_DETAIL].getFieldValue(
-				'total_sold_coin'
-			);
-
-		const ex_rate_get: number =
-			formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE].getFieldValue(
-				'ex_rate_get'
-			);
-		const exchange_rate: number = (1 / ex_rate_get) | 1;
-		const buy_time = {
-			start_time: 0,
-			end_time: 0,
-		};
-		buy_time.start_time = formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
-			.getFieldValue('start_time')
-			.unix();
-		buy_time.end_time = formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
-			.getFieldValue('end_time')
-			.unix();
 
 		const claim_configs: {
 			start_time: number;
@@ -176,39 +164,19 @@ export default function SaleRoundList() {
 			});
 
 			totalMaxClaim += Number(el.maxClaim);
-			console.log(123, totalMaxClaim);
 		});
 		if (claimConfig.length === 0) {
 			claim_configs.push({
-				start_time: buy_time.start_time + 1000,
+				start_time: payload.buy_time.start_time + 1000,
 				max_claim: 10000,
 			});
 		}
-		console.log('claimConfig', claim_configs, totalMaxClaim);
 
 		if (totalMaxClaim < 100 || totalMaxClaim > 100) {
 			setMessageErrClaimConfig(MessageValidations.MSC_1_16);
-			// return;
+			return;
 		} else setMessageErrClaimConfig('');
-		const payload = {
-			name,
-			details: {
-				network,
-				buy_limit,
-			},
-			claim_configs,
-			have_list_user: isEvryCanJoin,
-			description: 'string',
-			token_info: {
-				address: address,
-				token_address: 'string',
-				symbol: 'BSC',
-				token_icon: 'BSC',
-				total_sold_coin,
-			},
-			buy_time,
-			exchange_rate,
-		};
+
 		setSaleroundForm(payload);
 		clearTimeout(debounceCreate);
 		debounceCreate = setTimeout(() => {
