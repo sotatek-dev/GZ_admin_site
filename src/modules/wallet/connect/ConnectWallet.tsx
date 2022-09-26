@@ -34,6 +34,8 @@ export default function ConnectWallet() {
 		}
 	}
 
+	const buttonLabel = active ? 'Sign In' : 'Connect';
+
 	return (
 		<div className='wallet'>
 			<Logo />
@@ -48,7 +50,7 @@ export default function ConnectWallet() {
 							loading={isSignIn}
 							type='primary'
 						>
-							Connect
+							{buttonLabel}
 						</ConnectButton>
 					</Space>
 				</Col>

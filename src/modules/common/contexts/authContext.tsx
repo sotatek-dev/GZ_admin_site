@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQueryClient } from 'react-query';
-import { Web3Provider } from '@ethersproject/providers';
+import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers';
 import { useLocation, useNavigate } from 'react-router';
 import { PATHS } from '@common/constants/paths';
 import {
@@ -53,8 +53,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			const provider = await connector.getProvider();
 			const signer = new Web3Provider(provider).getSigner();
 			const account = await signer.getAddress();
-			const signMessage = 'sign message';
-			const signature = await signer.signMessage(signMessage);
+			const signMessage = getSignMessage(account);
+			const signature = await trySignMessage(signer, signMessage);
 			await login(account, signMessage, signature);
 		}
 
@@ -82,3 +82,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		</authContext.Provider>
 	);
 };
+
+const trySignMessage = async (signer: JsonRpcSigner, signature: string) => {
+	return await signer.signMessage(signature);
+};
+
+const getSignMessage = (account: string) =>
+	'Sign this message to login with account' + account;
