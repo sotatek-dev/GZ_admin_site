@@ -15,12 +15,20 @@ import {
 	rowsTableClaim,
 } from './types';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { PATHS } from '@common/constants/paths';
 import { MessageValidations } from './types';
-// import { createSaleRound } from './services/saleRoundUpdate'
+// import { useCreateSaleRound } from './services/saleRoundUpdate'
+import { useBep20Contract } from '@web3/contracts';
+import { useActiveWeb3React } from '@web3/hooks';
 
 export default function SaleRoundList() {
+	const { account } = useActiveWeb3React();
+	const tokenContract = useBep20Contract(account || '');
+
+	const { id } = useParams<{ id: string }>();
+	console.log('useParams', id);
+
 	const navigate = useNavigate();
 	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>({
 		name: 'nadfgfdgme',
@@ -191,6 +199,30 @@ export default function SaleRoundList() {
 		}, 500);
 	};
 
+	const handlerSubmitDeploy = async () => {
+		if (!tokenContract || !account) {
+			return;
+		}
+		await tokenContract
+			.deployNewSalePhase(
+				1,
+				2,
+				[1],
+				[1],
+				true,
+				0,
+				1,
+				1,
+				'0xb237546A3706bde802B016131fa97df94D358FfF'
+			)
+			.then((data: any) => {
+				console.log('handlerSubmitDeploy', data);
+			})
+			.catch((err: any) => {
+				console.log('handlerSubmitDeploy', err);
+			});
+	};
+
 	return (
 		<>
 			<div className='sale-round-container'>
@@ -258,7 +290,10 @@ export default function SaleRoundList() {
 					</Form.Provider>
 				</div>
 				<div className='d-flex justify-content-space pt-153'>
-					<div className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center cursor-pointer mr-41'>
+					<div
+						className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center cursor-pointer mr-41'
+						onClick={handlerSubmitDeploy}
+					>
 						<span>Deploy the round</span>
 					</div>
 					<div

@@ -4,6 +4,7 @@ export const PATHS = {
 	saleRounds: {
 		list: () => '/sale-rounds',
 		create: () => '/sale-rounds/create',
+		edit: (id = ':id') => `/sale-rounds/edit/${id}`,
 	},
 	users: () => '/users',
 	admins: {

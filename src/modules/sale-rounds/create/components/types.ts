@@ -37,13 +37,13 @@ export interface DataClaimConfig {
 }
 export interface ISaleRoundCreateForm {
 	name: string;
+	have_list_user: boolean;
+	description: string;
 	details: {
 		network: string;
 		buy_limit: number;
 	};
 	claim_configs: DataClaimConfig[];
-	have_list_user: boolean;
-	description: string;
 	token_info: SRTokenInforForm;
 	buy_time: SRBoxTime;
 	exchange_rate: number;
