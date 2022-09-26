@@ -1,50 +1,97 @@
 import './scss/SrClaimConfig.style.scss';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import DialogClaim from './DialogClaim';
+import { DataClaimConfig, rowsTableClaim } from './types';
+import dayjs from 'dayjs';
 
-function createData(id: number, startTime: string, maxClaim: number) {
-	return { id, startTime, maxClaim };
+function createData(val: rowsTableClaim): rowsTableClaim {
+	return val;
 }
 
-const rows = [
-	createData(1, 'Frozen yoghurt', 159),
-	createData(2, 'Ice cream sandwich', 237),
-	createData(3, 'Eclair', 262),
-	createData(4, 'Cupcake', 305),
-];
+const removeItem = (arr: Array<rowsTableClaim>, item: number) =>
+	arr.filter((e) => e.id !== item);
 
-export default function SaleRoundClaimConfig() {
+export default function SaleRoundClaimConfig(props: {
+	message: string;
+	onSubmitClaimConfig: (val: rowsTableClaim[]) => void;
+}) {
 	const [open, setOpen] = useState<boolean>(() => false);
-	const [objectConfig, setobjectConfig] = useState<string>(() => '');
+	const [totalMaxClaim, setTotalMaxClaim] = useState<number>(() => 0);
+	const [rows, setRows] = useState<Array<rowsTableClaim>>([]);
+	const [dialogClaim, setDialogClaim] = useState<Array<rowsTableClaim>>([]);
+	const [objectConfig, setobjectConfig] = useState<DataClaimConfig>(() => ({
+		start_time: 0,
+		max_claim: 0,
+	}));
+	const { onSubmitClaimConfig, message } = props;
+	const [idCount, setIdcount] = useState<number>(0);
 
 	const handleClickOpen = () => {
+		if (isDisableBtnCreate) return;
 		setOpen(true);
-		setobjectConfig('');
 	};
 
 	const handleClickEdit = () => {
 		setOpen(true);
-		setobjectConfig('ahihi');
 	};
 
-	const handleClose = () => {
+	const handleClose = (val: DataClaimConfig) => {
 		setOpen(false);
+		if (!val.start_time) return;
+
+		setobjectConfig(val);
+		const row: rowsTableClaim = {
+			id: idCount,
+			startTime: dayjs(val.start_time).format('YYYY-MM-DD HH:mm:ss'),
+			maxClaim: val.max_claim,
+		};
+		rows.push(createData(row));
+
+		const claimData: rowsTableClaim = {
+			id: idCount,
+			startTime: val.start_time,
+			maxClaim: val.max_claim,
+		};
+
+		setTotalMaxClaim(Number(totalMaxClaim) + Number(val.max_claim));
+
+		dialogClaim.push(claimData);
+
+		onSubmitClaimConfig(dialogClaim);
+		setIdcount(idCount + 1);
 	};
+	const handlerRemove = (val: rowsTableClaim) => {
+		setTotalMaxClaim(Number(totalMaxClaim) - Number(val.maxClaim));
+
+		setRows(removeItem(rows, val.id));
+		setDialogClaim(removeItem(dialogClaim, val.id));
+		onSubmitClaimConfig(dialogClaim);
+	};
+
+	const isDisableBtnCreate = useMemo((): boolean => {
+		if (totalMaxClaim >= 100) return true;
+		return false;
+	}, [totalMaxClaim, rows]);
 
 	return (
 		<>
 			<div className='sr-block-contents'>
-				<div className={'sale-round-title sr-claimconfig-title--h'}>
+				<div className='sale-round-title sr-claimconfig-title--h'>
 					Claim Configuration
 				</div>
 				<div className='sale-round-contents sr-claimconfig-showip--h'>
-					<div className={'sr-detail-box-radio'}>
+					<div className='sr-detail-box-radio'>
 						<div
-							className={'btn-sale-round-create btn-claim-create'}
+							className={`${
+								isDisableBtnCreate
+									? 'btn-sale-round-disable'
+									: 'btn-sale-round-create'
+							} btn-claim-create`}
 							onClick={handleClickOpen}
 						>
 							<span>Create</span>
 						</div>
+						<div className='ant-form-item-explain-error'>{message}</div>
 					</div>
 					<div className='claim-table'>
 						<div className='claim-table-header d-flex claim-table-row-style'>
@@ -59,8 +106,8 @@ export default function SaleRoundClaimConfig() {
 							</div>
 						</div>
 						<div className='claim-table-body'>
-							{rows.map((el, index) => (
-								<>
+							{rows.length > 0 &&
+								rows.map((el, index) => (
 									<div
 										key={`table-claim-rows-${index}`}
 										className='claim-table-row d-flex claim-table-row-style'
@@ -79,12 +126,16 @@ export default function SaleRoundClaimConfig() {
 												>
 													Edit
 												</div>
-												<div className='cursor-pointer'>Remove</div>
+												<div
+													className='cursor-pointer'
+													onClick={() => handlerRemove(el)}
+												>
+													Remove
+												</div>
 											</div>
 										</div>
 									</div>
-								</>
-							))}
+								))}
 						</div>
 					</div>
 				</div>

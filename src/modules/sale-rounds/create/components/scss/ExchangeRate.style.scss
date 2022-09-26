@@ -2,5 +2,22 @@
 	height: 48px;
 }
 .sr-exchangerate-showip--h {
-	height: 142px;
+	height: 140px;
+}
+.ip-sr-exchange-rate {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	.ant-input {
+		height: 100%;
+	}
+	.ant-input-group {
+		height: 100%;
+	}
+	.ant-input-suffix {
+		border-left: 0.06rem solid #d9d9d9;
+
+		div {
+			padding-left: 0.4rem;
+		}
+	}
 }

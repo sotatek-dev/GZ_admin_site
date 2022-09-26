@@ -1,40 +1,134 @@
 import './scss/SrDetails.style.scss';
-import aboutIcon from './icons/about-icon.svg';
-import { Tooltip } from 'antd';
-import { Input } from 'antd';
-import { Radio } from 'antd';
+// import aboutIcon from './icons/about-icon.svg';
+import { Input, Radio, Form, Checkbox } from 'antd';
+import { SrDetailsForm, MessageValidations } from './types';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { useState } from 'react';
+import type { FormInstance } from 'antd/es/form/Form';
+import NumericInput from './NumericInput';
 
-export default function SaleRoundBoxDetails() {
+interface SrDetailProps {
+	data: SrDetailsForm;
+	form: FormInstance;
+}
+
+export default function SaleRoundBoxDetails(props: SrDetailProps) {
+	const { data, form } = props;
+	const [buyLimit, setBuyLimit] = useState<string>('');
+	const [totalSoldCoin, setTotalSoldCoin] = useState<string>('');
+	const [checkedBuyLimit, setCheckedBuyLimit] = useState(true);
+	const [disabledBuyLimit, setDisabledBuyLimit] = useState(false);
+
+	const handlerCheckboxChange = (e: CheckboxChangeEvent) => {
+		setCheckedBuyLimit(e.target.checked);
+		setDisabledBuyLimit(!e.target.checked);
+	};
+
 	return (
 		<>
 			<div className='sr-block-contents'>
-				<div className={'sale-round-title sr-showdetail-title--h'}>
+				<div className='sale-round-title sr-showdetail-title--h'>
 					Sale Round details
 				</div>
 				<div className='px-20 sale-round-contents sr-showdetail-showip--h'>
-					<div className={'sr-detail-box-radio'}>
-						<div className='SR-contents-title'>Network available</div>
-						<Radio.Group name='radiogroup' defaultValue={1}>
-							<Radio value={1}>A</Radio>
-							<Radio value={2}>B</Radio>
-							<Radio value={3}>C</Radio>
-							<Radio value={4}>D</Radio>
-						</Radio.Group>
-					</div>
-					<div>
-						<div className='SR-contents-title d-flex pt-10 pb-10'>
-							<span className={'pr-4'}>Buy Limit (BUSD)</span>
-							<div className={'d-flex align-items-center'}>
-								<Tooltip
-									placement='bottom'
-									title={'Set this value to 0 for no limitation'}
-								>
-									<img src={aboutIcon} alt='' />
-								</Tooltip>
-							</div>
-						</div>
-						<Input className='ip-sale-round-detail' placeholder='Basic usage' />
-					</div>
+					<Form form={form} layout='vertical' name='srDetailForm'>
+						<Form.Item
+							name='network'
+							label='Network available'
+							className='mb-0 pt-12'
+							initialValue={data.network}
+						>
+							<Radio.Group>
+								<Radio value={'BSC'}>BSC</Radio>
+							</Radio.Group>
+						</Form.Item>
+						<Form.Item
+							name='buyLimit'
+							label={
+								<div className='SR-contents-title d-flex'>
+									<span className='pr-4'>Buy Limit (BUSD)</span>
+									<div className='d-flex align-items-center'>
+										<Checkbox
+											checked={checkedBuyLimit}
+											onChange={handlerCheckboxChange}
+											className='sr-checkbox-user pl-21'
+										>
+											No limit
+										</Checkbox>
+									</div>
+								</div>
+							}
+							className='pt-14 mb-9'
+							initialValue={data.buy_limit}
+						>
+							{disabledBuyLimit ? (
+								<NumericInput
+									key='buyLimit'
+									className='ip-sale-round-detail'
+									suffix=''
+									value={buyLimit}
+									onChange={setBuyLimit}
+								/>
+							) : (
+								<Input
+									disabled
+									className={`ip-sale-round-detail ${
+										!disabledBuyLimit ? 'ip-disable' : ''
+									}`}
+								/>
+							)}
+						</Form.Item>
+						{/* <Form.Item
+							name='buyLimit'
+							label={
+								<div className='SR-contents-title d-flex'>
+									<span className={'pr-4'}>Buy Limit (BUSD)</span>
+									<div className={'d-flex align-items-center'}>
+										<Tooltip
+											placement='bottom'
+											title={'Set this value to 0 for no limitation'}
+										>
+											<img src={aboutIcon} alt='' />
+										</Tooltip>
+									</div>
+								</div>
+							}
+							className='pt-14 mb-9'
+							initialValue={data.buy_limit}
+						>
+							<NumericInput
+								key='buyLimit'
+								className='ip-sale-round-detail'
+								suffix=''
+								value={buyLimit}
+								onChange={setBuyLimit}
+							/>
+						</Form.Item> */}
+						<Form.Item
+							name='address'
+							className='mb-22'
+							label='Address (Recieve Money)'
+							initialValue={data.address}
+							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
+						>
+							<Input className='ip-sr-token-infor' placeholder='Basic usage' />
+						</Form.Item>
+						<Form.Item
+							name='total_sold_coin'
+							className='mb-22'
+							label='Total Sold Coin'
+							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
+							initialValue={data.tottal_sold_coin}
+						>
+							<NumericInput
+								key='total_sold_coin'
+								className='ip-sr-token-infor'
+								suffix=''
+								value={totalSoldCoin}
+								onChange={setTotalSoldCoin}
+							/>
+						</Form.Item>
+					</Form>
 				</div>
 			</div>
 		</>

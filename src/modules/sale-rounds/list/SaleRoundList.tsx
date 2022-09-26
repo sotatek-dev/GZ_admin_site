@@ -59,7 +59,7 @@ const AdminList = () => {
 	return (
 		<>
 			<Space>
-				<Button onClick={() => navigate(PATHS.admins.new())}>
+				<Button onClick={() => navigate(PATHS.saleRounds.create())}>
 					Create new sale round
 				</Button>
 			</Space>

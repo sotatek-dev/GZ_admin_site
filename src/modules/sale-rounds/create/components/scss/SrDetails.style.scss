@@ -1,6 +1,16 @@
 .sr-showdetail-title--h {
-	height: 60px;
+	height: 3.75rem;
 }
 .sr-showdetail-showip--h {
-	height: 283px;
+	height: 22.063rem;
+}
+#srDetailForm {
+	.ant-form-item-label {
+		font-weight: 400;
+		font-size: 0.875rem;
+		line-height: 175%;
+		color: #001f4d;
+		padding-bottom: 0.188rem;
+		padding-left: 0rem;
+	}
 }

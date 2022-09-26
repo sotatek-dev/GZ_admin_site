@@ -1,6 +1,5 @@
 import './scss/ListUser.style.scss';
 import { Checkbox } from 'antd';
-import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { ColumnsType } from 'antd/es/table';
 import { Space, Table } from 'antd';
 import { Pagination } from 'antd';
@@ -8,11 +7,8 @@ import type { PaginationProps } from 'antd';
 import prevImgae from './icons/prev-icon.svg';
 import nextImgae from './icons/next-icons.svg';
 import copyIcon from './icons/copy-icon.svg';
-
-const onChange = (e: CheckboxChangeEvent) => {
-	// eslint-disable-next-line no-console
-	console.log(`checked = ${e.target.checked}`);
-};
+import { useState } from 'react';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 interface DataType {
 	key: string;
@@ -109,19 +105,29 @@ const itemRender: PaginationProps['itemRender'] = (
 	return originalElement;
 };
 
-export default function SaleRoundListUser() {
+export default function SaleRoundListUser(props: {
+	isEveryCanJoin: (val: boolean) => void;
+}) {
+	const { isEveryCanJoin } = props;
+	const [checkedEvCanJoin, setCheckedEvCanJoin] = useState(true);
+
+	const handlerCheckboxChange = (e: CheckboxChangeEvent) => {
+		setCheckedEvCanJoin(e.target.checked);
+		isEveryCanJoin(e.target.checked);
+	};
+
 	return (
 		<>
 			<div className='sr-block-contents'>
-				<div
-					className={
-						'sale-round-title sr-listuser-title--h d-flex justify-content-space'
-					}
-				>
+				<div className='sale-round-title sr-listuser-title--h d-flex justify-content-space'>
 					<div className='d-flex'>
 						<span className='pr-18'>List User</span>
 						<div>
-							<Checkbox className='sr-checkbox-user' onChange={onChange}>
+							<Checkbox
+								checked={checkedEvCanJoin}
+								onChange={handlerCheckboxChange}
+								className='sr-checkbox-user'
+							>
 								Everyone can join
 							</Checkbox>
 						</div>

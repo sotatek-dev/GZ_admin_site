@@ -1,38 +1,54 @@
 import './scss/ExchangeRate.style.scss';
 import arrowLeft from './icons/arrow-left-icon.svg';
-import { Input } from 'antd';
+import { Input, Form } from 'antd';
+import { MessageValidations } from './types';
+import { useState } from 'react';
+import NumericInputGet from './NumericInput';
+import type { FormInstance } from 'antd/es/form/Form';
 
-export default function SaleRoundExchangeRate() {
+export default function SaleRoundExchangeRate(props: { form: FormInstance }) {
+	const { form } = props;
+	const [getRates, setGetRates] = useState<string>('0.00');
+
 	return (
-		<>
-			<div className='sr-block-contents'>
-				<div className={'sale-round-title sr-exchangerate-title--h'}>
-					Exchange Rates
-				</div>
-				<div className='pt-16 px-20 d-flex w-100 sr-exchangerate-showip--h'>
-					<div className='w-45'>
-						<div className='ip-sale-round-general-label'>
-							You have <span className='ip-requirement'>*</span>
-						</div>
-						<Input
-							className='ip-sr-exchange-rate'
-							suffix='BUSD'
-							defaultValue='mysite'
-						/>
-					</div>
+		<div className='sr-block-contents'>
+			<div className='sale-round-title sr-exchangerate-title--h'>
+				Exchange Rates
+			</div>
+			<div className='pt-16 px-20 sr-exchangerate-showip--h'>
+				<Form
+					form={form}
+					layout='vertical'
+					name='srExchangeRate'
+					className='d-flex w-100'
+				>
+					<Form.Item
+						name='ex_rate_have'
+						className='w-45'
+						label='You have'
+						initialValue='1'
+					>
+						<Input disabled className='ip-sr-exchange-rate' suffix='BUSD' />
+					</Form.Item>
 					<div className='pt-31 icon-arrow-exchange'>
 						<img src={arrowLeft} alt='' />
 					</div>
-					<div className='w-45'>
-						<div className='ip-sale-round-general-label'>You get</div>
-						<Input
+					<Form.Item
+						name='ex_rate_get'
+						className='w-45'
+						label='You get'
+						rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
+						initialValue={getRates}
+					>
+						<NumericInputGet
 							className='ip-sr-exchange-rate'
-							addonAfter='GXZ'
-							defaultValue='mysite'
+							suffix={<div>GXZ</div>}
+							value={getRates}
+							onChange={() => setGetRates}
 						/>
-					</div>
-				</div>
+					</Form.Item>
+				</Form>
 			</div>
-		</>
+		</div>
 	);
 }

@@ -1,18 +1,47 @@
-import { Modal } from 'antd';
-import { DatePicker } from 'antd';
-import { Input } from 'antd';
+import { Modal, Form, DatePicker } from 'antd';
+import {
+	DataClaimConfig,
+	MessageValidations,
+	FORMAT_DATETIME_SALEROUND,
+} from './types';
+import NumericInput from './NumericInput';
+import { useState } from 'react';
 
-export interface SimpleDialogProps {
+interface DialogClaimConfigProps {
 	open: boolean;
-	selectedValue: string;
-	onClose: (value: string) => void;
+	selectedValue: DataClaimConfig;
+	onClose: (value: DataClaimConfig) => void;
 }
 
-export default function DialogClaim(props: SimpleDialogProps) {
+export default function DialogClaim(props: DialogClaimConfigProps) {
 	const { onClose, selectedValue, open } = props;
+	const [form] = Form.useForm();
+	const [maxClaimIp, setMaxClaimIp] = useState<string>('');
 
 	const handleClose = () => {
-		onClose(selectedValue);
+		form.resetFields();
+		onClose({
+			max_claim: 0,
+			start_time: 0,
+		});
+	};
+
+	const handlerSubmit = () => {
+		form.submit();
+	};
+
+	const handlerFinish = (values: {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		claim_start_time: any;
+		max_claim: number;
+	}) => {
+		const start_time = values.claim_start_time.format('x');
+		const max_claim = values.max_claim || 10000;
+		onClose({
+			max_claim,
+			start_time,
+		});
+		form.resetFields();
 	};
 
 	return (
@@ -35,24 +64,43 @@ export default function DialogClaim(props: SimpleDialogProps) {
 					<div className='dl-claim-title'>
 						{selectedValue ? 'Edit claim' : 'Create a claim'}
 					</div>
-					<div className='pt-16'>
-						<div className='dialog-claim-contents-title'>Start Time</div>
-						<div>
+					<Form
+						form={form}
+						layout='vertical'
+						name='srDialogClaim'
+						onFinish={handlerFinish}
+					>
+						<Form.Item
+							name='claim_start_time'
+							label='Start Time'
+							className='pt-16'
+							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
+						>
 							<DatePicker
-								className={'dialog-claim-datetime'}
-								renderExtraFooter={() => 'extra footer'}
+								format={FORMAT_DATETIME_SALEROUND}
+								className='dialog-claim-datetime'
 								showTime
 							/>
-						</div>
-					</div>
-					<div className='pt-33 '>
-						<div className='dialog-claim-contents-title'>Max Claim (%)</div>
-						<div>
-							<Input className='ipdl-claim-max' placeholder='Basic usage' />
-						</div>
-					</div>
+						</Form.Item>
+						<Form.Item
+							name='max_claim'
+							label='Max Claim (%)'
+							className='pt-33'
+							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
+						>
+							<NumericInput
+								className='ipdl-claim-max'
+								suffix=''
+								value={maxClaimIp}
+								onChange={setMaxClaimIp}
+							/>
+						</Form.Item>
+					</Form>
 					<div className='d-flex dl-claim-btn-bot'>
-						<div className='btn-sale-round-create btn-apply d-flex align-items-center justify-content-center'>
+						<div
+							onClick={handlerSubmit}
+							className='btn-sale-round-create btn-apply d-flex align-items-center justify-content-center'
+						>
 							<span>Apply</span>
 						</div>
 						<div
