@@ -3,6 +3,7 @@ import { useBep20Contract } from '@web3/contracts';
 import { useActiveWeb3React } from '@web3/hooks';
 
 interface PayloadDeploySaleRound {
+	_salePhase: string;
 	_startTime: number;
 	_endTime: number;
 	_claimTime: number[];
@@ -25,6 +26,7 @@ export const UseDeployNewSalePhase = () => {
 
 	const deploySaleRound = async (payload: PayloadDeploySaleRound) =>
 		tokenContract.deployNewSalePhase(
+			payload._salePhase,
 			payload._startTime,
 			payload._endTime,
 			payload._claimTime,

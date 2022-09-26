@@ -18,16 +18,23 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { PATHS } from '@common/constants/paths';
 import { MessageValidations } from './types';
-// import { useCreateSaleRound } from './services/saleRoundUpdate'
+import { useCreateSaleRound } from './services/saleRoundUpdate';
+import { useSaleRoundGetDetail } from './services/saleRoundGetDetail';
 import { useBep20Contract } from '@web3/contracts';
 import { useActiveWeb3React } from '@web3/hooks';
 
 export default function SaleRoundList() {
 	const { account } = useActiveWeb3React();
 	const tokenContract = useBep20Contract(account || '');
+	const { isCreateSaleRoung, createSaleRound } = useCreateSaleRound();
+	const [_idSaleRound, setIdSaleRound] = useState<string>('');
+	console.log('isCreateSaleRoung', isCreateSaleRoung);
 
 	const { id } = useParams<{ id: string }>();
 	console.log('useParams', id);
+
+	const { data } = useSaleRoundGetDetail(id);
+	console.log('useSaleRoundGetDetail', data);
 
 	const navigate = useNavigate();
 	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>({
@@ -46,9 +53,6 @@ export default function SaleRoundList() {
 		description: 'string',
 		token_info: {
 			address: '0xb237546A3706bde802B016131fa97df94D358FfF',
-			token_address: 'string',
-			symbol: 'BSC',
-			token_icon: 'BSC',
 			total_sold_coin: 99,
 		},
 		buy_time: {
@@ -78,6 +82,19 @@ export default function SaleRoundList() {
 	};
 
 	const handlerSubmitUpdate = async () => {
+		clearTimeout(debounceCreate);
+		debounceCreate = setTimeout(async () => {
+			const validateData = await handlerFnDebouceCreate();
+			if (!validateData) return;
+			const response = await createSaleRound(saleroundForm);
+
+			if (response) {
+				setIdSaleRound(response._id);
+			}
+		}, 500);
+	};
+
+	const handlerFnDebouceCreate = async () => {
 		formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_ABOUNT].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME].submit();
@@ -91,14 +108,16 @@ export default function SaleRoundList() {
 				network: '',
 				buy_limit: 0,
 			},
-			claim_configs: [],
+			claim_configs: [
+				{
+					start_time: 0,
+					max_claim: 0,
+				},
+			],
 			have_list_user: isEvryCanJoin,
 			description: '',
 			token_info: {
 				address: '',
-				token_address: '',
-				symbol: '',
-				token_icon: '',
 				total_sold_coin: 0,
 			},
 			buy_time: {
@@ -143,10 +162,9 @@ export default function SaleRoundList() {
 			.validateFields()
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
-				payload.token_info.address = data.address;
 				payload.details.network = data.network;
-				payload.details.buy_limit = data.buy_limit;
-				payload.token_info.symbol = data.network;
+				payload.details.buy_limit = data.buyLimit;
+				payload.token_info.address = data.address;
 				payload.token_info.total_sold_coin = data.total_sold_coin;
 			})
 			.catch(() => {
@@ -163,9 +181,9 @@ export default function SaleRoundList() {
 				satusValidate = false;
 			});
 
-		if (!satusValidate) return;
+		if (!satusValidate) return satusValidate;
 
-		const claim_configs: {
+		let claim_configs: {
 			start_time: number;
 			max_claim: number;
 		}[] = [];
@@ -178,11 +196,13 @@ export default function SaleRoundList() {
 
 			totalMaxClaim += Number(el.maxClaim);
 		});
+		claim_configs = claim_configs.sort((a, b) => a.start_time - b.start_time);
 		if (claimConfig.length === 0) {
 			claim_configs.push({
-				start_time: payload.buy_time.start_time + 1000,
+				start_time: payload.buy_time.start_time + 10,
 				max_claim: 10000,
 			});
+			totalMaxClaim = 100;
 		}
 
 		if (totalMaxClaim < 100 || totalMaxClaim > 100) {
@@ -190,13 +210,10 @@ export default function SaleRoundList() {
 			return;
 		} else setMessageErrClaimConfig('');
 
+		payload.claim_configs = claim_configs;
+
 		setSaleroundForm(payload);
-		clearTimeout(debounceCreate);
-		debounceCreate = setTimeout(() => {
-			// createSaleRound(saleroundForm)
-			// eslint-disable-next-line no-console
-			console.log(saleroundForm);
-		}, 500);
+		return true;
 	};
 
 	const handlerSubmitDeploy = async () => {
@@ -205,18 +222,19 @@ export default function SaleRoundList() {
 		}
 		await tokenContract
 			.deployNewSalePhase(
-				1,
-				2,
+				12,
+				saleroundForm.buy_time.start_time,
+				saleroundForm.buy_time.end_time,
 				[1],
 				[1],
-				true,
-				0,
-				1,
-				1,
-				'0xb237546A3706bde802B016131fa97df94D358FfF'
+				saleroundForm.details.buy_limit === 0 ? true : false,
+				saleroundForm.details.buy_limit,
+				saleroundForm.exchange_rate,
+				saleroundForm.token_info.total_sold_coin,
+				saleroundForm.token_info.address
 			)
 			.then((data: any) => {
-				console.log('handlerSubmitDeploy', data);
+				console.log('handlerSubmitDeploy', data, _idSaleRound);
 			})
 			.catch((err: any) => {
 				console.log('handlerSubmitDeploy', err);
@@ -254,12 +272,8 @@ export default function SaleRoundList() {
 							<Col span={12}>
 								<div>
 									<SrDetails
-										data={{
-											buy_limit: 0,
-											network: 'BSC',
-											address: '0xb237546A3706bde802B016131fa97df94D358FfF',
-											tottal_sold_coin: 0,
-										}}
+										tokenInfo={saleroundForm.token_info}
+										details={saleroundForm.details}
 										form={formsSaleRound[SaleRoundCreateForm.SR_DETAIL]}
 									/>
 								</div>

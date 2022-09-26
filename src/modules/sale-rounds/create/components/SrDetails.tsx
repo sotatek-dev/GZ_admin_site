@@ -1,19 +1,24 @@
 import './scss/SrDetails.style.scss';
 // import aboutIcon from './icons/about-icon.svg';
 import { Input, Radio, Form, Checkbox } from 'antd';
-import { SrDetailsForm, MessageValidations } from './types';
+import {
+	MessageValidations,
+	SrTokenInforForm,
+	SrTokenDetailForm,
+} from './types';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { useState } from 'react';
 import type { FormInstance } from 'antd/es/form/Form';
 import NumericInput from './NumericInput';
 
 interface SrDetailProps {
-	data: SrDetailsForm;
+	tokenInfo: SrTokenInforForm;
+	details: SrTokenDetailForm;
 	form: FormInstance;
 }
 
 export default function SaleRoundBoxDetails(props: SrDetailProps) {
-	const { data, form } = props;
+	const { tokenInfo, form, details } = props;
 	const [buyLimit, setBuyLimit] = useState<string>('');
 	const [totalSoldCoin, setTotalSoldCoin] = useState<string>('');
 	const [checkedBuyLimit, setCheckedBuyLimit] = useState(true);
@@ -36,7 +41,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 							name='network'
 							label='Network available'
 							className='mb-0 pt-12'
-							initialValue={data.network}
+							initialValue={details.network}
 						>
 							<Radio.Group>
 								<Radio value={'BSC'}>BSC</Radio>
@@ -59,7 +64,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 								</div>
 							}
 							className='pt-14 mb-9'
-							initialValue={data.buy_limit}
+							initialValue={details.buy_limit}
 						>
 							{disabledBuyLimit ? (
 								<NumericInput
@@ -108,7 +113,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 							name='address'
 							className='mb-22'
 							label='Address (Recieve Money)'
-							initialValue={data.address}
+							initialValue={tokenInfo.address}
 							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 						>
 							<Input className='ip-sr-token-infor' placeholder='Basic usage' />
@@ -118,7 +123,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 							className='mb-22'
 							label='Total Sold Coin'
 							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
-							initialValue={data.tottal_sold_coin}
+							initialValue={tokenInfo.total_sold_coin}
 						>
 							<NumericInput
 								key='total_sold_coin'

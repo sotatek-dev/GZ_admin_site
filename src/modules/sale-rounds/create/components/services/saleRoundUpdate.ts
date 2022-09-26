@@ -9,22 +9,25 @@ const APIs = {
 type Response = any;
 
 async function createFn(payload: any) {
-	return axiosClient.put<any, Response>(APIs.createSaleRound(), payload);
+	return axiosClient.post<any, Response>(APIs.createSaleRound(), payload);
 }
 export const useCreateSaleRound = () => {
 	const createMutation = useMutation(createFn);
 
 	const createSaleRound = async (payload: any) => {
 		try {
-			await createMutation.mutateAsync(payload);
+			const data = await createMutation.mutateAsync(payload);
+
 			message.success('Create succeed');
+			return data;
 		} catch (error) {
 			message.error('Create failed');
+			return;
 		}
 	};
 
 	return {
 		createSaleRound,
-		isUpdateNftMintSetting: createMutation.isLoading,
+		isCreateSaleRoung: createMutation.isLoading,
 	};
 };
