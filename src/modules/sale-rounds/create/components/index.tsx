@@ -102,6 +102,7 @@ export default function SaleRoundList() {
 
 		await formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]
 			.validateFields()
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
 				payload.name = data.name;
 			})
@@ -111,6 +112,7 @@ export default function SaleRoundList() {
 
 		await formsSaleRound[SaleRoundCreateForm.SR_ABOUNT]
 			.validateFields()
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
 				payload.description = data.description;
 			})
@@ -120,6 +122,7 @@ export default function SaleRoundList() {
 
 		await formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
 			.validateFields()
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
 				payload.buy_time.start_time = data.start_time.unix();
 				payload.buy_time.end_time = data.end_time.unix();
@@ -130,6 +133,7 @@ export default function SaleRoundList() {
 
 		await formsSaleRound[SaleRoundCreateForm.SR_DETAIL]
 			.validateFields()
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
 				payload.token_info.address = data.address;
 				payload.details.network = data.network;
@@ -143,6 +147,7 @@ export default function SaleRoundList() {
 
 		await formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE]
 			.validateFields()
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
 				payload.exchange_rate = (1 / Number(data.ex_rate_get)) | 1;
 			})
@@ -181,6 +186,7 @@ export default function SaleRoundList() {
 		clearTimeout(debounceCreate);
 		debounceCreate = setTimeout(() => {
 			// createSaleRound(saleroundForm)
+			// eslint-disable-next-line no-console
 			console.log(saleroundForm);
 		}, 500);
 	};

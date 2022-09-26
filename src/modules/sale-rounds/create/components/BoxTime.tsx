@@ -1,13 +1,10 @@
 import './scss/BoxTime.style.scss';
 import { DatePicker, Form } from 'antd';
-import {
-	ISRBoxTimeProps,
-	MessageValidations,
-	FORMAT_DATETIME_SALEROUND,
-} from './types';
+import { MessageValidations, FORMAT_DATETIME_SALEROUND } from './types';
 import dayjs from 'dayjs';
+import type { FormInstance } from 'antd/es/form/Form';
 
-export default function SaleRoundBoxTime(props: ISRBoxTimeProps) {
+export default function SaleRoundBoxTime(props: { form: FormInstance }) {
 	const { form } = props;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

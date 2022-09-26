@@ -1,5 +1,3 @@
-import type { FormInstance } from 'antd/es/form/Form';
-
 export enum SaleRoundCreateForm {
 	GENERAL_INFOR = 'GENERAL_INFOR',
 	SR_DETAIL = 'GENERAL_INFOR',
@@ -16,24 +14,11 @@ export enum MessageValidations {
 
 export const FORMAT_DATETIME_SALEROUND = 'YYYY-MM-DD hh:mm';
 
-export interface SRDetailsForm {
+export interface SrDetailsForm {
 	network: string;
 	buy_limit: number;
 	address: string;
 	tottal_sold_coin: number;
-}
-export interface SRDetailProps {
-	data: SRDetailsForm;
-	form: FormInstance;
-}
-export interface ISRExchangeRateProps {
-	form: FormInstance;
-}
-export interface ISRBoxTimeProps {
-	form: FormInstance;
-}
-export interface ISRAboutProps {
-	form: FormInstance;
 }
 export interface SRTokenInforForm {
 	address: string;

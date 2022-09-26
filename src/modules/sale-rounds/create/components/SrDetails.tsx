@@ -1,12 +1,18 @@
 import './scss/SrDetails.style.scss';
 // import aboutIcon from './icons/about-icon.svg';
 import { Input, Radio, Form, Checkbox } from 'antd';
-import { SRDetailProps, MessageValidations } from './types';
+import { SrDetailsForm, MessageValidations } from './types';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { useState } from 'react';
+import type { FormInstance } from 'antd/es/form/Form';
 import NumericInput from './NumericInput';
 
-export default function SaleRoundBoxDetails(props: SRDetailProps) {
+interface SrDetailProps {
+	data: SrDetailsForm;
+	form: FormInstance;
+}
+
+export default function SaleRoundBoxDetails(props: SrDetailProps) {
 	const { data, form } = props;
 	const [buyLimit, setBuyLimit] = useState<string>('');
 	const [totalSoldCoin, setTotalSoldCoin] = useState<string>('');

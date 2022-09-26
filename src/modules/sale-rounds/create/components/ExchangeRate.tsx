@@ -1,11 +1,12 @@
 import './scss/ExchangeRate.style.scss';
 import arrowLeft from './icons/arrow-left-icon.svg';
 import { Input, Form } from 'antd';
-import { ISRExchangeRateProps, MessageValidations } from './types';
+import { MessageValidations } from './types';
 import { useState } from 'react';
 import NumericInputGet from './NumericInput';
+import type { FormInstance } from 'antd/es/form/Form';
 
-export default function SaleRoundExchangeRate(props: ISRExchangeRateProps) {
+export default function SaleRoundExchangeRate(props: { form: FormInstance }) {
 	const { form } = props;
 	const [getRates, setGetRates] = useState<string>('0.00');
 

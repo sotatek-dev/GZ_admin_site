@@ -1,10 +1,11 @@
 import './scss/AboutSaleRaound.style.scss';
 import { Input, Form } from 'antd';
-import { ISRAboutProps, MessageValidations } from './types';
+import { MessageValidations } from './types';
+import type { FormInstance } from 'antd/es/form/Form';
 
 const { TextArea } = Input;
 
-export default function AboutSaleRound(props: ISRAboutProps) {
+export default function AboutSaleRound(props: { form: FormInstance }) {
 	const { form } = props;
 	return (
 		<>
