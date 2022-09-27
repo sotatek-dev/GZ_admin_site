@@ -1,19 +1,15 @@
 import { Button } from '@common/components';
 import { useRedirectBack } from '@common/hooks';
 import { AdminForm } from '@admins/common/components';
-import { useCreateAdmin } from './CreateAdmin.mutation';
+import { useCreateNewAdmin } from './mutations/useCreateNewAdmin';
 import { Admin } from '@admins/common/types';
-import { useNavigate } from 'react-router';
-import { PATHS } from '@common/constants/paths';
 
 export default function CreateAdmin() {
-	const navigate = useNavigate();
 	const goBack = useRedirectBack();
-	const { createAdmin, isCreatingAdmin } = useCreateAdmin();
+	const { createNewAdmin, isCreateNewAdmin } = useCreateNewAdmin();
 
 	async function handleCreateAdmin(values: Omit<Admin, '_id'>) {
-		await createAdmin(values);
-		navigate(PATHS.admins.list());
+		createNewAdmin(values);
 	}
 
 	return (
@@ -21,7 +17,7 @@ export default function CreateAdmin() {
 			<Button onClick={goBack}>Back</Button>
 			<AdminForm
 				title='CREATE NEW ADMIN'
-				finish={{ onSubmit: handleCreateAdmin, isSubmitting: isCreatingAdmin }}
+				finish={{ onSubmit: handleCreateAdmin, isSubmitting: isCreateNewAdmin }}
 			/>
 		</>
 	);
