@@ -6,9 +6,17 @@ import { useState } from 'react';
 import NumericInputGet from './NumericInput';
 import type { FormInstance } from 'antd/es/form/Form';
 
-export default function SaleRoundExchangeRate(props: { form: FormInstance }) {
-	const { form } = props;
-	const [getRates, setGetRates] = useState<string>('0.00');
+interface ExchangeRatePropsForm {
+	form: FormInstance;
+	ex_rate_get: string;
+	isUpdate: boolean;
+}
+
+export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
+	const { form, ex_rate_get, isUpdate } = props;
+	console.log('ex_rate_get', ex_rate_get, isUpdate);
+
+	const [getRates, setGetRates] = useState<string>('11');
 
 	return (
 		<div className='sr-block-contents'>
@@ -38,7 +46,7 @@ export default function SaleRoundExchangeRate(props: { form: FormInstance }) {
 						className='w-45'
 						label='You get'
 						rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
-						initialValue={getRates}
+						initialValue={isUpdate ? ex_rate_get : ''}
 					>
 						<NumericInputGet
 							className='ip-sr-exchange-rate'

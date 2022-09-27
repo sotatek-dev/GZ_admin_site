@@ -1,5 +1,7 @@
 import './scss/BoxTime.style.scss';
-import { DatePicker, Form } from 'antd';
+import { Form } from 'antd';
+import DatePicker from 'src/modules/common/components/DatePicker';
+
 import { MessageValidations, FORMAT_DATETIME_SALEROUND } from './types';
 import dayjs from 'dayjs';
 import type { FormInstance } from 'antd/es/form/Form';
@@ -11,7 +13,7 @@ export default function SaleRoundBoxTime(props: { form: FormInstance }) {
 	const handlerStartDateChange = ({ getFieldValue }: any) => ({
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		validator(_: any, value: any) {
-			if (value && dayjs() > dayjs(value.format()))
+			if (value && dayjs() > value)
 				return Promise.reject(
 					new Error('Start buy time must be after current')
 				);
@@ -32,7 +34,7 @@ export default function SaleRoundBoxTime(props: { form: FormInstance }) {
 	const handlerEndDateChange = ({ getFieldValue }: any) => ({
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		validator(_: any, value: any) {
-			if (value && dayjs() > dayjs(value.format()))
+			if (value && dayjs() > value)
 				return Promise.reject(new Error('End buy time must be after current'));
 			if (
 				!value ||

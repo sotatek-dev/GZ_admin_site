@@ -16,53 +16,36 @@ export default function SaleRoundClaimConfig(props: {
 	onSubmitClaimConfig: (val: rowsTableClaim[]) => void;
 }) {
 	const [open, setOpen] = useState<boolean>(() => false);
-	const [isupdate, setIsUpdate] = useState<boolean>(() => false);
 	const [totalMaxClaim, setTotalMaxClaim] = useState<number>(() => 0);
 	const [rows, setRows] = useState<Array<rowsTableClaim>>([]);
 	const [dialogClaim, setDialogClaim] = useState<Array<rowsTableClaim>>([]);
-	const [objectConfig, setobjectConfig] = useState<DataClaimConfig>({
-		max_claim: 0,
-		start_time: 0,
+	const [objectConfig, setobjectConfig] = useState<rowsTableClaim>({
+		id: 0,
+		maxClaim: 0,
+		startTime: 0,
 	});
 	const { onSubmitClaimConfig, message } = props;
 	const [idCount, setIdcount] = useState<number>(0);
 
-	const handleClickOpen = async () => {
+	const handleClickOpen = () => {
 		if (isDisableBtnCreate) return;
-		await setobjectConfig({
-			max_claim: 0,
-			start_time: 0,
-		});
-		await setIsUpdate(false);
-		await setOpen(true);
-	};
-
-	const handleClickEdit = async (val: rowsTableClaim) => {
-		await setIsUpdate(true);
-		await setobjectConfig({
-			max_claim: val.maxClaim,
-			start_time: dayjs(val.startTime, 'YYYY-MM-DD HH:mm:ss').unix(),
-		});
-		console.log(
-			'objectConfig',
-			dayjs(val.startTime, 'YYYY-MM-DD HH:mm:ss').unix()
-		);
 		setOpen(true);
 	};
 
-	const handleClose = async (val: DataClaimConfig, status: number) => {
-		setOpen(false);
-		if (status === -1) {
-			await setobjectConfig({
-				max_claim: 0,
-				start_time: 0,
-			});
-			return;
-		}
+	const handleClickEdit = (val: rowsTableClaim) => {
+		setobjectConfig({
+			id: 0,
+			maxClaim: val.maxClaim,
+			startTime: val.startTime,
+		});
 
+		// setOpen(true);
+	};
+
+	const handlerCreate = (val: DataClaimConfig) => {
 		const row: rowsTableClaim = {
 			id: idCount,
-			startTime: dayjs.unix(val.start_time).format('YYYY-MM-DD HH:mm:ss'),
+			startTime: val.start_time,
 			maxClaim: Number(val.max_claim),
 		};
 		rows.push(createData(row));
@@ -79,6 +62,45 @@ export default function SaleRoundClaimConfig(props: {
 
 		onSubmitClaimConfig(dialogClaim);
 		setIdcount(idCount + 1);
+		setobjectConfig({
+			id: 0,
+			maxClaim: 0,
+			startTime: 0,
+		});
+		setOpen(false);
+	};
+
+	const handlerUpdate = (val: rowsTableClaim) => {
+		rows.forEach((el) => {
+			if (el.id === val.id) {
+				el.maxClaim = Number(val.maxClaim);
+				el.startTime = val.startTime;
+			}
+		});
+		dialogClaim.forEach((el) => {
+			if (el.id === val.id) {
+				el.maxClaim = Number(val.maxClaim);
+				el.startTime = val.startTime;
+			}
+		});
+		setobjectConfig({
+			id: 0,
+			maxClaim: 0,
+			startTime: 0,
+		});
+		setOpen(false);
+	};
+
+	const handleClose = () => {
+		if (open) {
+			setOpen(false);
+			return;
+		}
+		setobjectConfig({
+			id: 0,
+			maxClaim: 0,
+			startTime: 0,
+		});
 	};
 	const handlerRemove = (val: rowsTableClaim) => {
 		setTotalMaxClaim(Number(totalMaxClaim) - Number(val.maxClaim));
@@ -92,6 +114,9 @@ export default function SaleRoundClaimConfig(props: {
 		if (totalMaxClaim >= 100) return true;
 		return false;
 	}, [totalMaxClaim, rows]);
+
+	const formatDateTime = (val: number) =>
+		dayjs.unix(val).format('YYYY-MM-DD HH:mm:ss');
 
 	return (
 		<>
@@ -133,7 +158,9 @@ export default function SaleRoundClaimConfig(props: {
 										className='claim-table-row d-flex claim-table-row-style'
 									>
 										<div className='td-datetime d-flex align-items-center'>
-											<span className='pl-16'>{el.startTime}</span>
+											<span className='pl-16'>
+												{formatDateTime(el.startTime)}
+											</span>
 										</div>
 										<div className='td-maxclaim d-flex align-items-center justify-content-center'>
 											<span>{el.maxClaim}</span>
@@ -161,10 +188,12 @@ export default function SaleRoundClaimConfig(props: {
 				</div>
 			</div>
 			<DialogClaim
+				key={`${objectConfig.startTime}-${open}`}
 				open={open}
-				isUpdate={isupdate}
 				selectedValue={objectConfig}
 				onClose={handleClose}
+				onCreate={handlerCreate}
+				onUpdate={handlerUpdate}
 			/>
 		</>
 	);

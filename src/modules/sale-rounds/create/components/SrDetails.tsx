@@ -64,7 +64,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 								</div>
 							}
 							className='pt-14 mb-9'
-							initialValue={details.buy_limit}
+							initialValue={details.buy_limit || ''}
 						>
 							{disabledBuyLimit ? (
 								<NumericInput
@@ -123,7 +123,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 							className='mb-22'
 							label='Total Sold Coin'
 							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
-							initialValue={tokenInfo.total_sold_coin}
+							initialValue={tokenInfo.total_sold_coin || ''}
 						>
 							<NumericInput
 								key='total_sold_coin'

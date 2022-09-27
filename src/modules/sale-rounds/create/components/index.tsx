@@ -27,22 +27,20 @@ import { message } from '@common/components';
 export default function SaleRoundList() {
 	const { account } = useActiveWeb3React();
 	const tokenContract = useBep20Contract(account || '');
-	const { isCreateSaleRound, createSaleRound } = useCreateSaleRound();
+	const { createSaleRound } = useCreateSaleRound();
 	const [_idSaleRound, setIdSaleRound] = useState<string>('');
-	console.log('isCreateSaleRoung', isCreateSaleRound);
 
 	const { id } = useParams<{ id: string }>();
-	console.log('useParams', id);
 
 	const { data } = useSaleRoundGetDetail(id);
 	console.log('useSaleRoundGetDetail', data);
 
 	const navigate = useNavigate();
 	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>({
-		name: 'nadfgfdgme',
+		name: '',
 		details: {
 			network: 'BSC',
-			buy_limit: 9,
+			buy_limit: 0,
 		},
 		claim_configs: [
 			{
@@ -51,16 +49,16 @@ export default function SaleRoundList() {
 			},
 		],
 		have_list_user: true,
-		description: 'string',
+		description: '',
 		token_info: {
-			address: '0xb237546A3706bde802B016131fa97df94D358FfF',
+			address: '',
 			total_sold_coin: 0,
 		},
 		buy_time: {
 			start_time: 0,
 			end_time: 1,
 		},
-		exchange_rate: 1,
+		exchange_rate: 0,
 	});
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let debounceCreate: any;
@@ -215,7 +213,7 @@ export default function SaleRoundList() {
 		claimConfig.forEach((el) => {
 			claim_configs.push({
 				start_time: Number(el.startTime),
-				max_claim: Number(el.maxClaim),
+				max_claim: Number(el.maxClaim) * 100,
 			});
 
 			totalMaxClaim += Number(el.maxClaim);
@@ -224,7 +222,7 @@ export default function SaleRoundList() {
 		if (claimConfig.length === 0) {
 			claim_configs.push({
 				start_time: payload.buy_time.start_time + 10,
-				max_claim: 100,
+				max_claim: 10000,
 			});
 			totalMaxClaim = 100;
 		}
@@ -320,6 +318,12 @@ export default function SaleRoundList() {
 								</div>
 								<div className='pt-15'>
 									<ExchangeRate
+										isUpdate={false}
+										ex_rate_get={
+											saleroundForm.exchange_rate > 0
+												? String(1 / saleroundForm.exchange_rate)
+												: String(saleroundForm.exchange_rate)
+										}
 										form={formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE]}
 									/>
 								</div>

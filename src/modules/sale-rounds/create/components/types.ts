@@ -43,6 +43,6 @@ export interface ISaleRoundCreateForm {
 
 export interface rowsTableClaim {
 	id: number;
-	startTime: string | number;
+	startTime: number;
 	maxClaim: number;
 }
