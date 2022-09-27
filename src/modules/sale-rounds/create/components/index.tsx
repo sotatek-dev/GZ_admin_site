@@ -14,7 +14,7 @@ import {
 	SaleRoundCreateForm,
 	rowsTableClaim,
 } from './types';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { PATHS } from '@common/constants/paths';
 import { MessageValidations } from './types';
@@ -22,13 +22,14 @@ import { useCreateSaleRound } from './services/saleRoundUpdate';
 import { useSaleRoundGetDetail } from './services/saleRoundGetDetail';
 import { useBep20Contract } from '@web3/contracts';
 import { useActiveWeb3React } from '@web3/hooks';
+import { message } from '@common/components';
 
 export default function SaleRoundList() {
 	const { account } = useActiveWeb3React();
 	const tokenContract = useBep20Contract(account || '');
-	const { isCreateSaleRoung, createSaleRound } = useCreateSaleRound();
+	const { isCreateSaleRound, createSaleRound } = useCreateSaleRound();
 	const [_idSaleRound, setIdSaleRound] = useState<string>('');
-	console.log('isCreateSaleRoung', isCreateSaleRoung);
+	console.log('isCreateSaleRoung', isCreateSaleRound);
 
 	const { id } = useParams<{ id: string }>();
 	console.log('useParams', id);
@@ -40,7 +41,7 @@ export default function SaleRoundList() {
 	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>({
 		name: 'nadfgfdgme',
 		details: {
-			network: 'network',
+			network: 'BSC',
 			buy_limit: 9,
 		},
 		claim_configs: [
@@ -53,7 +54,7 @@ export default function SaleRoundList() {
 		description: 'string',
 		token_info: {
 			address: '0xb237546A3706bde802B016131fa97df94D358FfF',
-			total_sold_coin: 99,
+			total_sold_coin: 0,
 		},
 		buy_time: {
 			start_time: 0,
@@ -81,20 +82,28 @@ export default function SaleRoundList() {
 		setClaimConfig(val);
 	};
 
+	const isDisableBtnAfterCreate = useMemo(
+		() => (_idSaleRound ? true : false),
+		[_idSaleRound]
+	);
+
 	const handlerSubmitUpdate = async () => {
 		clearTimeout(debounceCreate);
 		debounceCreate = setTimeout(async () => {
-			const validateData = await handlerFnDebouceCreate();
-			if (!validateData) return;
-			const response = await createSaleRound(saleroundForm);
+			const { statusValidateForm, data } = await handlerFnDebouceCreate();
+			if (!statusValidateForm) return;
+			const response = await createSaleRound(data);
 
 			if (response) {
-				setIdSaleRound(response._id);
+				setIdSaleRound(response.sale_round);
 			}
 		}, 500);
 	};
 
-	const handlerFnDebouceCreate = async () => {
+	const handlerFnDebouceCreate = async (): Promise<{
+		statusValidateForm: boolean;
+		data: ISaleRoundCreateForm;
+	}> => {
 		formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_ABOUNT].submit();
 		formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME].submit();
@@ -102,7 +111,7 @@ export default function SaleRoundList() {
 		formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE].submit();
 
 		let satusValidate = true;
-		const payload = {
+		let payload = {
 			name: '',
 			details: {
 				network: '',
@@ -131,7 +140,10 @@ export default function SaleRoundList() {
 			.validateFields()
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
-				payload.name = data.name;
+				payload = {
+					...payload,
+					name: data.name,
+				};
 			})
 			.catch(() => {
 				satusValidate = false;
@@ -141,7 +153,10 @@ export default function SaleRoundList() {
 			.validateFields()
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
-				payload.description = data.description;
+				payload = {
+					...payload,
+					description: data.description,
+				};
 			})
 			.catch(() => {
 				satusValidate = false;
@@ -151,8 +166,13 @@ export default function SaleRoundList() {
 			.validateFields()
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
-				payload.buy_time.start_time = data.start_time.unix();
-				payload.buy_time.end_time = data.end_time.unix();
+				payload = {
+					...payload,
+					buy_time: {
+						start_time: data.start_time.unix(),
+						end_time: data.end_time.unix(),
+					},
+				};
 			})
 			.catch(() => {
 				satusValidate = false;
@@ -165,7 +185,7 @@ export default function SaleRoundList() {
 				payload.details.network = data.network;
 				payload.details.buy_limit = data.buyLimit;
 				payload.token_info.address = data.address;
-				payload.token_info.total_sold_coin = data.total_sold_coin;
+				payload.token_info.total_sold_coin = Number(data.total_sold_coin);
 			})
 			.catch(() => {
 				satusValidate = false;
@@ -181,7 +201,11 @@ export default function SaleRoundList() {
 				satusValidate = false;
 			});
 
-		if (!satusValidate) return satusValidate;
+		if (!satusValidate)
+			return {
+				statusValidateForm: satusValidate as boolean,
+				data: payload as ISaleRoundCreateForm,
+			};
 
 		let claim_configs: {
 			start_time: number;
@@ -191,7 +215,7 @@ export default function SaleRoundList() {
 		claimConfig.forEach((el) => {
 			claim_configs.push({
 				start_time: Number(el.startTime),
-				max_claim: Number(el.maxClaim) * 100,
+				max_claim: Number(el.maxClaim),
 			});
 
 			totalMaxClaim += Number(el.maxClaim);
@@ -200,20 +224,35 @@ export default function SaleRoundList() {
 		if (claimConfig.length === 0) {
 			claim_configs.push({
 				start_time: payload.buy_time.start_time + 10,
-				max_claim: 10000,
+				max_claim: 100,
 			});
 			totalMaxClaim = 100;
 		}
 
 		if (totalMaxClaim < 100 || totalMaxClaim > 100) {
 			setMessageErrClaimConfig(MessageValidations.MSC_1_16);
-			return;
+			return {
+				statusValidateForm: false,
+				data: payload as ISaleRoundCreateForm,
+			};
 		} else setMessageErrClaimConfig('');
 
 		payload.claim_configs = claim_configs;
 
-		setSaleroundForm(payload);
-		return true;
+		await setSaleroundForm(payload);
+
+		return {
+			statusValidateForm: true,
+			data: payload as ISaleRoundCreateForm,
+		};
+	};
+
+	const handlerResetForm = () => {
+		formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR].resetFields();
+		formsSaleRound[SaleRoundCreateForm.SR_ABOUNT].resetFields();
+		formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME].resetFields();
+		formsSaleRound[SaleRoundCreateForm.SR_DETAIL].resetFields();
+		formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE].resetFields();
 	};
 
 	const handlerSubmitDeploy = async () => {
@@ -222,11 +261,11 @@ export default function SaleRoundList() {
 		}
 		await tokenContract
 			.deployNewSalePhase(
-				12,
+				_idSaleRound,
 				saleroundForm.buy_time.start_time,
 				saleroundForm.buy_time.end_time,
-				[1],
-				[1],
+				saleroundForm.claim_configs.map((el) => el.start_time),
+				saleroundForm.claim_configs.map((el) => el.max_claim),
 				saleroundForm.details.buy_limit === 0 ? true : false,
 				saleroundForm.details.buy_limit,
 				saleroundForm.exchange_rate,
@@ -235,9 +274,11 @@ export default function SaleRoundList() {
 			)
 			.then((data: any) => {
 				console.log('handlerSubmitDeploy', data, _idSaleRound);
+				message.error('Deploy success');
+				handlerResetForm();
 			})
-			.catch((err: any) => {
-				console.log('handlerSubmitDeploy', err);
+			.catch(() => {
+				message.error('Deploy failed');
 			});
 	};
 
@@ -303,19 +344,27 @@ export default function SaleRoundList() {
 						</Row>
 					</Form.Provider>
 				</div>
-				<div className='d-flex justify-content-space pt-153'>
+				<div
+					className={`d-flex pt-153 ${
+						isDisableBtnAfterCreate
+							? 'justify-content-center'
+							: 'justify-content-space'
+					}`}
+				>
 					<div
 						className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center cursor-pointer mr-41'
 						onClick={handlerSubmitDeploy}
 					>
 						<span>Deploy the round</span>
 					</div>
-					<div
-						className='btn-sale-round-create btn-update-round d-flex align-items-center justify-content-center'
-						onClick={handlerSubmitUpdate}
-					>
-						<span>Create the round</span>
-					</div>
+					{!isDisableBtnAfterCreate && (
+						<div
+							className='btn-sale-round-create btn-update-round d-flex align-items-center justify-content-center'
+							onClick={handlerSubmitUpdate}
+						>
+							<span>Create the round</span>
+						</div>
+					)}
 				</div>
 			</div>
 		</>

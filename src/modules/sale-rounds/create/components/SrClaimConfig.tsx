@@ -16,41 +16,61 @@ export default function SaleRoundClaimConfig(props: {
 	onSubmitClaimConfig: (val: rowsTableClaim[]) => void;
 }) {
 	const [open, setOpen] = useState<boolean>(() => false);
+	const [isupdate, setIsUpdate] = useState<boolean>(() => false);
 	const [totalMaxClaim, setTotalMaxClaim] = useState<number>(() => 0);
 	const [rows, setRows] = useState<Array<rowsTableClaim>>([]);
 	const [dialogClaim, setDialogClaim] = useState<Array<rowsTableClaim>>([]);
-	const [objectConfig, setobjectConfig] = useState<DataClaimConfig>(() => ({
-		start_time: 0,
+	const [objectConfig, setobjectConfig] = useState<DataClaimConfig>({
 		max_claim: 0,
-	}));
+		start_time: 0,
+	});
 	const { onSubmitClaimConfig, message } = props;
 	const [idCount, setIdcount] = useState<number>(0);
 
-	const handleClickOpen = () => {
+	const handleClickOpen = async () => {
 		if (isDisableBtnCreate) return;
+		await setobjectConfig({
+			max_claim: 0,
+			start_time: 0,
+		});
+		await setIsUpdate(false);
+		await setOpen(true);
+	};
+
+	const handleClickEdit = async (val: rowsTableClaim) => {
+		await setIsUpdate(true);
+		await setobjectConfig({
+			max_claim: val.maxClaim,
+			start_time: dayjs(val.startTime, 'YYYY-MM-DD HH:mm:ss').unix(),
+		});
+		console.log(
+			'objectConfig',
+			dayjs(val.startTime, 'YYYY-MM-DD HH:mm:ss').unix()
+		);
 		setOpen(true);
 	};
 
-	const handleClickEdit = () => {
-		setOpen(true);
-	};
-
-	const handleClose = (val: DataClaimConfig) => {
+	const handleClose = async (val: DataClaimConfig, status: number) => {
 		setOpen(false);
-		if (!val.start_time) return;
+		if (status === -1) {
+			await setobjectConfig({
+				max_claim: 0,
+				start_time: 0,
+			});
+			return;
+		}
 
-		setobjectConfig(val);
 		const row: rowsTableClaim = {
 			id: idCount,
-			startTime: dayjs(val.start_time).format('YYYY-MM-DD HH:mm:ss'),
-			maxClaim: val.max_claim,
+			startTime: dayjs.unix(val.start_time).format('YYYY-MM-DD HH:mm:ss'),
+			maxClaim: Number(val.max_claim),
 		};
 		rows.push(createData(row));
 
 		const claimData: rowsTableClaim = {
 			id: idCount,
 			startTime: val.start_time,
-			maxClaim: val.max_claim,
+			maxClaim: Number(val.max_claim),
 		};
 
 		setTotalMaxClaim(Number(totalMaxClaim) + Number(val.max_claim));
@@ -122,7 +142,7 @@ export default function SaleRoundClaimConfig(props: {
 											<div className='d-flex align-items-center justify-content-center'>
 												<div
 													className='pr-16 cursor-pointer'
-													onClick={handleClickEdit}
+													onClick={() => handleClickEdit(el)}
 												>
 													Edit
 												</div>
@@ -142,6 +162,7 @@ export default function SaleRoundClaimConfig(props: {
 			</div>
 			<DialogClaim
 				open={open}
+				isUpdate={isupdate}
 				selectedValue={objectConfig}
 				onClose={handleClose}
 			/>

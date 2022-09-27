@@ -41,7 +41,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 							name='network'
 							label='Network available'
 							className='mb-0 pt-12'
-							initialValue={details.network}
+							initialValue={'BSC'}
 						>
 							<Radio.Group>
 								<Radio value={'BSC'}>BSC</Radio>

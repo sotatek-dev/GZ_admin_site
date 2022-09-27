@@ -28,6 +28,6 @@ export const useCreateSaleRound = () => {
 
 	return {
 		createSaleRound,
-		isCreateSaleRoung: createMutation.isLoading,
+		isCreateSaleRound: createMutation.isLoading,
 	};
 };

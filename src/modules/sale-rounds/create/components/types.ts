@@ -28,7 +28,7 @@ export interface SRBoxTime {
 }
 export interface DataClaimConfig {
 	start_time: number;
-	max_claim: number;
+	max_claim: number | string;
 }
 export interface ISaleRoundCreateForm {
 	name: string;
