@@ -24,7 +24,7 @@ import {
 	useUpdateSaleRoundDeployed,
 } from './services/saleRoundUpdate';
 import { useSaleRoundGetDetail } from './services/saleRoundGetDetail';
-import { useBep20Contract } from '@web3/contracts';
+import { usePresalePoolContract } from '@web3/contracts';
 import { useActiveWeb3React } from '@web3/hooks';
 import { message } from '@common/components';
 import BigNumber from 'bignumber.js';
@@ -32,7 +32,7 @@ import { Loading } from '@common/components';
 
 export default function SaleRoundList() {
 	const { account } = useActiveWeb3React();
-	const tokenContract = useBep20Contract(account || '');
+	const tokenContract = usePresalePoolContract();
 	const { createSaleRound } = useCreateSaleRound();
 	const { updateSaleRound } = useUpdateSaleRound();
 	const { updateSaleRoundDeployed } = useUpdateSaleRoundDeployed();

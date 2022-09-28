@@ -1,4 +1,4 @@
 import { useErc20Contract } from './useErc20Contract';
-import { useBep20Contract } from './useBep20Contrast';
+import { usePresalePoolContract } from './usePresalePoolContract';
 
-export { useErc20Contract, useBep20Contract };
+export { useErc20Contract, usePresalePoolContract };

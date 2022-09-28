@@ -1,5 +1,12 @@
+import { NAME_REGEX } from '@admins/common/constants';
 import { Admin } from '@admins/common/types';
 import { Button, Form, Input, Loading } from '@common/components';
+import { MESSAGES } from '@common/constants/messages';
+import {
+	addressValidator,
+	emailValidator,
+	requiredValidate,
+} from '@common/helpers/validate';
 import { useGetProfile } from '@common/services/queries/useGetProfile';
 import { useUpdateProfile } from './Profile.mutation';
 
@@ -27,7 +34,7 @@ export default function Profile() {
 				initialValue={profile?.wallet_address}
 				label='Wallet Address'
 				name='wallet_address'
-				rules={[{ required: true, message: 'Please input wallet address!' }]}
+				rules={[requiredValidate(), { validator: addressValidator }]}
 			>
 				<Input />
 			</Form.Item>
@@ -35,7 +42,7 @@ export default function Profile() {
 				initialValue={profile?.email}
 				label='Email'
 				name='email'
-				rules={[{ required: true, message: 'Please input email!' }]}
+				rules={[requiredValidate(), { validator: emailValidator }]}
 			>
 				<Input />
 			</Form.Item>
@@ -43,6 +50,7 @@ export default function Profile() {
 				initialValue={profile?.firstname}
 				label='First Name'
 				name='firstname'
+				rules={[{ pattern: NAME_REGEX, message: MESSAGES.MC6 }]}
 			>
 				<Input />
 			</Form.Item>
@@ -50,6 +58,7 @@ export default function Profile() {
 				initialValue={profile?.lastname}
 				label='Last Name'
 				name='lastname'
+				rules={[{ pattern: NAME_REGEX, message: MESSAGES.MC7 }]}
 			>
 				<Input />
 			</Form.Item>

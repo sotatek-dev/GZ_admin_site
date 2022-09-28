@@ -1,22 +1,23 @@
 import './NFTInfo.style.scss';
-import { Card, Col, Row } from '@common/components';
+import { Button, Card, Col, Row } from '@common/components';
 import { MinPhaseLabel, MintPhase } from '@settings/nft-mint/types';
+import { useSetCurrentRound } from '@settings/nft-mint/services/useSetCurrentRound';
 
 const TAB_LIST = [
 	{
-		key: MintPhase.WhiteList,
+		key: `${MintPhase.WhiteList}`,
 		tab: MinPhaseLabel[MintPhase.WhiteList],
 	},
 	{
-		key: MintPhase.Presale1,
+		key: `${MintPhase.Presale1}`,
 		tab: MinPhaseLabel[MintPhase.Presale1],
 	},
 	{
-		key: MintPhase.Presale2,
+		key: `${MintPhase.Presale2}`,
 		tab: MinPhaseLabel[MintPhase.Presale2],
 	},
 	{
-		key: MintPhase.Public,
+		key: `${MintPhase.Public}`,
 		tab: MinPhaseLabel[MintPhase.Public],
 	},
 ];
@@ -32,6 +33,7 @@ export default function NFTInfo({
 	currentPhase,
 	setCurrentPhase,
 }: Props) {
+	const { setCurrentRound, isSetCurrentRound } = useSetCurrentRound();
 	const onTab2Change = (key: MintPhase) => {
 		setCurrentPhase(key);
 	};
@@ -42,13 +44,20 @@ export default function NFTInfo({
 				<Card
 					tabList={TAB_LIST}
 					tabBarExtraContent='NFT Info'
-					activeTabKey={currentPhase}
+					activeTabKey={`${currentPhase}`}
 					onTabChange={(key) => {
 						onTab2Change(key as MintPhase);
 					}}
 					style={{ padding: 0, minHeight: 450 }}
 				>
 					{form}
+					<Button
+						type='primary'
+						onClick={() => setCurrentRound(currentPhase)}
+						loading={isSetCurrentRound}
+					>
+						Set Current Round
+					</Button>
 				</Card>
 			</Col>
 		</Row>

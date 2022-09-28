@@ -12,11 +12,12 @@ import { useRedirectBack } from '@common/hooks';
 
 export default function SettingNFTMint() {
 	const goBack = useRedirectBack();
-	const [currentPhase, setCurrentPhase] = useState<MintPhase>(
+	const [currentPhaseTab, setCurrentPhase] = useState<MintPhase>(
 		MintPhase.WhiteList
 	);
 
-	const { data: phaseSetting } = useNFTMintPhaseSetting(currentPhase);
+	const { currentPhase, currentPhaseSetting } =
+		useNFTMintPhaseSetting(currentPhaseTab);
 	const { updateNftMintSetting, isUpdateNftMintSetting } =
 		useUpdateNFTMintSetting();
 
@@ -31,7 +32,7 @@ export default function SettingNFTMint() {
 		const { price, price_after_24h, nft_mint_limit, mint_time } = values;
 
 		const newSetting = {
-			_id: phaseSetting?._id as string,
+			_id: currentPhaseTab,
 			price,
 			price_after_24h,
 			nft_mint_limit,
@@ -52,23 +53,23 @@ export default function SettingNFTMint() {
 			<NFTInfo
 				form={
 					<NFTInfoForm
-						form={forms[currentPhase]}
-						phaseSetting={phaseSetting}
+						form={forms[currentPhaseTab]}
+						phaseSetting={currentPhaseSetting}
 						onFinish={handleSaveSetting}
 						key={currentPhase}
 					/>
 				}
-				currentPhase={currentPhase}
+				currentPhase={currentPhaseTab}
 				setCurrentPhase={handleChangeCurrentPhase}
 			/>
 			<UserList />
 			<div className='setting-nft-button_group'>
-				<Button danger onClick={() => forms[currentPhase].resetFields()}>
+				<Button danger onClick={() => forms[currentPhaseTab].resetFields()}>
 					Cancel
 				</Button>
 				<Button
 					htmlType='submit'
-					onClick={() => forms[currentPhase].submit()}
+					onClick={() => forms[currentPhaseTab].submit()}
 					loading={isUpdateNftMintSetting}
 				>
 					Save

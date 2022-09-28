@@ -27,13 +27,14 @@ export default function ConnectWallet() {
 				return;
 			}
 			await signIn(ConnectorKey.injected);
-			message.success(MESSAGES.MC3);
 		} catch {
 			message.error({ content: MESSAGES.MC4, key: MESSAGES.MC4 });
 		} finally {
 			setIsSignIn(false);
 		}
 	}
+
+	const buttonLabel = active ? 'Sign In' : 'Connect';
 
 	return (
 		<div className='wallet'>
@@ -49,7 +50,7 @@ export default function ConnectWallet() {
 							loading={isSignIn}
 							type='primary'
 						>
-							Connect
+							{buttonLabel}
 						</ConnectButton>
 					</Space>
 				</Col>
