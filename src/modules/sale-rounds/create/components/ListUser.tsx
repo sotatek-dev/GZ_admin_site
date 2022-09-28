@@ -9,7 +9,10 @@ import nextImgae from './icons/next-icons.svg';
 import copyIcon from './icons/copy-icon.svg';
 import { useState } from 'react';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-
+import { Button, Upload } from 'antd';
+import type { UploadProps } from 'antd';
+import { message } from '@common/components';
+import { getCookieStorage } from '@common/helpers/storage';
 interface DataType {
 	key: string;
 	Wallet: string;
@@ -107,13 +110,42 @@ const itemRender: PaginationProps['itemRender'] = (
 
 export default function SaleRoundListUser(props: {
 	isEveryCanJoin: (val: boolean) => void;
+	isUpdated: string | undefined;
 }) {
-	const { isEveryCanJoin } = props;
+	const { isEveryCanJoin, isUpdated } = props;
 	const [checkedEvCanJoin, setCheckedEvCanJoin] = useState(true);
 
 	const handlerCheckboxChange = (e: CheckboxChangeEvent) => {
 		setCheckedEvCanJoin(e.target.checked);
 		isEveryCanJoin(e.target.checked);
+	};
+	const accessToken = getCookieStorage('access_token');
+
+	const propsUploadFile: UploadProps = {
+		name: 'file',
+		action: `${process.env.REACT_APP_BASE_API_URL}whitelisted-user/sale-round/${isUpdated}`,
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+		onChange(info) {
+			if (info.file.status !== 'uploading') {
+				console.log(info.file, info.fileList);
+			}
+			if (info.file.status === 'done') {
+				message.success(`${info.file.name} file uploaded successfully`);
+			} else if (info.file.status === 'error') {
+				message.error(`${info.file.name} file upload failed.`);
+			}
+		},
+		showUploadList: false,
+		progress: {
+			strokeColor: {
+				'0%': '#108ee9',
+				'100%': '#87d068',
+			},
+			strokeWidth: 3,
+			format: (percent) => percent && `${parseFloat(percent.toFixed(2))}%`,
+		},
 	};
 
 	return (
@@ -137,9 +169,11 @@ export default function SaleRoundListUser(props: {
 							<div className='mr-12 btn-sale-round-create btn-userlist-reload d-flex justify-content-center align-items-center'>
 								<span>Reload all</span>
 							</div>
-							<div className='d-flex justify-content-center align-items-center btn-userlist-addcsv'>
-								<span>Add CSV File</span>
-							</div>
+							<Upload {...propsUploadFile}>
+								<Button className='d-flex justify-content-center align-items-center btn-userlist-addcsv'>
+									<span>Add CSV File</span>
+								</Button>
+							</Upload>
 						</div>
 					</div>
 				</div>

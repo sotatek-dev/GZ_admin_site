@@ -34,19 +34,21 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	});
 	const [idCount, setIdcount] = useState<number>(0);
 	useEffect(() => {
-		if (data && data.length === 0 && rows.length > 0) return;
-		let sumTotal = 0;
-		const newData = data.map((el, idx) => {
-			sumTotal += el.max_claim / 100;
-			return {
-				id: idx,
-				maxClaim: el.max_claim / 100,
-				startTime: el.start_time,
-			};
-		});
-		setTotalMaxClaim(sumTotal);
-		setRows(newData);
-		onSubmitClaimConfig(newData);
+		if (data && data.length > 0) {
+			let sumTotal = 0;
+			const newData = data.map((el, idx) => {
+				sumTotal += el.max_claim / 100;
+				return {
+					id: idx,
+					maxClaim: el.max_claim / 100,
+					startTime: el.start_time,
+				};
+			});
+			setTotalMaxClaim(sumTotal);
+			onSubmitClaimConfig(newData);
+			setRows(newData);
+			setIdcount(idCount + 1);
+		}
 	}, [data]);
 
 	const handleClickOpen = () => {
@@ -76,13 +78,13 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 		setTotalMaxClaim(Number(totalMaxClaim) + Number(val.max_claim));
 
 		onSubmitClaimConfig(rows);
-		setIdcount(idCount + 1);
 		setobjectConfig({
 			id: 0,
 			maxClaim: 0,
 			startTime: 0,
 		});
 		setOpen(false);
+		setIdcount(idCount + 1);
 	};
 
 	const handlerUpdate = (val: rowsTableClaim) => {
@@ -160,8 +162,11 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 								<span>Actions</span>
 							</div>
 						</div>
-						<div className='claim-table-body'>
-							{rows.length > 0 &&
+						<div
+							key={`claim-table-body-${idCount}`}
+							className='claim-table-body'
+						>
+							{idCount > 0 &&
 								rows.map((el, index) => (
 									<div
 										key={`table-claim-rows-${index}`}

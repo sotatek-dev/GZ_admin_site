@@ -21,6 +21,7 @@ import { MessageValidations } from './types';
 import {
 	useCreateSaleRound,
 	useUpdateSaleRound,
+	useUpdateSaleRoundDeployed,
 } from './services/saleRoundUpdate';
 import { useSaleRoundGetDetail } from './services/saleRoundGetDetail';
 import { useBep20Contract } from '@web3/contracts';
@@ -34,14 +35,18 @@ export default function SaleRoundList() {
 	const tokenContract = useBep20Contract(account || '');
 	const { createSaleRound } = useCreateSaleRound();
 	const { updateSaleRound } = useUpdateSaleRound();
+	const { updateSaleRoundDeployed } = useUpdateSaleRoundDeployed();
 	const [_idSaleRound, setIdSaleRound] = useState<number>();
 
 	const { id } = useParams<{ id: string }>();
-	const idSaleRound = id as string;
+	const idSaleRoundUpdate = id as string;
 
 	const { data, isLoading } = useSaleRoundGetDetail(id);
 
-	const isUpdateSaleRound = useMemo(() => (id ? true : false), [isLoading]);
+	const isUpdateSaleRound = useMemo(() => {
+		if (data && data.status === 'deployed') return true;
+		return false;
+	}, [isLoading]);
 
 	const navigate = useNavigate();
 	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>({
@@ -98,14 +103,23 @@ export default function SaleRoundList() {
 		debounceCreate = setTimeout(async () => {
 			if (isUpdateSaleRound) {
 				await handlerUpdateSaleRound();
-			} else {
-				const { statusValidateForm, data } = await handlerFnDebouceCreate();
-				if (!statusValidateForm) return;
-				const response = await createSaleRound(data);
+				return;
+			}
+			const { statusValidateForm, data } = await handlerFnDebouceCreate();
+			if (!statusValidateForm) return;
 
-				if (response) {
-					setIdSaleRound(response.sale_round);
-				}
+			if (idSaleRoundUpdate) {
+				await updateSaleRound({
+					...data,
+					_id: idSaleRoundUpdate,
+				});
+				return;
+			}
+
+			const response = await createSaleRound(data);
+
+			if (response) {
+				setIdSaleRound(response.sale_round);
 			}
 		}, 500);
 	};
@@ -320,10 +334,10 @@ export default function SaleRoundList() {
 
 		if (!satusValidate) return;
 
-		await updateSaleRound({
+		await updateSaleRoundDeployed({
 			description,
 			name,
-			_id: idSaleRound,
+			_id: idSaleRoundUpdate,
 		});
 	};
 
@@ -399,7 +413,10 @@ export default function SaleRoundList() {
 						</Row>
 						<Row className='pt-41'>
 							<Col span={24}>
-								<ListUser isEveryCanJoin={setEveryCanJoin} />
+								<ListUser
+									isUpdated={idSaleRoundUpdate}
+									isEveryCanJoin={setEveryCanJoin}
+								/>
 							</Col>
 						</Row>
 					</Form.Provider>
