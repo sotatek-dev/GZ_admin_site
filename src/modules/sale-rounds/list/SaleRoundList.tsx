@@ -75,6 +75,11 @@ const AdminList = () => {
 			</Space>
 			<Table
 				bordered
+				onRow={(el) => {
+					return {
+						onClick: () => navigate(PATHS.saleRounds.edit(el._id)),
+					};
+				}}
 				columns={columns}
 				dataSource={data?.list}
 				loading={isLoading}

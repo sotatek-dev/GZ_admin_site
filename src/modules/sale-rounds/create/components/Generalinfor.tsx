@@ -6,10 +6,11 @@ import { MessageValidations } from './types';
 interface GeneralInforProps {
 	srName: string;
 	form: FormInstance;
+	isUpdate: boolean;
 }
 
 export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
-	const { srName, form } = props;
+	const { srName, form, isUpdate } = props;
 
 	return (
 		<>
@@ -25,7 +26,11 @@ export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
 							initialValue={srName}
 							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 						>
-							<Input className='ip-sale-round-general' name='name' />
+							<Input
+								disabled={isUpdate}
+								className='ip-sale-round-general'
+								name='name'
+							/>
 						</Form.Item>
 					</Form>
 				</div>

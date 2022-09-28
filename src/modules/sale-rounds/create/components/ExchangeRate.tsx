@@ -8,15 +8,14 @@ import type { FormInstance } from 'antd/es/form/Form';
 
 interface ExchangeRatePropsForm {
 	form: FormInstance;
-	ex_rate_get: string;
+	ex_rate_get: string | undefined;
 	isUpdate: boolean;
 }
 
 export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
 	const { form, ex_rate_get, isUpdate } = props;
-	console.log('ex_rate_get', ex_rate_get, isUpdate);
 
-	const [getRates, setGetRates] = useState<string>('11');
+	const [getRates, setGetRates] = useState<string>('');
 
 	return (
 		<div className='sr-block-contents'>
@@ -46,13 +45,14 @@ export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
 						className='w-45'
 						label='You get'
 						rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
-						initialValue={isUpdate ? ex_rate_get : ''}
+						initialValue={ex_rate_get ? String(1 / Number(ex_rate_get)) : ''}
 					>
 						<NumericInputGet
+							disabled={isUpdate}
 							className='ip-sr-exchange-rate'
 							suffix={<div>GXZ</div>}
 							value={getRates}
-							onChange={() => setGetRates}
+							onChange={setGetRates}
 						/>
 					</Form.Item>
 				</Form>

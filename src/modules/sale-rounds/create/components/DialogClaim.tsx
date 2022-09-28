@@ -80,7 +80,6 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 						<div className='dl-claim-title'>
 							{handlerEdit ? 'Edit claim' : 'Create a claim'}
 						</div>
-						<div>{startTime}</div>
 						<Form
 							form={form}
 							layout='vertical'
@@ -94,7 +93,7 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 								rules={[
 									{ required: true, message: MessageValidations.MSC_1_15 },
 								]}
-								initialValue={handlerEdit && dayjs.unix(startTime)}
+								initialValue={(handlerEdit && dayjs.unix(startTime)) || ''}
 							>
 								<DatePicker
 									format={FORMAT_DATETIME_SALEROUND}
@@ -112,6 +111,7 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 								initialValue={(maxClaim && maxClaim) || ''}
 							>
 								<NumericInput
+									disabled={false}
 									className='ipdl-claim-max'
 									suffix=''
 									value={ipMaxclaim}

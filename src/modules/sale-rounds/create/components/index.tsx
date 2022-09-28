@@ -18,22 +18,30 @@ import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { PATHS } from '@common/constants/paths';
 import { MessageValidations } from './types';
-import { useCreateSaleRound } from './services/saleRoundUpdate';
+import {
+	useCreateSaleRound,
+	useUpdateSaleRound,
+} from './services/saleRoundUpdate';
 import { useSaleRoundGetDetail } from './services/saleRoundGetDetail';
 import { useBep20Contract } from '@web3/contracts';
 import { useActiveWeb3React } from '@web3/hooks';
 import { message } from '@common/components';
+import BigNumber from 'bignumber.js';
+import { Loading } from '@common/components';
 
 export default function SaleRoundList() {
 	const { account } = useActiveWeb3React();
 	const tokenContract = useBep20Contract(account || '');
 	const { createSaleRound } = useCreateSaleRound();
-	const [_idSaleRound, setIdSaleRound] = useState<string>('');
+	const { updateSaleRound } = useUpdateSaleRound();
+	const [_idSaleRound, setIdSaleRound] = useState<number>();
 
 	const { id } = useParams<{ id: string }>();
+	const idSaleRound = id as string;
 
-	const { data } = useSaleRoundGetDetail(id);
-	console.log('useSaleRoundGetDetail', data);
+	const { data, isLoading } = useSaleRoundGetDetail(id);
+
+	const isUpdateSaleRound = useMemo(() => (id ? true : false), [isLoading]);
 
 	const navigate = useNavigate();
 	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>({
@@ -56,7 +64,7 @@ export default function SaleRoundList() {
 		},
 		buy_time: {
 			start_time: 0,
-			end_time: 1,
+			end_time: 0,
 		},
 		exchange_rate: 0,
 	});
@@ -88,12 +96,16 @@ export default function SaleRoundList() {
 	const handlerSubmitUpdate = async () => {
 		clearTimeout(debounceCreate);
 		debounceCreate = setTimeout(async () => {
-			const { statusValidateForm, data } = await handlerFnDebouceCreate();
-			if (!statusValidateForm) return;
-			const response = await createSaleRound(data);
+			if (isUpdateSaleRound) {
+				await handlerUpdateSaleRound();
+			} else {
+				const { statusValidateForm, data } = await handlerFnDebouceCreate();
+				if (!statusValidateForm) return;
+				const response = await createSaleRound(data);
 
-			if (response) {
-				setIdSaleRound(response.sale_round);
+				if (response) {
+					setIdSaleRound(response.sale_round);
+				}
 			}
 		}, 500);
 	};
@@ -181,7 +193,7 @@ export default function SaleRoundList() {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
 				payload.details.network = data.network;
-				payload.details.buy_limit = data.buyLimit;
+				payload.details.buy_limit = data.buyLimit || 0;
 				payload.token_info.address = data.address;
 				payload.token_info.total_sold_coin = Number(data.total_sold_coin);
 			})
@@ -254,9 +266,10 @@ export default function SaleRoundList() {
 	};
 
 	const handlerSubmitDeploy = async () => {
-		if (!tokenContract || !account) {
+		if (!tokenContract || !account || !_idSaleRound) {
 			return;
 		}
+
 		await tokenContract
 			.deployNewSalePhase(
 				_idSaleRound,
@@ -265,13 +278,14 @@ export default function SaleRoundList() {
 				saleroundForm.claim_configs.map((el) => el.start_time),
 				saleroundForm.claim_configs.map((el) => el.max_claim),
 				saleroundForm.details.buy_limit === 0 ? true : false,
-				saleroundForm.details.buy_limit,
+				BigNumber(saleroundForm.details.buy_limit)
+					.times(BigNumber(10).pow(18))
+					.toNumber(),
 				saleroundForm.exchange_rate,
 				saleroundForm.token_info.total_sold_coin,
 				saleroundForm.token_info.address
 			)
-			.then((data: any) => {
-				console.log('handlerSubmitDeploy', data, _idSaleRound);
+			.then(() => {
 				message.error('Deploy success');
 				handlerResetForm();
 			})
@@ -279,6 +293,43 @@ export default function SaleRoundList() {
 				message.error('Deploy failed');
 			});
 	};
+
+	const handlerUpdateSaleRound = async () => {
+		formsSaleRound[SaleRoundCreateForm.SR_ABOUNT].submit();
+		let description = '';
+		let satusValidate = true;
+		let name = '';
+		await formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]
+			.validateFields()
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			.then((data: any) => {
+				name = data.name;
+			})
+			.catch(() => {
+				satusValidate = false;
+			});
+		await formsSaleRound[SaleRoundCreateForm.SR_ABOUNT]
+			.validateFields()
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			.then((data: any) => {
+				description = data.description;
+			})
+			.catch(() => {
+				satusValidate = false;
+			});
+
+		if (!satusValidate) return;
+
+		await updateSaleRound({
+			description,
+			name,
+			_id: idSaleRound,
+		});
+	};
+
+	if (isLoading) {
+		return <Loading />;
+	}
 
 	return (
 		<>
@@ -297,12 +348,16 @@ export default function SaleRoundList() {
 							<Col span={12}>
 								<div className='w-100'>
 									<Generalinfor
+										key={data?.name}
+										isUpdate={isUpdateSaleRound}
 										form={formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]}
-										srName={saleroundForm.name}
+										srName={data?.name}
 									/>
 								</div>
 								<div className='w-100 pt-42'>
 									<SrClaimConfig
+										isUpdate={isUpdateSaleRound}
+										data={data?.claim_configs || []}
 										message={messageErrClaimConfig}
 										onSubmitClaimConfig={handlerSubClaimConfig}
 									/>
@@ -311,24 +366,24 @@ export default function SaleRoundList() {
 							<Col span={12}>
 								<div>
 									<SrDetails
-										tokenInfo={saleroundForm.token_info}
-										details={saleroundForm.details}
+										isUpdate={isUpdateSaleRound}
+										tokenInfo={data?.token_info}
+										details={data?.details}
 										form={formsSaleRound[SaleRoundCreateForm.SR_DETAIL]}
 									/>
 								</div>
 								<div className='pt-15'>
 									<ExchangeRate
-										isUpdate={false}
-										ex_rate_get={
-											saleroundForm.exchange_rate > 0
-												? String(1 / saleroundForm.exchange_rate)
-												: String(saleroundForm.exchange_rate)
-										}
+										isUpdate={isUpdateSaleRound}
+										ex_rate_get={data?.exchange_rate}
 										form={formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE]}
 									/>
 								</div>
 								<div className='pt-19'>
 									<BoxTime
+										isUpdate={isUpdateSaleRound}
+										startTime={data?.buy_time?.start_time}
+										endTime={data?.buy_time?.end_time}
 										form={formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]}
 									/>
 								</div>
@@ -337,6 +392,7 @@ export default function SaleRoundList() {
 						<Row className='pt-41'>
 							<Col span={24}>
 								<AboutSaleRaound
+									description={data?.description}
 									form={formsSaleRound[SaleRoundCreateForm.SR_ABOUNT]}
 								/>
 							</Col>
@@ -350,23 +406,27 @@ export default function SaleRoundList() {
 				</div>
 				<div
 					className={`d-flex pt-153 ${
-						isDisableBtnAfterCreate
+						isDisableBtnAfterCreate || isUpdateSaleRound
 							? 'justify-content-center'
 							: 'justify-content-space'
 					}`}
 				>
-					<div
-						className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center cursor-pointer mr-41'
-						onClick={handlerSubmitDeploy}
-					>
-						<span>Deploy the round</span>
-					</div>
+					{!isUpdateSaleRound && (
+						<div
+							className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center cursor-pointer mr-41'
+							onClick={handlerSubmitDeploy}
+						>
+							<span>Deploy the round</span>
+						</div>
+					)}
 					{!isDisableBtnAfterCreate && (
 						<div
 							className='btn-sale-round-create btn-update-round d-flex align-items-center justify-content-center'
 							onClick={handlerSubmitUpdate}
 						>
-							<span>Create the round</span>
+							<span>
+								{isUpdateSaleRound ? 'Update the Round' : 'Create the round'}
+							</span>
 						</div>
 					)}
 				</div>

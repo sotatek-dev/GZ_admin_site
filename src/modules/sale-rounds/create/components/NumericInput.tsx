@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 
 interface NumericInputProps {
 	className: string;
+	disabled: boolean;
 	suffix: ReactNode | string;
 	value: string;
 	onChange: (value: string) => void;

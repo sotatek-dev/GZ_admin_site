@@ -1,8 +1,18 @@
 import './scss/SrClaimConfig.style.scss';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import DialogClaim from './DialogClaim';
 import { DataClaimConfig, rowsTableClaim } from './types';
 import dayjs from 'dayjs';
+
+interface SaleRoundClaimConfigProps {
+	isUpdate: boolean;
+	data: {
+		max_claim: number;
+		start_time: number;
+	}[];
+	message: string;
+	onSubmitClaimConfig: (val: rowsTableClaim[]) => void;
+}
 
 function createData(val: rowsTableClaim): rowsTableClaim {
 	return val;
@@ -11,21 +21,33 @@ function createData(val: rowsTableClaim): rowsTableClaim {
 const removeItem = (arr: Array<rowsTableClaim>, item: number) =>
 	arr.filter((e) => e.id !== item);
 
-export default function SaleRoundClaimConfig(props: {
-	message: string;
-	onSubmitClaimConfig: (val: rowsTableClaim[]) => void;
-}) {
+export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
+	const { onSubmitClaimConfig, message, data, isUpdate } = props;
+
 	const [open, setOpen] = useState<boolean>(() => false);
 	const [totalMaxClaim, setTotalMaxClaim] = useState<number>(() => 0);
 	const [rows, setRows] = useState<Array<rowsTableClaim>>([]);
-	const [dialogClaim, setDialogClaim] = useState<Array<rowsTableClaim>>([]);
 	const [objectConfig, setobjectConfig] = useState<rowsTableClaim>({
 		id: 0,
 		maxClaim: 0,
 		startTime: 0,
 	});
-	const { onSubmitClaimConfig, message } = props;
 	const [idCount, setIdcount] = useState<number>(0);
+	useEffect(() => {
+		if (data && data.length === 0 && rows.length > 0) return;
+		let sumTotal = 0;
+		const newData = data.map((el, idx) => {
+			sumTotal += el.max_claim / 100;
+			return {
+				id: idx,
+				maxClaim: el.max_claim / 100,
+				startTime: el.start_time,
+			};
+		});
+		setTotalMaxClaim(sumTotal);
+		setRows(newData);
+		onSubmitClaimConfig(newData);
+	}, [data]);
 
 	const handleClickOpen = () => {
 		if (isDisableBtnCreate) return;
@@ -33,6 +55,7 @@ export default function SaleRoundClaimConfig(props: {
 	};
 
 	const handleClickEdit = (val: rowsTableClaim) => {
+		if (isUpdate) return;
 		setobjectConfig({
 			id: 0,
 			maxClaim: val.maxClaim,
@@ -50,17 +73,9 @@ export default function SaleRoundClaimConfig(props: {
 		};
 		rows.push(createData(row));
 
-		const claimData: rowsTableClaim = {
-			id: idCount,
-			startTime: val.start_time,
-			maxClaim: Number(val.max_claim),
-		};
-
 		setTotalMaxClaim(Number(totalMaxClaim) + Number(val.max_claim));
 
-		dialogClaim.push(claimData);
-
-		onSubmitClaimConfig(dialogClaim);
+		onSubmitClaimConfig(rows);
 		setIdcount(idCount + 1);
 		setobjectConfig({
 			id: 0,
@@ -77,12 +92,7 @@ export default function SaleRoundClaimConfig(props: {
 				el.startTime = val.startTime;
 			}
 		});
-		dialogClaim.forEach((el) => {
-			if (el.id === val.id) {
-				el.maxClaim = Number(val.maxClaim);
-				el.startTime = val.startTime;
-			}
-		});
+		onSubmitClaimConfig(rows);
 		setobjectConfig({
 			id: 0,
 			maxClaim: 0,
@@ -103,11 +113,11 @@ export default function SaleRoundClaimConfig(props: {
 		});
 	};
 	const handlerRemove = (val: rowsTableClaim) => {
+		if (isUpdate) return;
 		setTotalMaxClaim(Number(totalMaxClaim) - Number(val.maxClaim));
 
 		setRows(removeItem(rows, val.id));
-		setDialogClaim(removeItem(dialogClaim, val.id));
-		onSubmitClaimConfig(dialogClaim);
+		onSubmitClaimConfig(rows);
 	};
 
 	const isDisableBtnCreate = useMemo((): boolean => {

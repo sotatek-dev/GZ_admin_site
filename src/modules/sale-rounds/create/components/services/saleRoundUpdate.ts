@@ -5,11 +5,18 @@ import { useMutation } from 'react-query';
 
 const APIs = {
 	createSaleRound: () => '/sale-round',
+	updateSaleRound: (id: string) => `/sale-round/info/${id}`,
 };
 type Response = any;
 
 async function createFn(payload: any) {
 	return axiosClient.post<any, Response>(APIs.createSaleRound(), payload);
+}
+async function updateFn(payload: any) {
+	return axiosClient.put<any, Response>(
+		APIs.updateSaleRound(payload._id),
+		payload
+	);
 }
 export const useCreateSaleRound = () => {
 	const createMutation = useMutation(createFn);
@@ -29,5 +36,26 @@ export const useCreateSaleRound = () => {
 	return {
 		createSaleRound,
 		isCreateSaleRound: createMutation.isLoading,
+	};
+};
+
+export const useUpdateSaleRound = () => {
+	const updateMutation = useMutation(updateFn);
+
+	const updateSaleRound = async (newPayload: any) => {
+		try {
+			const data = await updateMutation.mutateAsync(newPayload);
+
+			message.success('update succeed');
+			return data;
+		} catch (error) {
+			message.error('update failed');
+			return;
+		}
+	};
+
+	return {
+		updateSaleRound,
+		isCreateSaleRound: updateMutation.isLoading,
 	};
 };
