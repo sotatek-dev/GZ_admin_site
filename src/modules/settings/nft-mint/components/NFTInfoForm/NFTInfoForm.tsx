@@ -1,15 +1,34 @@
-import { DatePicker, Form, InputNumber, Loading } from '@common/components';
-import { NFTInfoFormValue, NftMintSetting } from '@settings/nft-mint/types';
-import type { FormInstance } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
+import {
+	Button,
+	DatePicker,
+	Form,
+	InputNumber,
+	Loading,
+} from '@common/components';
+import { useSetCurrentRound } from '@settings/nft-mint/services/useSetCurrentRound';
+import {
+	MintPhase,
+	NFTInfoFormValue,
+	NftMintSetting,
+} from '@settings/nft-mint/types';
+import type { FormInstance } from 'antd/es/form/Form';
 
 interface Props {
+	currentPhase: MintPhase;
 	form: FormInstance;
 	onFinish: (values: NFTInfoFormValue) => void;
 	phaseSetting?: NftMintSetting;
 }
 
-export default function NFTInfoForm({ form, onFinish, phaseSetting }: Props) {
+export default function NFTInfoForm({
+	form,
+	onFinish,
+	currentPhase,
+	phaseSetting,
+}: Props) {
+	const { setCurrentRound, isSetCurrentRound } = useSetCurrentRound();
+
 	if (!phaseSetting) {
 		return <Loading />;
 	}
@@ -73,6 +92,13 @@ export default function NFTInfoForm({ form, onFinish, phaseSetting }: Props) {
 					placeholder={['Start mint time', 'End mint time']}
 				/>
 			</Form.Item>
+			<Button
+				type='primary'
+				onClick={() => setCurrentRound(currentPhase)}
+				loading={isSetCurrentRound}
+			>
+				Set Current Round
+			</Button>
 		</Form>
 	);
 }

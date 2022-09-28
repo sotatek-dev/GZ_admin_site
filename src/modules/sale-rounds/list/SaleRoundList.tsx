@@ -69,6 +69,7 @@ const AdminList = () => {
 				</Button>
 			</Row>
 			<Table
+				rowKey='_id'
 				bordered
 				pagination={false}
 				columns={columns}
