@@ -1,87 +1,55 @@
 import './scss/ListUser.style.scss';
 import { Checkbox } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import { Space, Table } from 'antd';
 import { Pagination } from 'antd';
 import type { PaginationProps } from 'antd';
 import prevImgae from './icons/prev-icon.svg';
 import nextImgae from './icons/next-icons.svg';
 import copyIcon from './icons/copy-icon.svg';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { Button, Upload } from 'antd';
+import { Upload } from 'antd';
 import type { UploadProps } from 'antd';
 import { message } from '@common/components';
 import { getCookieStorage } from '@common/helpers/storage';
+import {
+	useSrWhiteListGet,
+	APIsWhiteList,
+	useSrWhiteListUpdate,
+	useSrWhiteListDelete,
+} from './services/whiteListUserGetUpdate';
+import { Loading } from '@common/components';
+import { Popconfirm } from 'antd';
+import {
+	Button,
+	Form,
+	Input,
+	InputNumber,
+	Table,
+	Typography,
+} from '@common/components';
+import { useQueryClient } from 'react-query';
+
 interface DataType {
 	key: string;
 	Wallet: string;
 	Email: string;
 }
 
-const columns: ColumnsType<DataType> = [
-	{
-		title: 'Wallet',
-		dataIndex: 'Wallet',
-		key: 'Wallet',
-		render: (text) => (
-			<>
-				<div className='w-100'>
-					<div className='table-td-wallet d-flex'>
-						<div className='d-flex justify-content-center align-items-center'>
-							<span>{text}</span>
-						</div>
-						<div className='d-flex justify-content-center align-items-center'>
-							<span className='icon-copy-wallet cursor-pointer'>
-								<img src={copyIcon} alt='' />
-							</span>
-						</div>
-					</div>
-				</div>
-			</>
-		),
-	},
-	{
-		title: 'Email',
-		dataIndex: 'Email',
-		key: 'Email',
-		render: (text) => (
-			<>
-				<div className='table-td-wallet d-flex pr-15'>
-					<div className='d-flex justify-content-center align-items-center'>
-						<span className='font-w-600'>{text}</span>
-					</div>
-				</div>
-			</>
-		),
-	},
-	{
-		title: 'Action',
-		key: 'action',
-		render: (_, record) => (
-			<Space size='middle'>
-				<a>Invite {record.Wallet}</a>
-				<a>Delete</a>
-			</Space>
-		),
-	},
-];
+interface PageingWhiteList {
+	page: number;
+	limit: number;
+}
 
-const data: DataType[] = [
+const pageDefault = () => ({
+	page: 1,
+	limit: 10,
+});
+
+const dataTable: DataType[] = [
 	{
 		key: '1',
 		Wallet: 'John Brown',
 		Email: 'New York No. 1 Lake Park',
-	},
-	{
-		key: '2',
-		Wallet: 'Jim Green',
-		Email: 'London No. 1 Lake Park',
-	},
-	{
-		key: '3',
-		Wallet: 'Joe Black',
-		Email: 'Sidney No. 1 Lake Park',
 	},
 ];
 
@@ -110,10 +78,168 @@ const itemRender: PaginationProps['itemRender'] = (
 
 export default function SaleRoundListUser(props: {
 	isEveryCanJoin: (val: boolean) => void;
-	isUpdated: string | undefined;
+	isUpdated: boolean | undefined;
+	idSaleRound: string | undefined;
 }) {
-	const { isEveryCanJoin, isUpdated } = props;
+	const [form] = Form.useForm<DataType>();
+	const { isEveryCanJoin, isUpdated, idSaleRound } = props;
 	const [checkedEvCanJoin, setCheckedEvCanJoin] = useState(true);
+	const [editingKey, setEditingKey] = useState<string | number>('');
+	const [_rowsTable, setRowsTable] = useState<DataType[]>([...dataTable]);
+	const [payloadPaging, setPayloadPaging] =
+		useState<PageingWhiteList>(pageDefault);
+	const [keyCount, setkeyCount] = useState<number>(0);
+	const [pagingTotal, setPagingTotal] = useState<number>(0);
+	const queryClient = useQueryClient();
+	const { updateSrWhiteList } = useSrWhiteListUpdate();
+	const { deleteSrWhiteList } = useSrWhiteListDelete();
+
+	const isEditing = (record: DataType) => record.key === editingKey;
+
+	const { data, isLoading } = useSrWhiteListGet(idSaleRound, payloadPaging);
+
+	useEffect(() => {
+		setRowsTable(
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			data?.list.map((el: any) => ({
+				key: el._id,
+				Wallet: el.wallet_address,
+				Email: el.email,
+			}))
+		);
+		if (data) {
+			setPayloadPaging({
+				...payloadPaging,
+				page: data?.pagination?.page,
+			});
+			setPagingTotal(data?.pagination?.total);
+		}
+	}, [data]);
+
+	const edit = (record: Partial<DataType> & { key: React.Key }) => {
+		form.setFieldsValue({ Wallet: '', Email: '', ...record });
+		setEditingKey(record.key);
+	};
+
+	const cancel = () => {
+		setEditingKey('');
+	};
+
+	const save = async (key: React.Key) => {
+		try {
+			const row = (await form.validateFields()) as DataType;
+
+			await updateSrWhiteList({
+				id: key,
+				email: row.Email,
+				wallet_address: row.Wallet,
+			});
+
+			setkeyCount(keyCount + 1);
+		} catch (errInfo) {
+			// eslint-disable-next-line no-console
+			console.log('Validate Failed:', errInfo);
+		}
+	};
+
+	const handlerRemoveRows = async (
+		record: Partial<DataType> & { key: React.Key }
+	) => {
+		await deleteSrWhiteList(record.key);
+	};
+
+	const copyWalletAddress = async (text: string) => {
+		try {
+			await navigator.clipboard.writeText(text);
+			message.success('Copy Sucess');
+		} catch (_err: unknown) {
+			message.error('Failed to copy!');
+		}
+	};
+
+	const columns = [
+		{
+			title: 'Wallet',
+			dataIndex: 'Wallet',
+			key: 'Wallet',
+			editable: true,
+			render: (text: string) => (
+				<>
+					<div className='w-100'>
+						<div className='table-td-wallet d-flex'>
+							<div className='d-flex justify-content-center align-items-center'>
+								<span>{text}</span>
+							</div>
+							<div className='d-flex justify-content-center align-items-center'>
+								<span
+									onClick={() => copyWalletAddress(text)}
+									className='icon-copy-wallet cursor-pointer'
+								>
+									<img src={copyIcon} alt='' />
+								</span>
+							</div>
+						</div>
+					</div>
+				</>
+			),
+		},
+		{
+			title: 'Email',
+			dataIndex: 'Email',
+			key: 'Email',
+			editable: true,
+			render: (text: string) => (
+				<>
+					<div className='table-td-wallet d-flex pr-15'>
+						<div className='d-flex justify-content-center align-items-center'>
+							<span className='font-w-600'>{text}</span>
+						</div>
+					</div>
+				</>
+			),
+		},
+		{
+			title: 'Action',
+			key: 'action',
+			render: (_: unknown, record: DataType) => {
+				const editable = isEditing(record);
+
+				return editable ? (
+					<span>
+						<Typography.Link
+							onClick={() => save(record.key)}
+							style={{ marginRight: 8 }}
+						>
+							Save
+						</Typography.Link>
+						<Popconfirm title='Sure to cancel?' onConfirm={cancel}>
+							<a>Cancel</a>
+						</Popconfirm>
+					</span>
+				) : (
+					<div>
+						<Typography.Link
+							disabled={editingKey !== ''}
+							onClick={() => edit(record)}
+						>
+							Edit
+						</Typography.Link>
+						<Popconfirm
+							className='pl-10'
+							title='Sure to remove'
+							onConfirm={() => handlerRemoveRows(record)}
+						>
+							<a>Remove</a>
+						</Popconfirm>
+					</div>
+				);
+			},
+		},
+	];
+
+	const handlerPageChange = (page: number) => {
+		setPayloadPaging({ ...payloadPaging, page });
+	};
 
 	const handlerCheckboxChange = (e: CheckboxChangeEvent) => {
 		setCheckedEvCanJoin(e.target.checked);
@@ -123,16 +249,21 @@ export default function SaleRoundListUser(props: {
 
 	const propsUploadFile: UploadProps = {
 		name: 'file',
-		action: `${process.env.REACT_APP_BASE_API_URL}whitelisted-user/sale-round/${isUpdated}`,
+		accept: '.csv',
+		action: `${process.env.REACT_APP_BASE_API_URL}/whitelisted-user/sale-round/${idSaleRound}`,
 		headers: {
 			Authorization: `Bearer ${accessToken}`,
 		},
 		onChange(info) {
 			if (info.file.status !== 'uploading') {
+				// eslint-disable-next-line no-console
 				console.log(info.file, info.fileList);
 			}
 			if (info.file.status === 'done') {
 				message.success(`${info.file.name} file uploaded successfully`);
+				queryClient.invalidateQueries([
+					APIsWhiteList.getWhitelist(idSaleRound || ''),
+				]);
 			} else if (info.file.status === 'error') {
 				message.error(`${info.file.name} file upload failed.`);
 			}
@@ -147,6 +278,26 @@ export default function SaleRoundListUser(props: {
 			format: (percent) => percent && `${parseFloat(percent.toFixed(2))}%`,
 		},
 	};
+
+	const mergedColumns = columns.map((col) => {
+		if (!col.editable) {
+			return col;
+		}
+		return {
+			...col,
+			onCell: (record: DataType) => ({
+				record,
+				inputType: col.dataIndex === 'age' ? 'number' : 'text',
+				dataIndex: col.dataIndex,
+				title: col.title,
+				editing: isEditing(record),
+			}),
+		};
+	});
+
+	if (isLoading) {
+		return <Loading />;
+	}
 
 	return (
 		<>
@@ -165,33 +316,44 @@ export default function SaleRoundListUser(props: {
 						</div>
 					</div>
 					<div>
-						<div className='d-flex pr-105'>
-							<div className='mr-12 btn-sale-round-create btn-userlist-reload d-flex justify-content-center align-items-center'>
-								<span>Reload all</span>
-							</div>
-							<Upload {...propsUploadFile}>
-								<Button className='d-flex justify-content-center align-items-center btn-userlist-addcsv'>
-									<span>Add CSV File</span>
+						{!isUpdated && idSaleRound && (
+							<div className='d-flex pr-105'>
+								<Button className='mr-12 d-flex justify-content-center align-items-center'>
+									<span>Reload all</span>
 								</Button>
-							</Upload>
-						</div>
+								<Upload {...propsUploadFile}>
+									<Button className='d-flex justify-content-center align-items-center'>
+										<span>Add CSV File</span>
+									</Button>
+								</Upload>
+							</div>
+						)}
 					</div>
 				</div>
 				<div className='px-20 sr-listuser-showip--h'>
 					<div className='sr-listuser-table--h'>
-						<Table
-							bordered={false}
-							columns={columns}
-							dataSource={data}
-							pagination={{ pageSize: 50, position: [] }}
-							scroll={{ y: 395 }}
-						/>
+						<Form form={form} component={false}>
+							<Table
+								key={`sr-listuser-table-${keyCount}`}
+								bordered
+								columns={mergedColumns}
+								components={{
+									body: {
+										cell: EditableCell,
+									},
+								}}
+								dataSource={_rowsTable}
+								pagination={{ pageSize: 50, position: [] }}
+								scroll={{ y: 395 }}
+							/>
+						</Form>
 					</div>
 					<div className='d-flex justify-content-end pr-32'>
 						<Pagination
-							defaultCurrent={1}
-							total={500}
-							pageSize={1}
+							onChange={handlerPageChange}
+							defaultCurrent={payloadPaging.page}
+							total={pagingTotal}
+							pageSize={payloadPaging.limit}
 							itemRender={itemRender}
 						/>
 					</div>
@@ -200,3 +362,45 @@ export default function SaleRoundListUser(props: {
 		</>
 	);
 }
+
+interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+	index: number;
+	editing: boolean;
+	dataIndex: string;
+	title: string;
+	inputType: 'number' | 'text';
+	record: DataType;
+	children: React.ReactNode;
+}
+
+const EditableCell: React.FC<EditableCellProps> = ({
+	editing,
+	dataIndex,
+	title,
+	inputType,
+	children,
+	...restProps
+}) => {
+	const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+
+	return (
+		<td {...restProps}>
+			{editing ? (
+				<Form.Item
+					name={dataIndex}
+					style={{ margin: 0 }}
+					rules={[
+						{
+							required: true,
+							message: `Please Input ${title}!`,
+						},
+					]}
+				>
+					{inputNode}
+				</Form.Item>
+			) : (
+				children
+			)}
+		</td>
+	);
+};

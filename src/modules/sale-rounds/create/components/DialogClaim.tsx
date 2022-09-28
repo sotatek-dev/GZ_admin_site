@@ -9,6 +9,7 @@ import {
 import NumericInput from './NumericInput';
 import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import { Button } from '@common/components';
 
 interface DialogClaimConfigProps {
 	open: boolean;
@@ -120,18 +121,19 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 							</Form.Item>
 						</Form>
 						<div className='d-flex dl-claim-btn-bot'>
-							<div
+							<Button
 								onClick={handlerSubmit}
-								className='btn-sale-round-create btn-apply d-flex align-items-center justify-content-center'
+								className='d-flex align-items-center justify-content-center'
 							>
 								<span>Apply</span>
-							</div>
-							<div
-								className='btn-sale-round-cancel btn-cancel d-flex align-items-center justify-content-center'
+							</Button>
+							<Button
+								danger
+								className='d-flex align-items-center justify-content-center'
 								onClick={handleClose}
 							>
 								<span>Cancel</span>
-							</div>
+							</Button>
 						</div>
 					</div>
 				</div>

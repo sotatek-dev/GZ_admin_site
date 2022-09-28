@@ -28,7 +28,7 @@ import { usePresalePoolContract } from '@web3/contracts';
 import { useActiveWeb3React } from '@web3/hooks';
 import { message } from '@common/components';
 import BigNumber from 'bignumber.js';
-import { Loading } from '@common/components';
+import { Loading, Button } from '@common/components';
 
 export default function SaleRoundList() {
 	const { account } = useActiveWeb3React();
@@ -37,6 +37,8 @@ export default function SaleRoundList() {
 	const { updateSaleRound } = useUpdateSaleRound();
 	const { updateSaleRoundDeployed } = useUpdateSaleRoundDeployed();
 	const [_idSaleRound, setIdSaleRound] = useState<number>();
+	const [_idSaleRoundAfterCreate, setIdSaleRoundAfterCreate] =
+		useState<string>();
 
 	const { id } = useParams<{ id: string }>();
 	const idSaleRoundUpdate = id as string;
@@ -44,7 +46,7 @@ export default function SaleRoundList() {
 	const { data, isLoading } = useSaleRoundGetDetail(id);
 
 	const isUpdateSaleRound = useMemo(() => {
-		if (data && data.status === 'deployed') return true;
+		if (data && data.is_current_sale_round) return true;
 		return false;
 	}, [isLoading]);
 
@@ -120,6 +122,7 @@ export default function SaleRoundList() {
 
 			if (response) {
 				setIdSaleRound(response.sale_round);
+				setIdSaleRoundAfterCreate(response._id);
 			}
 		}, 500);
 	};
@@ -302,6 +305,7 @@ export default function SaleRoundList() {
 			.then(() => {
 				message.error('Deploy success');
 				handlerResetForm();
+				navigate(PATHS.saleRounds.list());
 			})
 			.catch(() => {
 				message.error('Deploy failed');
@@ -339,6 +343,7 @@ export default function SaleRoundList() {
 			name,
 			_id: idSaleRoundUpdate,
 		});
+		navigate(PATHS.saleRounds.list());
 	};
 
 	if (isLoading) {
@@ -349,12 +354,12 @@ export default function SaleRoundList() {
 		<>
 			<div className='sale-round-container'>
 				<div className='pb-62'>
-					<div
-						className='btn-sale-round-create btn-back d-flex align-items-center justify-content-center'
+					<Button
+						className='d-flex align-items-center justify-content-center'
 						onClick={() => navigate(PATHS.saleRounds.list())}
 					>
 						<span>Back</span>
-					</div>
+					</Button>
 				</div>
 				<div className='sale-round-mid'>
 					<Form.Provider>
@@ -414,7 +419,8 @@ export default function SaleRoundList() {
 						<Row className='pt-41'>
 							<Col span={24}>
 								<ListUser
-									isUpdated={idSaleRoundUpdate}
+									idSaleRound={idSaleRoundUpdate || _idSaleRoundAfterCreate}
+									isUpdated={isUpdateSaleRound}
 									isEveryCanJoin={setEveryCanJoin}
 								/>
 							</Col>
@@ -429,22 +435,22 @@ export default function SaleRoundList() {
 					}`}
 				>
 					{!isUpdateSaleRound && (
-						<div
-							className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center cursor-pointer mr-41'
+						<Button
+							className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center mr-41'
 							onClick={handlerSubmitDeploy}
 						>
 							<span>Deploy the round</span>
-						</div>
+						</Button>
 					)}
 					{!isDisableBtnAfterCreate && (
-						<div
-							className='btn-sale-round-create btn-update-round d-flex align-items-center justify-content-center'
+						<Button
+							className='btn-update-round d-flex align-items-center justify-content-center'
 							onClick={handlerSubmitUpdate}
 						>
 							<span>
 								{isUpdateSaleRound ? 'Update the Round' : 'Create the round'}
 							</span>
-						</div>
+						</Button>
 					)}
 				</div>
 			</div>

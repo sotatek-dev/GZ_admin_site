@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import DialogClaim from './DialogClaim';
 import { DataClaimConfig, rowsTableClaim } from './types';
 import dayjs from 'dayjs';
+import { Button } from '@common/components';
 
 interface SaleRoundClaimConfigProps {
 	isUpdate: boolean;
@@ -138,16 +139,9 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 				</div>
 				<div className='sale-round-contents sr-claimconfig-showip--h'>
 					<div className='sr-detail-box-radio'>
-						<div
-							className={`${
-								isDisableBtnCreate
-									? 'btn-sale-round-disable'
-									: 'btn-sale-round-create'
-							} btn-claim-create`}
-							onClick={handleClickOpen}
-						>
+						<Button disabled={isDisableBtnCreate} onClick={handleClickOpen}>
 							<span>Create</span>
-						</div>
+						</Button>
 						<div className='ant-form-item-explain-error'>{message}</div>
 					</div>
 					<div className='claim-table'>
