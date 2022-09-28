@@ -31,7 +31,7 @@ export default function SettingNFTMint() {
 		const { price, price_after_24h, nft_mint_limit, mint_time } = values;
 
 		const newSetting = {
-			_id: phaseSetting?._id as string,
+			_id: currentPhase,
 			price,
 			price_after_24h,
 			nft_mint_limit,

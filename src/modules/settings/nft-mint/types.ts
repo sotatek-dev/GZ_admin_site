@@ -1,8 +1,8 @@
 export enum MintPhase {
-	WhiteList = 'WHITE_LIST',
-	Presale1 = 'PRESALE_1',
-	Presale2 = 'PRESALE_2',
-	Public = 'PUBLIC',
+	WhiteList = '1',
+	Presale1 = '2',
+	Presale2 = '3',
+	Public = '4',
 }
 
 export const MinPhaseLabel = {
