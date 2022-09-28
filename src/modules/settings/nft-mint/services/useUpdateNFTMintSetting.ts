@@ -8,9 +8,9 @@ interface Request {
 	_id: MintPhase;
 	start_mint_time: number;
 	end_mint_time: number;
-	price: number;
-	price_after_24h: number;
-	nft_mint_limit: number;
+	price: string;
+	price_after_24h: string;
+	nft_mint_limit: string;
 }
 
 export const useUpdateNFTMintSetting = () => {
@@ -27,7 +27,7 @@ export const useUpdateNFTMintSetting = () => {
 			price_after_24h,
 			start_mint_time,
 		} = rqBody;
-		return await dNFTContract.editSalePhase(
+		const tx = await dNFTContract.editSalePhase(
 			_id,
 			start_mint_time,
 			end_mint_time,
@@ -35,21 +35,20 @@ export const useUpdateNFTMintSetting = () => {
 			new BigNumber(price_after_24h).multipliedBy(1e18).toString(),
 			new BigNumber(nft_mint_limit).multipliedBy(1e18).toString()
 		);
+		return await tx.wait();
 	};
 
-	const updateMutation = useMutation(updateSalePhase);
-
-	const updateNftMintSetting = async (newSetting: Request) => {
-		try {
-			await updateMutation.mutateAsync(newSetting);
+	const updateMutation = useMutation(updateSalePhase, {
+		onSuccess() {
 			message.success('Update succeed');
-		} catch (error) {
+		},
+		onError() {
 			message.error('Update failed');
-		}
-	};
+		},
+	});
 
 	return {
-		updateNftMintSetting,
+		updateNftMintSetting: updateMutation.mutate,
 		isUpdateNftMintSetting: updateMutation.isLoading,
 	};
 };

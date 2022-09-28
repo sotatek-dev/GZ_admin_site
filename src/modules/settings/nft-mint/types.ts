@@ -15,9 +15,9 @@ export const MinPhaseLabel = {
 export interface NftMintSetting {
 	_id: string;
 	type: MintPhase;
-	price: number;
-	price_after_24h: number;
-	nft_mint_limit: number;
+	price: string;
+	price_after_24h: string;
+	nft_mint_limit: string;
 	start_mint_time: number;
 	end_mint_time: number;
 }
