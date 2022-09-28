@@ -16,8 +16,7 @@ export default function SettingNFTMint() {
 		MintPhase.WhiteList
 	);
 
-	const { currentPhase, currentPhaseSetting } =
-		useNFTMintPhaseSetting(currentPhaseTab);
+	const { currentPhaseSetting } = useNFTMintPhaseSetting(currentPhaseTab);
 	const { updateNftMintSetting, isUpdateNftMintSetting } =
 		useUpdateNFTMintSetting();
 
@@ -53,10 +52,11 @@ export default function SettingNFTMint() {
 			<NFTInfo
 				form={
 					<NFTInfoForm
+						currentPhase={currentPhaseTab}
 						form={forms[currentPhaseTab]}
 						phaseSetting={currentPhaseSetting}
 						onFinish={handleSaveSetting}
-						key={currentPhase}
+						key={currentPhaseTab}
 					/>
 				}
 				currentPhase={currentPhaseTab}

@@ -1,7 +1,6 @@
 import './NFTInfo.style.scss';
-import { Button, Card, Col, Row } from '@common/components';
+import { Card, Col, Row } from '@common/components';
 import { MinPhaseLabel, MintPhase } from '@settings/nft-mint/types';
-import { useSetCurrentRound } from '@settings/nft-mint/services/useSetCurrentRound';
 
 const TAB_LIST = [
 	{
@@ -33,7 +32,6 @@ export default function NFTInfo({
 	currentPhase,
 	setCurrentPhase,
 }: Props) {
-	const { setCurrentRound, isSetCurrentRound } = useSetCurrentRound();
 	const onTab2Change = (key: MintPhase) => {
 		setCurrentPhase(key);
 	};
@@ -48,16 +46,9 @@ export default function NFTInfo({
 					onTabChange={(key) => {
 						onTab2Change(key as MintPhase);
 					}}
-					style={{ padding: 0, minHeight: 450 }}
+					style={{ padding: 0, minHeight: 500 }}
 				>
 					{form}
-					<Button
-						type='primary'
-						onClick={() => setCurrentRound(currentPhase)}
-						loading={isSetCurrentRound}
-					>
-						Set Current Round
-					</Button>
 				</Card>
 			</Col>
 		</Row>
