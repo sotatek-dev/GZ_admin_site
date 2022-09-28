@@ -1,36 +1,25 @@
 import dayjs from 'dayjs';
-import {
-	Button,
-	DatePicker,
-	Form,
-	InputNumber,
-	Loading,
-} from '@common/components';
-import { useSetCurrentRound } from '@settings/nft-mint/services/useSetCurrentRound';
-import {
-	MintPhase,
-	NFTInfoFormValue,
-	NftMintSetting,
-} from '@settings/nft-mint/types';
+import { DatePicker, Form, InputNumber, Loading } from '@common/components';
+import { MintPhase, NFTInfoFormValue } from '@settings/nft-mint/types';
 import type { FormInstance } from 'antd/es/form/Form';
+import { useNFTMintPhaseSetting } from '@settings/nft-mint/services/useGetSettingNFTMint';
 
 interface Props {
-	currentPhase: MintPhase;
+	activePhaseTab: MintPhase;
 	form: FormInstance;
 	onFinish: (values: NFTInfoFormValue) => void;
-	phaseSetting?: NftMintSetting;
 }
 
-export default function NFTInfoForm({
-	form,
-	onFinish,
-	currentPhase,
-	phaseSetting,
-}: Props) {
-	const { setCurrentRound, isSetCurrentRound } = useSetCurrentRound();
+export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
+	const { currentPhaseSetting, isGetPhaseSetting } =
+		useNFTMintPhaseSetting(activePhaseTab);
 
-	if (!phaseSetting) {
+	if (isGetPhaseSetting) {
 		return <Loading />;
+	}
+
+	if (!currentPhaseSetting) {
+		return null;
 	}
 
 	const {
@@ -39,7 +28,7 @@ export default function NFTInfoForm({
 		nft_mint_limit,
 		start_mint_time,
 		end_mint_time,
-	} = phaseSetting;
+	} = currentPhaseSetting;
 
 	return (
 		<Form
@@ -92,13 +81,6 @@ export default function NFTInfoForm({
 					placeholder={['Start mint time', 'End mint time']}
 				/>
 			</Form.Item>
-			<Button
-				type='primary'
-				onClick={() => setCurrentRound(currentPhase)}
-				loading={isSetCurrentRound}
-			>
-				Set Current Round
-			</Button>
 		</Form>
 	);
 }
