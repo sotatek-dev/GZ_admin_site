@@ -14,18 +14,13 @@ export enum MessageValidations {
 
 export const FORMAT_DATETIME_SALEROUND = 'YYYY-MM-DD hh:mm';
 
-export interface SrDetailsForm {
+export interface SrTokenInforForm {
+	address: string;
+	total_sold_coin: number;
+}
+export interface SrTokenDetailForm {
 	network: string;
 	buy_limit: number;
-	address: string;
-	tottal_sold_coin: number;
-}
-export interface SRTokenInforForm {
-	address: string;
-	token_address: string;
-	symbol: string;
-	token_icon: string;
-	total_sold_coin: number;
 }
 export interface SRBoxTime {
 	start_time: number;
@@ -33,24 +28,21 @@ export interface SRBoxTime {
 }
 export interface DataClaimConfig {
 	start_time: number;
-	max_claim: number;
+	max_claim: number | string;
 }
 export interface ISaleRoundCreateForm {
 	name: string;
-	details: {
-		network: string;
-		buy_limit: number;
-	};
-	claim_configs: DataClaimConfig[];
 	have_list_user: boolean;
 	description: string;
-	token_info: SRTokenInforForm;
+	details: SrTokenDetailForm;
+	claim_configs: DataClaimConfig[];
+	token_info: SrTokenInforForm;
 	buy_time: SRBoxTime;
 	exchange_rate: number;
 }
 
 export interface rowsTableClaim {
 	id: number;
-	startTime: string | number;
+	startTime: number;
 	maxClaim: number;
 }

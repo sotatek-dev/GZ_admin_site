@@ -1,17 +1,26 @@
 import './scss/BoxTime.style.scss';
-import { DatePicker, Form } from 'antd';
+import { Form } from 'antd';
+import DatePicker from 'src/modules/common/components/DatePicker';
+
 import { MessageValidations, FORMAT_DATETIME_SALEROUND } from './types';
 import dayjs from 'dayjs';
 import type { FormInstance } from 'antd/es/form/Form';
 
-export default function SaleRoundBoxTime(props: { form: FormInstance }) {
-	const { form } = props;
+interface SaleRoundBoxTimeProps {
+	isUpdate: boolean;
+	startTime: number;
+	endTime: number;
+	form: FormInstance;
+}
+
+export default function SaleRoundBoxTime(props: SaleRoundBoxTimeProps) {
+	const { form, startTime, endTime, isUpdate } = props;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const handlerStartDateChange = ({ getFieldValue }: any) => ({
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		validator(_: any, value: any) {
-			if (value && dayjs() > dayjs(value.format()))
+			if (value && dayjs() > value)
 				return Promise.reject(
 					new Error('Start buy time must be after current')
 				);
@@ -32,7 +41,7 @@ export default function SaleRoundBoxTime(props: { form: FormInstance }) {
 	const handlerEndDateChange = ({ getFieldValue }: any) => ({
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		validator(_: any, value: any) {
-			if (value && dayjs() > dayjs(value.format()))
+			if (value && dayjs() > value)
 				return Promise.reject(new Error('End buy time must be after current'));
 			if (
 				!value ||
@@ -68,8 +77,10 @@ export default function SaleRoundBoxTime(props: { form: FormInstance }) {
 								{ required: true, message: MessageValidations.MSC_1_15 },
 								handlerStartDateChange,
 							]}
+							initialValue={(startTime && dayjs.unix(startTime)) || ''}
 						>
 							<DatePicker
+								disabled={isUpdate}
 								className='ip-box-datetime'
 								format={FORMAT_DATETIME_SALEROUND}
 								showTime
@@ -83,8 +94,10 @@ export default function SaleRoundBoxTime(props: { form: FormInstance }) {
 								{ required: true, message: MessageValidations.MSC_1_15 },
 								handlerEndDateChange,
 							]}
+							initialValue={(endTime && dayjs.unix(endTime)) || ''}
 						>
 							<DatePicker
+								disabled={isUpdate}
 								format={FORMAT_DATETIME_SALEROUND}
 								className='ip-box-datetime'
 								showTime

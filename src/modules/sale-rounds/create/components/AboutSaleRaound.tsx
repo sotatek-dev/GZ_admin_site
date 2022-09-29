@@ -5,8 +5,13 @@ import type { FormInstance } from 'antd/es/form/Form';
 
 const { TextArea } = Input;
 
-export default function AboutSaleRound(props: { form: FormInstance }) {
-	const { form } = props;
+interface AboutSaleRoundProps {
+	description: string;
+	form: FormInstance;
+}
+
+export default function AboutSaleRound(props: AboutSaleRoundProps) {
+	const { form, description } = props;
 	return (
 		<>
 			<div className='sr-block-contents'>
@@ -29,6 +34,7 @@ export default function AboutSaleRound(props: { form: FormInstance }) {
 									message: MessageValidations.MSC_1_4__M500,
 								},
 							]}
+							initialValue={description ? description : ''}
 						>
 							<TextArea className='about-sr-textarea' rows={13} />
 						</Form.Item>

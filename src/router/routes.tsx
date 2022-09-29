@@ -30,6 +30,7 @@ export const AppRoutes = () => {
 				<Route path={PATHS.profile()} element={<Profile />} />
 				<Route path={PATHS.saleRounds.list()} element={<SaleRoundList />} />
 				<Route path={PATHS.saleRounds.create()} element={<SaleRoundCreate />} />
+				<Route path={PATHS.saleRounds.edit()} element={<SaleRoundCreate />} />
 				<Route path={PATHS.admins.list()} element={<AdminList />} />
 				<Route path={PATHS.admins.edit()} element={<EditAdmin />} />
 				<Route path={PATHS.admins.new()} element={<CreateAdmin />} />

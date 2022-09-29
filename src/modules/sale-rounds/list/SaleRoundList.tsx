@@ -52,7 +52,7 @@ const AdminList = () => {
 		await refetch();
 
 		if (!error) {
-			message.success(MESSAGES.MC5);
+			message.success(MESSAGES.MC4);
 		}
 	};
 
@@ -71,6 +71,11 @@ const AdminList = () => {
 			<Table
 				rowKey='_id'
 				bordered
+				onRow={(el) => {
+					return {
+						onClick: () => navigate(PATHS.saleRounds.edit(el._id)),
+					};
+				}}
 				pagination={false}
 				columns={columns}
 				dataSource={data?.list}
