@@ -1,28 +1,27 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { axiosClient } from '@common/services/apiClient';
-import { Admin } from '@admins/common/types';
-import { ADMIN_APIS } from '../apis';
-
-type Request = {
-	id: string;
-};
-
-type Response = Admin;
-
-async function deleteFn(id: string) {
-	return await axiosClient.delete<Request, Response>(
-		ADMIN_APIS.deleteAdmin(id)
-	);
-}
+import { useMutation } from 'react-query';
+import { usePresalePoolContract } from '@web3/contracts';
+import { message } from '@common/components';
 
 export const useDeleteAdmin = () => {
-	const queryClient = useQueryClient();
-	const updateMutation = useMutation(deleteFn);
+	const presalePoolContract = usePresalePoolContract();
 
-	const deleteAdmin = async (id: string) => {
-		await updateMutation.mutateAsync(id);
-		await queryClient.invalidateQueries([ADMIN_APIS.getAll()]);
+	async function deleteFn(address: string) {
+		if (!presalePoolContract) return;
+		const tx = await presalePoolContract.removeSubAdmin(address);
+		return await tx.wait();
+	}
+
+	const updateMutation = useMutation(deleteFn, {
+		onSuccess() {
+			message.success('Delete successfully');
+		},
+		onError() {
+			message.error('Delete failed');
+		},
+	});
+
+	return {
+		deleteAdmin: updateMutation.mutate,
+		isDeleting: updateMutation.isLoading,
 	};
-
-	return { deleteAdmin };
 };

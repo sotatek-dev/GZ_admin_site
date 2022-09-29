@@ -19,12 +19,20 @@ export default function EditAdmin() {
 
 	const { data, isLoading } = useGetAdminById(id);
 	const { updateAdmin, isUpdateAdmin } = useUpdateAdmin();
-	const { deleteAdmin } = useDeleteAdmin();
+	const { deleteAdmin, isDeleting } = useDeleteAdmin();
 
 	async function handleUpdate(values: Omit<Admin, '_id'>) {
 		await updateAdmin({ _id: adminId, ...values });
 		navigate(PATHS.admins.list());
 	}
+
+	const handleDeleteAdmin = () => {
+		if (!data) {
+			return;
+		}
+
+		deleteAdmin(data.wallet_address);
+	};
 
 	return (
 		<>
@@ -32,7 +40,8 @@ export default function EditAdmin() {
 			<DeleteButton
 				danger
 				htmlType='submit'
-				onClick={() => deleteAdmin(adminId)}
+				loading={isDeleting}
+				onClick={handleDeleteAdmin}
 			>
 				Delete Admin
 			</DeleteButton>
