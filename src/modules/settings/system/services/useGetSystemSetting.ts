@@ -39,5 +39,5 @@ export const useUpdateSystem = () => {
 	};
 };
 export const useGetSystemSetting = () => {
-	return useQuery<any>([API], fetcher);
+	return useQuery([API], fetcher);
 };

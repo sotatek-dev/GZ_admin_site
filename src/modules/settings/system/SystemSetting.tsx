@@ -19,14 +19,9 @@ import { FieldData } from 'rc-field-form/es/interface';
 import { MESSAGES } from '@common/constants/messages';
 import { useUpdateKeyNFTSC } from '@admins/setting/mutations/useUpdateKeyNFTSC';
 import { useUpdateDNFTSC } from '@admins/setting/mutations/useUpdateDNFTSC';
-type SubmitProps<T> = {
-	treasury_address: string;
-	key_price: T;
-	rescure_price: T;
-	launch_price: T;
-	mint_days: T;
-	key_mint_min_token: T;
-};
+import { InitialProps, SubmitProps } from './type';
+import { UseQueryResult } from 'react-query';
+import BigNumber from 'bignumber.js';
 export default function SystemSetting() {
 	const goBack = useRedirectBack();
 	const {
@@ -41,22 +36,24 @@ export default function SystemSetting() {
 		updatePriceKeyNFTSC,
 	} = useUpdateKeyNFTSC();
 	const [disableUpdateBtn, setDisableUpdateBtn] = useState<boolean>(true);
-	const { data: initialData = {} } = useGetSystemSetting();
+	const { data: initialData } = useGetSystemSetting() as UseQueryResult<
+		InitialProps,
+		unknown
+	>;
 	const [form] = Form.useForm();
-	const moneyType = 'BUSD';
-	const money: {
+	const defaultPriceType = 'BUSD';
+	const price: {
 		min: number;
 		mintKey: number;
 		mintKeyDefault: number;
 		max: number;
+		fromBUSDToSC: number;
 	} = {
 		min: 0,
 		mintKey: 5,
 		mintKeyDefault: 1,
 		max: 1000000000,
-	};
-	const handleConvertFromBUSDToSC = (price: number) => {
-		return Math.pow(price * 10, 18);
+		fromBUSDToSC: 1e18,
 	};
 	const { updateMintDaySystemAdmin, isLoadingSystem } = useUpdateSystem();
 	const handleFieldChange = useCallback(
@@ -65,47 +62,50 @@ export default function SystemSetting() {
 		},
 		[]
 	);
+	const formatPrice = (price: number | string) => {
+		return `${price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	};
 	const handleSubmit = (values: SubmitProps<number>) => {
 		const listKeys = Object.keys(values);
 		listKeys?.length > 0 &&
 			listKeys.forEach((item) => {
 				switch (item) {
 					case 'treasury_address': {
-						if (values[item] !== initialData[item]) {
+						if (values[item] !== initialData?.[item]) {
 							updateTreasuryAddressKeyNFTSC(values[item]);
 							updateTreasuryAddressDNFTSC(values[item]);
 						}
 						break;
 					}
 					case 'key_price': {
-						if (values[item] !== initialData[item]) {
+						if (values[item] !== initialData?.[item]) {
 							updatePriceKeyNFTSC(
-								handleConvertFromBUSDToSC(values[item]).toString()
+								new BigNumber(values[item]).times(price.fromBUSDToSC).toString()
 							);
 						}
 						break;
 					}
 					case 'rescure_price': {
-						if (values[item] !== initialData[item]) {
+						if (values[item] !== initialData?.[item]) {
 							updateRescurPriceDNFTSC(
-								handleConvertFromBUSDToSC(values[item]).toString()
+								new BigNumber(values[item]).times(price.fromBUSDToSC).toString()
 							);
 						}
 						break;
 					}
 					case 'launch_price': {
-						if (values[item] !== initialData[item]) {
+						if (values?.[item] || '' !== initialData?.[item] || '') {
 							updateLaunchPriceKeyNFTSC(
-								handleConvertFromBUSDToSC(values[item]).toString()
+								new BigNumber(values[item]).times(price.fromBUSDToSC).toString()
 							);
 							updateLaunchPriceDNFTSC(
-								handleConvertFromBUSDToSC(values[item]).toString()
+								new BigNumber(values[item]).times(price.fromBUSDToSC).toString()
 							);
 						}
 						break;
 					}
 					case 'key_mint_min_token': {
-						if (values[item] !== initialData[item]) {
+						if (values?.[item] || '' !== initialData?.[item] || '') {
 							updateMinimumMintKeyDNFTSC(values[item]);
 						}
 						break;
@@ -164,13 +164,11 @@ export default function SystemSetting() {
 							rules={[{ required: true, message: MESSAGES.MSC115 }]}
 						>
 							<InputNumber
-								min={money.min}
-								max={money.max}
-								defaultValue={money.min}
-								formatter={(value) =>
-									`${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-								}
-								addonAfter={moneyType}
+								min={price.min}
+								max={price.max}
+								defaultValue={price.min}
+								formatter={(value) => formatPrice(value || 0)}
+								addonAfter={defaultPriceType}
 							/>
 						</Form.Item>
 						<Form.Item
@@ -179,13 +177,11 @@ export default function SystemSetting() {
 							rules={[{ required: true, message: MESSAGES.MSC115 }]}
 						>
 							<InputNumber
-								min={money.min}
-								max={money.max}
-								defaultValue={money.min}
-								formatter={(value) =>
-									`${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-								}
-								addonAfter={moneyType}
+								min={price.min}
+								max={price.max}
+								defaultValue={price.min}
+								formatter={(value) => formatPrice(value || 0)}
+								addonAfter={defaultPriceType}
 							/>
 						</Form.Item>
 						<Form.Item
@@ -194,13 +190,11 @@ export default function SystemSetting() {
 							rules={[{ required: true, message: MESSAGES.MSC115 }]}
 						>
 							<InputNumber
-								min={money.min}
-								max={money.max}
-								defaultValue={money.min}
-								formatter={(value) =>
-									`${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-								}
-								addonAfter={moneyType}
+								min={price.min}
+								max={price.max}
+								defaultValue={price.min}
+								formatter={(value) => formatPrice(value || 0)}
+								addonAfter={defaultPriceType}
 							/>
 						</Form.Item>
 						<Form.Item
@@ -209,8 +203,8 @@ export default function SystemSetting() {
 							rules={[{ required: true, message: MESSAGES.MSC115 }]}
 						>
 							<InputNumber
-								min={money.mintKeyDefault}
-								defaultValue={money.mintKey}
+								min={price.mintKeyDefault}
+								defaultValue={price.mintKey}
 							/>
 						</Form.Item>
 						<Form.Item
@@ -218,7 +212,7 @@ export default function SystemSetting() {
 							name='key_mint_min_token'
 							rules={[{ required: true, message: MESSAGES.MSC115 }]}
 						>
-							<InputNumber defaultValue={0} min={money.min} max={money.max} />
+							<InputNumber defaultValue={0} min={price.min} max={price.max} />
 						</Form.Item>
 						<Form.Item style={{ textAlign: 'center' }}>
 							<Button disabled={disableUpdateBtn} htmlType='submit'>
