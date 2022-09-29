@@ -5,6 +5,6 @@ import { useContract } from './useContract';
 export const useDNFTContract = () => {
 	return useContract<DNFT>(
 		DNFTABI,
-		'0x9c94442927Abb5Da3848eA960d3FA0C47B13971A'
+		process.env.REACT_APP_DNFT_CONTRACT as string
 	);
 };

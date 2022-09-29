@@ -2,9 +2,11 @@ import { axiosClient } from '@common/services/apiClient';
 import { useQuery } from 'react-query';
 import { MintNFTUser, MintPhase } from '@settings/nft-mint/types';
 import { BE_MintPhase } from '../SettingMintNFT.constant';
+import { Pagination } from '@admins/common/types';
 
 interface Response {
 	list: MintNFTUser[];
+	pagination: Pagination;
 }
 
 interface Request {

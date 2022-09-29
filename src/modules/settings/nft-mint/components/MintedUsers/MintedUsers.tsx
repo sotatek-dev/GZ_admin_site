@@ -1,8 +1,10 @@
 import './MintedUsers.style.scss';
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Col, Form, Row, Table } from '@common/components';
 import { useGetNftUsers } from '@settings/nft-mint/services/useGetMintNftUsers';
 import { MintPhase } from '@settings/nft-mint/types';
+import { DEFAULT_PAGINATION } from '@common/constants/pagination';
+import type { PaginationProps } from 'antd';
 
 interface DataType {
 	_id: React.Key;
@@ -16,9 +18,11 @@ interface Props {
 
 export default function UserList({ activePhaseTab }: Props) {
 	const [form] = Form.useForm<DataType>();
+	const [page, setPage] = useState(1);
+
 	const { data } = useGetNftUsers({
-		limit: 100,
-		page: 1,
+		limit: DEFAULT_PAGINATION.limit,
+		page,
 		phase: activePhaseTab,
 	});
 
@@ -35,6 +39,10 @@ export default function UserList({ activePhaseTab }: Props) {
 		},
 	];
 
+	const onPageChange: PaginationProps['onChange'] = (current) => {
+		setPage(current);
+	};
+
 	return (
 		<Row className='user-list'>
 			<Col span={24}>
@@ -44,6 +52,12 @@ export default function UserList({ activePhaseTab }: Props) {
 							bordered
 							columns={columns}
 							dataSource={data?.list}
+							pagination={{
+								defaultCurrent: 1,
+								pageSize: data?.pagination.limit,
+								total: data?.pagination.total,
+								onChange: onPageChange,
+							}}
 							rowKey='_id'
 						/>
 					</Form>

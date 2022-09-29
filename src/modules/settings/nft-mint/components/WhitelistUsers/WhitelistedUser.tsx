@@ -1,6 +1,6 @@
 import './WhiteListedUser.style.scss';
 import React, { useEffect, useState } from 'react';
-import { Popconfirm } from 'antd';
+import { PaginationProps, Popconfirm } from 'antd';
 import {
 	Card,
 	Col,
@@ -19,6 +19,7 @@ import {
 } from './WhiteListedUser.mutation';
 import UploadCSV from '@common/components/UploadCSV';
 import { useUploadWhitelistUsers } from '@settings/nft-mint/services/useUploadWhitelistUsers';
+import { DEFAULT_PAGINATION } from '@common/constants/pagination';
 
 interface DataType {
 	_id: string;
@@ -36,10 +37,11 @@ export default function UserList({ activePhaseTab }: Props) {
 	const { updateWhitelistedUser } = useUpdateWhitelistedUser();
 	const { uploadWhitelistUser } = useUploadWhitelistUsers();
 	const { deleteWhiteListedUser } = useDeleteWhiteListedUser();
+	const [page, setPage] = useState(1);
 
 	const { data } = useGetNftUsers({
-		limit: 100,
-		page: 1,
+		limit: DEFAULT_PAGINATION.limit,
+		page,
 		phase: activePhaseTab,
 	});
 
@@ -184,6 +186,10 @@ export default function UserList({ activePhaseTab }: Props) {
 		};
 	});
 
+	const onPageChange: PaginationProps['onChange'] = (current) => {
+		setPage(current);
+	};
+
 	return (
 		<Row className='user-list'>
 			<Col span={24}>
@@ -207,6 +213,12 @@ export default function UserList({ activePhaseTab }: Props) {
 							}}
 							columns={mergedColumns}
 							dataSource={tempData}
+							pagination={{
+								defaultCurrent: 1,
+								pageSize: data?.pagination.limit,
+								total: data?.pagination.total,
+								onChange: onPageChange,
+							}}
 							rowKey='_id'
 						/>
 					</Form>

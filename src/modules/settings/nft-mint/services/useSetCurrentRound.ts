@@ -8,7 +8,8 @@ export const useSetCurrentRound = () => {
 
 	const setCurrentRound = async (phase: MintPhase) => {
 		if (!dNFTContract) return;
-		return await dNFTContract.setCurrentSalePhase(phase);
+		const tx = await dNFTContract.setCurrentSalePhase(phase);
+		return await tx.wait();
 	};
 
 	const updateMutation = useMutation(setCurrentRound, {
