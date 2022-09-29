@@ -1,9 +1,9 @@
 import './SettingNFTMint.style.scss';
+import { useState } from 'react';
 import dayjs from 'dayjs';
 import { Button, Col, Form } from '@common/components';
 import NFTInfo from './components/NFTInfo';
-import UserList from './components/UserList';
-import { useState } from 'react';
+import Users from './components/Users';
 import { MintPhase, NFTInfoFormValue } from './types';
 import NFTInfoForm from './components/NFTInfoForm';
 import { useUpdateNFTMintSetting } from './services/useUpdateNFTMintSetting';
@@ -59,7 +59,7 @@ export default function SettingNFTMint() {
 					/>
 				}
 			/>
-			<UserList />
+			<Users activePhaseTab={activePhaseTab} />
 			<div className='setting-nft-button_group'>
 				<Button danger onClick={() => forms[activePhaseTab].resetFields()}>
 					Cancel
