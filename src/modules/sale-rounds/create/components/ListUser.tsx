@@ -88,7 +88,7 @@ export default function SaleRoundListUser(props: {
 	const [_rowsTable, setRowsTable] = useState<DataType[]>([...dataTable]);
 	const [payloadPaging, setPayloadPaging] =
 		useState<PageingWhiteList>(pageDefault);
-	const [keyCount, setkeyCount] = useState<number>(0);
+	// const [keyCount, setkeyCount] = useState<number>(0);
 	const [pagingTotal, setPagingTotal] = useState<number>(0);
 	const queryClient = useQueryClient();
 	const { updateSrWhiteList } = useSrWhiteListUpdate();
@@ -129,13 +129,16 @@ export default function SaleRoundListUser(props: {
 		try {
 			const row = (await form.validateFields()) as DataType;
 
-			await updateSrWhiteList({
-				id: key,
-				email: row.Email,
-				wallet_address: row.Wallet,
-			});
-
-			setkeyCount(keyCount + 1);
+			await updateSrWhiteList(
+				{
+					id: key,
+					email: row.Email,
+					wallet_address: row.Wallet,
+				},
+				idSaleRound || ''
+			);
+			setEditingKey('');
+			// setkeyCount(keyCount + 1);
 		} catch (errInfo) {
 			// eslint-disable-next-line no-console
 			console.log('Validate Failed:', errInfo);
@@ -145,7 +148,7 @@ export default function SaleRoundListUser(props: {
 	const handlerRemoveRows = async (
 		record: Partial<DataType> & { key: React.Key }
 	) => {
-		await deleteSrWhiteList(record.key);
+		await deleteSrWhiteList(record.key, idSaleRound || '');
 	};
 
 	const copyWalletAddress = async (text: string) => {
@@ -334,7 +337,7 @@ export default function SaleRoundListUser(props: {
 					<div className='sr-listuser-table--h'>
 						<Form form={form} component={false}>
 							<Table
-								key={`sr-listuser-table-${keyCount}`}
+								// key={`sr-listuser-table-${keyCount}`}
 								bordered
 								columns={mergedColumns}
 								components={{

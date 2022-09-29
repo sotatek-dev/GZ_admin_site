@@ -118,9 +118,10 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	const handlerRemove = (val: rowsTableClaim) => {
 		if (isUpdate) return;
 		setTotalMaxClaim(Number(totalMaxClaim) - Number(val.maxClaim));
-
-		setRows(removeItem(rows, val.id));
-		onSubmitClaimConfig(rows);
+		let newArr = [];
+		newArr = removeItem(rows, val.id);
+		setRows(newArr);
+		onSubmitClaimConfig(newArr);
 	};
 
 	const isDisableBtnCreate = useMemo((): boolean => {
