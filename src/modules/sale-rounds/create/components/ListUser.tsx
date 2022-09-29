@@ -25,6 +25,7 @@ import {
 	Input,
 	InputNumber,
 	Table,
+	Card,
 	Typography,
 } from '@common/components';
 import { useQueryClient } from 'react-query';
@@ -303,21 +304,17 @@ export default function SaleRoundListUser(props: {
 	}
 
 	return (
-		<>
-			<div className='sr-block-contents'>
-				<div className='sale-round-title sr-listuser-title--h d-flex justify-content-space'>
-					<div className='d-flex'>
-						<span className='pr-18'>List User</span>
-						<div>
-							<Checkbox
-								checked={checkedEvCanJoin}
-								onChange={handlerCheckboxChange}
-								className='sr-checkbox-user'
-							>
-								Everyone can join
-							</Checkbox>
-						</div>
-					</div>
+		<Card
+			title='List User'
+			extra={
+				<div className='d-flex justify-content-center align-items-center'>
+					<Checkbox
+						checked={checkedEvCanJoin}
+						onChange={handlerCheckboxChange}
+						className='sr-checkbox-user'
+					>
+						Everyone can join
+					</Checkbox>
 					<div>
 						{!isUpdated && idSaleRound && (
 							<div className='d-flex pr-105'>
@@ -333,36 +330,37 @@ export default function SaleRoundListUser(props: {
 						)}
 					</div>
 				</div>
-				<div className='px-20 sr-listuser-showip--h'>
-					<div className='sr-listuser-table--h'>
-						<Form form={form} component={false}>
-							<Table
-								// key={`sr-listuser-table-${keyCount}`}
-								bordered
-								columns={mergedColumns}
-								components={{
-									body: {
-										cell: EditableCell,
-									},
-								}}
-								dataSource={_rowsTable}
-								pagination={{ pageSize: 50, position: [] }}
-								scroll={{ y: 395 }}
-							/>
-						</Form>
-					</div>
-					<div className='d-flex justify-content-end pr-32'>
-						<Pagination
-							onChange={handlerPageChange}
-							defaultCurrent={payloadPaging.page}
-							total={pagingTotal}
-							pageSize={payloadPaging.limit}
-							itemRender={itemRender}
+			}
+		>
+			<div className='px-20 sr-listuser-showip--h'>
+				<div className='sr-listuser-table--h'>
+					<Form form={form} component={false}>
+						<Table
+							// key={`sr-listuser-table-${keyCount}`}
+							bordered
+							columns={mergedColumns}
+							components={{
+								body: {
+									cell: EditableCell,
+								},
+							}}
+							dataSource={_rowsTable}
+							pagination={{ pageSize: 50, position: [] }}
+							scroll={{ y: 305 }}
 						/>
-					</div>
+					</Form>
+				</div>
+				<div className='d-flex justify-content-end pr-32'>
+					<Pagination
+						onChange={handlerPageChange}
+						defaultCurrent={payloadPaging.page}
+						total={pagingTotal}
+						pageSize={payloadPaging.limit}
+						itemRender={itemRender}
+					/>
 				</div>
 			</div>
-		</>
+		</Card>
 	);
 }
 

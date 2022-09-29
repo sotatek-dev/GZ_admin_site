@@ -27,7 +27,7 @@ import { useSaleRoundGetDetail } from './services/saleRoundGetDetail';
 import { usePresalePoolContract } from '@web3/contracts';
 import { useActiveWeb3React } from '@web3/hooks';
 import { message } from '@common/components';
-// import BigNumber from 'bignumber.js';
+import BigNumber from 'bignumber.js';
 import { Loading, Button } from '@common/components';
 
 export default function SaleRoundList() {
@@ -215,7 +215,7 @@ export default function SaleRoundList() {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
 				payload.details.network = data.network;
-				payload.details.buy_limit = data.buyLimit || 0;
+				payload.details.buy_limit = Number(data.buyLimit) || 0;
 				payload.token_info.address = data.address;
 				payload.token_info.total_sold_coin = Number(data.total_sold_coin);
 			})
@@ -314,9 +314,11 @@ export default function SaleRoundList() {
 				saleroundForm.claim_configs.map((el) => el.start_time),
 				saleroundForm.claim_configs.map((el) => el.max_claim),
 				saleroundForm.details.buy_limit === 0 ? true : false,
-				saleroundForm.details.buy_limit,
-				saleroundForm.exchange_rate,
-				saleroundForm.token_info.total_sold_coin,
+				new BigNumber(saleroundForm.details.buy_limit).times(1e18).toString(),
+				new BigNumber(saleroundForm.exchange_rate).times(1e18).toString(),
+				new BigNumber(saleroundForm.token_info.total_sold_coin)
+					.times(1e18)
+					.toString(),
 				saleroundForm.token_info.address
 			)
 			.then(() => {
@@ -457,7 +459,8 @@ export default function SaleRoundList() {
 				>
 					{!isUpdateSaleRound && (
 						<Button
-							className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center mr-41'
+							danger
+							className='btn-deploy-round d-flex align-items-center justify-content-center mr-41'
 							onClick={handlerSubmitDeploy}
 						>
 							<span>Deploy the round</span>
