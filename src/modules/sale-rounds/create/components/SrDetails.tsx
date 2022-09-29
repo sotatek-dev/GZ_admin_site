@@ -92,7 +92,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 						initialValue={tokenInfo?.address}
 						rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 					>
-						<Input disabled={isUpdate} className='ip-sr-token-infor' />
+						<Input disabled={isUpdate} />
 					</Form.Item>
 					<Form.Item
 						name='total_sold_coin'
@@ -104,7 +104,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 						<NumericInput
 							disabled={isUpdate}
 							key='total_sold_coin'
-							className='ip-sr-token-infor'
+							className=''
 							suffix=''
 							value={totalSoldCoin}
 							onChange={setTotalSoldCoin}

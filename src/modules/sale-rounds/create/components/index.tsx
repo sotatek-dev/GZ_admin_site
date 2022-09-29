@@ -215,7 +215,7 @@ export default function SaleRoundList() {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
 				payload.details.network = data.network;
-				payload.details.buy_limit = data.buyLimit || 0;
+				payload.details.buy_limit = Number(data.buyLimit) || 0;
 				payload.token_info.address = data.address;
 				payload.token_info.total_sold_coin = Number(data.total_sold_coin);
 			})
@@ -459,7 +459,8 @@ export default function SaleRoundList() {
 				>
 					{!isUpdateSaleRound && (
 						<Button
-							className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center mr-41'
+							danger
+							className='btn-deploy-round d-flex align-items-center justify-content-center mr-41'
 							onClick={handlerSubmitDeploy}
 						>
 							<span>Deploy the round</span>
