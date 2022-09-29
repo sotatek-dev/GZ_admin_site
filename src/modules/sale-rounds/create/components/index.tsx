@@ -27,7 +27,7 @@ import { useSaleRoundGetDetail } from './services/saleRoundGetDetail';
 import { usePresalePoolContract } from '@web3/contracts';
 import { useActiveWeb3React } from '@web3/hooks';
 import { message } from '@common/components';
-import BigNumber from 'bignumber.js';
+// import BigNumber from 'bignumber.js';
 import { Loading, Button } from '@common/components';
 
 export default function SaleRoundList() {
@@ -107,14 +107,19 @@ export default function SaleRoundList() {
 				await handlerUpdateSaleRound();
 				return;
 			}
+
 			const { statusValidateForm, data } = await handlerFnDebouceCreate();
 			if (!statusValidateForm) return;
 
 			if (idSaleRoundUpdate) {
-				await updateSaleRound({
+				const response = await updateSaleRound({
 					...data,
 					_id: idSaleRoundUpdate,
 				});
+
+				if (response) {
+					setIdSaleRound(response.sale_round);
+				}
 				return;
 			}
 
@@ -295,19 +300,20 @@ export default function SaleRoundList() {
 				saleroundForm.claim_configs.map((el) => el.start_time),
 				saleroundForm.claim_configs.map((el) => el.max_claim),
 				saleroundForm.details.buy_limit === 0 ? true : false,
-				BigNumber(saleroundForm.details.buy_limit)
-					.times(BigNumber(10).pow(18))
-					.toNumber(),
+				saleroundForm.details.buy_limit,
 				saleroundForm.exchange_rate,
 				saleroundForm.token_info.total_sold_coin,
 				saleroundForm.token_info.address
 			)
 			.then(() => {
-				message.error('Deploy success');
+				message.success('Deploy success');
 				handlerResetForm();
 				navigate(PATHS.saleRounds.list());
 			})
-			.catch(() => {
+			.catch((err: unknown) => {
+				// eslint-disable-next-line no-console
+				console.log(err);
+
 				message.error('Deploy failed');
 			});
 	};
@@ -343,6 +349,7 @@ export default function SaleRoundList() {
 			name,
 			_id: idSaleRoundUpdate,
 		});
+
 		navigate(PATHS.saleRounds.list());
 	};
 
@@ -448,7 +455,7 @@ export default function SaleRoundList() {
 							onClick={handlerSubmitUpdate}
 						>
 							<span>
-								{isUpdateSaleRound ? 'Update the Round' : 'Create the round'}
+								{idSaleRoundUpdate ? 'Update the Round' : 'Create the round'}
 							</span>
 						</Button>
 					)}
