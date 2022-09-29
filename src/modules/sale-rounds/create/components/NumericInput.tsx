@@ -22,7 +22,10 @@ export default function NumericInput(props: NumericInputProps) {
 		temp = temp.replace(/,/g, '');
 
 		if (reg.test(temp) || temp === '') {
-			if (inputValue.charAt(inputValue.length - 1) === '.') {
+			if (
+				inputValue.charAt(inputValue.length - 1) === '.' ||
+				inputValue.charAt(inputValue.length - 1) === '0'
+			) {
 				onChange(inputValue);
 				return;
 			}
