@@ -243,8 +243,13 @@ export default function SaleRoundList() {
 			start_time: number;
 			max_claim: number;
 		}[] = [];
+
+		let checkClaimTime = true;
 		let totalMaxClaim = 0;
 		claimConfig.forEach((el) => {
+			if (el.startTime < payload.buy_time.end_time) {
+				checkClaimTime = false;
+			}
 			claim_configs.push({
 				start_time: Number(el.startTime),
 				max_claim: Number(el.maxClaim) * 100,
@@ -252,10 +257,19 @@ export default function SaleRoundList() {
 
 			totalMaxClaim += Number(el.maxClaim);
 		});
+
+		if (!checkClaimTime) {
+			setMessageErrClaimConfig(MessageValidations.MSC_1_27);
+			return {
+				statusValidateForm: false,
+				data: payload as ISaleRoundCreateForm,
+			};
+		} else setMessageErrClaimConfig('');
+
 		claim_configs = claim_configs.sort((a, b) => a.start_time - b.start_time);
 		if (claimConfig.length === 0) {
 			claim_configs.push({
-				start_time: payload.buy_time.start_time + 10,
+				start_time: payload.buy_time.end_time + 10,
 				max_claim: 10000,
 			});
 			totalMaxClaim = 100;
