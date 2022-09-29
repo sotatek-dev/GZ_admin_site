@@ -5,8 +5,8 @@ import { axiosClient } from '@common/services/apiClient';
 
 export const APIsWhiteList = {
 	getWhitelist: (id: string) => `/whitelisted-user/sale-round/${id}`,
-	getWhiteUpdate: (id: string) => `/whitelisted-user/sale-round/${id}`,
-	getWhiteDelete: (id: string) => `/whitelisted-user/sale-round/${id}`,
+	getWhiteUpdate: (id: string) => `/whitelisted-user/${id}`,
+	getWhiteDelete: (id: string) => `/whitelisted-user/${id}`,
 };
 
 type Request = any;
@@ -48,11 +48,11 @@ export const useSrWhiteListUpdate = () => {
 	const updateMutation = useMutation(updateFn);
 	const queryClient = useQueryClient();
 
-	const updateSrWhiteList = async (payload: any) => {
+	const updateSrWhiteList = async (payload: any, _idSaleRound: string) => {
 		try {
 			const data = await updateMutation.mutateAsync(payload);
-			await queryClient.invalidateQueries([
-				APIsWhiteList.getWhitelist(payload.id),
+			await queryClient.refetchQueries([
+				APIsWhiteList.getWhitelist(_idSaleRound),
 			]);
 			message.success('Update succeed');
 			return data;
@@ -72,10 +72,12 @@ export const useSrWhiteListDelete = () => {
 	const deleteMutation = useMutation(deleteFn);
 	const queryClient = useQueryClient();
 
-	const deleteSrWhiteList = async (id: string) => {
+	const deleteSrWhiteList = async (id: string, _idSaleRound: string) => {
 		try {
 			const data = await deleteMutation.mutateAsync(id);
-			await queryClient.invalidateQueries([APIsWhiteList.getWhitelist(id)]);
+			await queryClient.refetchQueries([
+				APIsWhiteList.getWhitelist(_idSaleRound),
+			]);
 			message.success('Delete succeed');
 			return data;
 		} catch (error) {
