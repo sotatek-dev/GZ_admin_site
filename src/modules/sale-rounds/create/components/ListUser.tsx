@@ -347,7 +347,7 @@ export default function SaleRoundListUser(props: {
 								}}
 								dataSource={_rowsTable}
 								pagination={{ pageSize: 50, position: [] }}
-								scroll={{ y: 395 }}
+								scroll={{ y: 305 }}
 							/>
 						</Form>
 					</div>
