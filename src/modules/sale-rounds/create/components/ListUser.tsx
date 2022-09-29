@@ -25,6 +25,7 @@ import {
 	Input,
 	InputNumber,
 	Table,
+	Card,
 	Typography,
 } from '@common/components';
 import { useQueryClient } from 'react-query';
@@ -88,7 +89,7 @@ export default function SaleRoundListUser(props: {
 	const [_rowsTable, setRowsTable] = useState<DataType[]>([...dataTable]);
 	const [payloadPaging, setPayloadPaging] =
 		useState<PageingWhiteList>(pageDefault);
-	const [keyCount, setkeyCount] = useState<number>(0);
+	// const [keyCount, setkeyCount] = useState<number>(0);
 	const [pagingTotal, setPagingTotal] = useState<number>(0);
 	const queryClient = useQueryClient();
 	const { updateSrWhiteList } = useSrWhiteListUpdate();
@@ -129,13 +130,16 @@ export default function SaleRoundListUser(props: {
 		try {
 			const row = (await form.validateFields()) as DataType;
 
-			await updateSrWhiteList({
-				id: key,
-				email: row.Email,
-				wallet_address: row.Wallet,
-			});
-
-			setkeyCount(keyCount + 1);
+			await updateSrWhiteList(
+				{
+					id: key,
+					email: row.Email,
+					wallet_address: row.Wallet,
+				},
+				idSaleRound || ''
+			);
+			setEditingKey('');
+			// setkeyCount(keyCount + 1);
 		} catch (errInfo) {
 			// eslint-disable-next-line no-console
 			console.log('Validate Failed:', errInfo);
@@ -145,7 +149,7 @@ export default function SaleRoundListUser(props: {
 	const handlerRemoveRows = async (
 		record: Partial<DataType> & { key: React.Key }
 	) => {
-		await deleteSrWhiteList(record.key);
+		await deleteSrWhiteList(record.key, idSaleRound || '');
 	};
 
 	const copyWalletAddress = async (text: string) => {
@@ -300,21 +304,17 @@ export default function SaleRoundListUser(props: {
 	}
 
 	return (
-		<>
-			<div className='sr-block-contents'>
-				<div className='sale-round-title sr-listuser-title--h d-flex justify-content-space'>
-					<div className='d-flex'>
-						<span className='pr-18'>List User</span>
-						<div>
-							<Checkbox
-								checked={checkedEvCanJoin}
-								onChange={handlerCheckboxChange}
-								className='sr-checkbox-user'
-							>
-								Everyone can join
-							</Checkbox>
-						</div>
-					</div>
+		<Card
+			title='List User'
+			extra={
+				<div className='d-flex justify-content-center align-items-center'>
+					<Checkbox
+						checked={checkedEvCanJoin}
+						onChange={handlerCheckboxChange}
+						className='sr-checkbox-user'
+					>
+						Everyone can join
+					</Checkbox>
 					<div>
 						{!isUpdated && idSaleRound && (
 							<div className='d-flex pr-105'>
@@ -330,36 +330,37 @@ export default function SaleRoundListUser(props: {
 						)}
 					</div>
 				</div>
-				<div className='px-20 sr-listuser-showip--h'>
-					<div className='sr-listuser-table--h'>
-						<Form form={form} component={false}>
-							<Table
-								key={`sr-listuser-table-${keyCount}`}
-								bordered
-								columns={mergedColumns}
-								components={{
-									body: {
-										cell: EditableCell,
-									},
-								}}
-								dataSource={_rowsTable}
-								pagination={{ pageSize: 50, position: [] }}
-								scroll={{ y: 395 }}
-							/>
-						</Form>
-					</div>
-					<div className='d-flex justify-content-end pr-32'>
-						<Pagination
-							onChange={handlerPageChange}
-							defaultCurrent={payloadPaging.page}
-							total={pagingTotal}
-							pageSize={payloadPaging.limit}
-							itemRender={itemRender}
+			}
+		>
+			<div className='px-20 sr-listuser-showip--h'>
+				<div className='sr-listuser-table--h'>
+					<Form form={form} component={false}>
+						<Table
+							// key={`sr-listuser-table-${keyCount}`}
+							bordered
+							columns={mergedColumns}
+							components={{
+								body: {
+									cell: EditableCell,
+								},
+							}}
+							dataSource={_rowsTable}
+							pagination={{ pageSize: 50, position: [] }}
+							scroll={{ y: 305 }}
 						/>
-					</div>
+					</Form>
+				</div>
+				<div className='d-flex justify-content-end pr-32'>
+					<Pagination
+						onChange={handlerPageChange}
+						defaultCurrent={payloadPaging.page}
+						total={pagingTotal}
+						pageSize={payloadPaging.limit}
+						itemRender={itemRender}
+					/>
 				</div>
 			</div>
-		</>
+		</Card>
 	);
 }
 

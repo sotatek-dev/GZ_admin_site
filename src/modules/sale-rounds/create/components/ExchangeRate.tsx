@@ -1,10 +1,10 @@
 import './scss/ExchangeRate.style.scss';
 import arrowLeft from './icons/arrow-left-icon.svg';
-import { Input, Form } from 'antd';
 import { MessageValidations } from './types';
 import { useState } from 'react';
 import NumericInputGet from './NumericInput';
 import type { FormInstance } from 'antd/es/form/Form';
+import { Card, Form, Input } from '@common/components';
 
 interface ExchangeRatePropsForm {
 	form: FormInstance;
@@ -18,10 +18,7 @@ export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
 	const [getRates, setGetRates] = useState<string>('');
 
 	return (
-		<div className='sr-block-contents'>
-			<div className='sale-round-title sr-exchangerate-title--h'>
-				Exchange Rates
-			</div>
+		<Card title='Exchange Rates'>
 			<div className='pt-16 px-20 sr-exchangerate-showip--h'>
 				<Form
 					form={form}
@@ -57,6 +54,6 @@ export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
 					</Form.Item>
 				</Form>
 			</div>
-		</div>
+		</Card>
 	);
 }

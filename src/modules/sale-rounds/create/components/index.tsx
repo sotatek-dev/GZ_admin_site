@@ -107,14 +107,19 @@ export default function SaleRoundList() {
 				await handlerUpdateSaleRound();
 				return;
 			}
+
 			const { statusValidateForm, data } = await handlerFnDebouceCreate();
 			if (!statusValidateForm) return;
 
 			if (idSaleRoundUpdate) {
-				await updateSaleRound({
+				const response = await updateSaleRound({
 					...data,
 					_id: idSaleRoundUpdate,
 				});
+
+				if (response) {
+					setIdSaleRound(response.sale_round);
+				}
 				return;
 			}
 
@@ -210,7 +215,7 @@ export default function SaleRoundList() {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.then((data: any) => {
 				payload.details.network = data.network;
-				payload.details.buy_limit = data.buyLimit || 0;
+				payload.details.buy_limit = Number(data.buyLimit) || 0;
 				payload.token_info.address = data.address;
 				payload.token_info.total_sold_coin = Number(data.total_sold_coin);
 			})
@@ -238,8 +243,13 @@ export default function SaleRoundList() {
 			start_time: number;
 			max_claim: number;
 		}[] = [];
+
+		let checkClaimTime = true;
 		let totalMaxClaim = 0;
 		claimConfig.forEach((el) => {
+			if (el.startTime < payload.buy_time.end_time) {
+				checkClaimTime = false;
+			}
 			claim_configs.push({
 				start_time: Number(el.startTime),
 				max_claim: Number(el.maxClaim) * 100,
@@ -247,10 +257,19 @@ export default function SaleRoundList() {
 
 			totalMaxClaim += Number(el.maxClaim);
 		});
+
+		if (!checkClaimTime) {
+			setMessageErrClaimConfig(MessageValidations.MSC_1_27);
+			return {
+				statusValidateForm: false,
+				data: payload as ISaleRoundCreateForm,
+			};
+		} else setMessageErrClaimConfig('');
+
 		claim_configs = claim_configs.sort((a, b) => a.start_time - b.start_time);
 		if (claimConfig.length === 0) {
 			claim_configs.push({
-				start_time: payload.buy_time.start_time + 10,
+				start_time: payload.buy_time.end_time + 10,
 				max_claim: 10000,
 			});
 			totalMaxClaim = 100;
@@ -295,19 +314,22 @@ export default function SaleRoundList() {
 				saleroundForm.claim_configs.map((el) => el.start_time),
 				saleroundForm.claim_configs.map((el) => el.max_claim),
 				saleroundForm.details.buy_limit === 0 ? true : false,
-				BigNumber(saleroundForm.details.buy_limit)
-					.times(BigNumber(10).pow(18))
-					.toNumber(),
-				saleroundForm.exchange_rate,
-				saleroundForm.token_info.total_sold_coin,
+				new BigNumber(saleroundForm.details.buy_limit).times(1e18).toString(),
+				new BigNumber(saleroundForm.exchange_rate).times(1e18).toString(),
+				new BigNumber(saleroundForm.token_info.total_sold_coin)
+					.times(1e18)
+					.toString(),
 				saleroundForm.token_info.address
 			)
 			.then(() => {
-				message.error('Deploy success');
+				message.success('Deploy success');
 				handlerResetForm();
 				navigate(PATHS.saleRounds.list());
 			})
-			.catch(() => {
+			.catch((err: unknown) => {
+				// eslint-disable-next-line no-console
+				console.log(err);
+
 				message.error('Deploy failed');
 			});
 	};
@@ -343,6 +365,7 @@ export default function SaleRoundList() {
 			name,
 			_id: idSaleRoundUpdate,
 		});
+
 		navigate(PATHS.saleRounds.list());
 	};
 
@@ -436,7 +459,8 @@ export default function SaleRoundList() {
 				>
 					{!isUpdateSaleRound && (
 						<Button
-							className='btn-deploy btn-deploy-round d-flex align-items-center justify-content-center mr-41'
+							danger
+							className='btn-deploy-round d-flex align-items-center justify-content-center mr-41'
 							onClick={handlerSubmitDeploy}
 						>
 							<span>Deploy the round</span>
@@ -448,7 +472,7 @@ export default function SaleRoundList() {
 							onClick={handlerSubmitUpdate}
 						>
 							<span>
-								{isUpdateSaleRound ? 'Update the Round' : 'Create the round'}
+								{idSaleRoundUpdate ? 'Update the Round' : 'Create the round'}
 							</span>
 						</Button>
 					)}

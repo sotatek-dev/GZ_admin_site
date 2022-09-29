@@ -4,6 +4,7 @@ import DialogClaim from './DialogClaim';
 import { DataClaimConfig, rowsTableClaim } from './types';
 import dayjs from 'dayjs';
 import { Button } from '@common/components';
+import { Card } from '@common/components';
 
 interface SaleRoundClaimConfigProps {
 	isUpdate: boolean;
@@ -118,9 +119,10 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	const handlerRemove = (val: rowsTableClaim) => {
 		if (isUpdate) return;
 		setTotalMaxClaim(Number(totalMaxClaim) - Number(val.maxClaim));
-
-		setRows(removeItem(rows, val.id));
-		onSubmitClaimConfig(rows);
+		let newArr = [];
+		newArr = removeItem(rows, val.id);
+		setRows(newArr);
+		onSubmitClaimConfig(newArr);
 	};
 
 	const isDisableBtnCreate = useMemo((): boolean => {
@@ -133,10 +135,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 
 	return (
 		<>
-			<div className='sr-block-contents'>
-				<div className='sale-round-title sr-claimconfig-title--h'>
-					Claim Configuration
-				</div>
+			<Card title='Claim Configuration'>
 				<div className='sale-round-contents sr-claimconfig-showip--h'>
 					<div className='sr-detail-box-radio'>
 						<Button disabled={isDisableBtnCreate} onClick={handleClickOpen}>
@@ -195,7 +194,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 						</div>
 					</div>
 				</div>
-			</div>
+			</Card>
 			<DialogClaim
 				key={`${objectConfig.startTime}-${open}`}
 				open={open}
