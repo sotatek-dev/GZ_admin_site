@@ -13,7 +13,7 @@ export enum MessageValidations {
 	MSC_1_4__M500 = 'Please enter less than 500!',
 }
 
-export const FORMAT_DATETIME_SALEROUND = 'YYYY-MM-DD hh:mm';
+export const FORMAT_DATETIME_SALEROUND = 'YYYY-MM-DD hh:mm A';
 
 export interface SrTokenInforForm {
 	address: string;
@@ -39,11 +39,24 @@ export interface ISaleRoundCreateForm {
 	claim_configs: DataClaimConfig[];
 	token_info: SrTokenInforForm;
 	buy_time: SRBoxTime;
-	exchange_rate: number;
+	exchange_rate: number | string;
 }
 
 export interface rowsTableClaim {
 	id: number;
 	startTime: number;
 	maxClaim: number;
+}
+
+export interface SaleRoundDetailsType {
+	address?: string;
+	buyLimit?: string | number;
+	name?: string;
+	network?: string;
+	total_sold_coin?: string | number;
+}
+
+export interface SaleRoundExchangeRateType {
+	ex_rate_get: string;
+	ex_rate_have: string;
 }

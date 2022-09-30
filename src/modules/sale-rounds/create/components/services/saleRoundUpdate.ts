@@ -2,6 +2,7 @@
 import { message } from '@common/components';
 import { axiosClient } from '@common/services/apiClient';
 import { useMutation } from 'react-query';
+import { formatNumberPush } from './helper';
 
 const APIs = {
 	createSaleRound: () => '/sale-round',
@@ -33,7 +34,21 @@ export const useCreateSaleRound = () => {
 
 	const createSaleRound = async (payload: any) => {
 		try {
-			const data = await createMutation.mutateAsync(payload);
+			const newData = {
+				...payload,
+				details: {
+					network: payload?.details?.network,
+					buy_limit: formatNumberPush(payload?.details?.buy_limit),
+				},
+				exchange_rate: formatNumberPush(payload?.exchange_rate),
+				token_info: {
+					address: payload?.token_info?.address,
+					total_sold_coin: formatNumberPush(
+						payload?.token_info?.total_sold_coin
+					),
+				},
+			};
+			const data = await createMutation.mutateAsync(newData);
 
 			message.success('Create succeed');
 			return data;
@@ -75,7 +90,22 @@ export const useUpdateSaleRound = () => {
 
 	const updateSaleRound = async (newPayload: any) => {
 		try {
-			const data = await updateMutation.mutateAsync(newPayload);
+			const newData = {
+				...newPayload,
+				details: {
+					network: newPayload?.details?.network,
+					buy_limit: formatNumberPush(newPayload?.details?.buy_limit),
+				},
+				exchange_rate: formatNumberPush(newPayload?.exchange_rate),
+				token_info: {
+					address: newPayload?.token_info?.address,
+					total_sold_coin: formatNumberPush(
+						newPayload?.token_info?.total_sold_coin
+					),
+				},
+			};
+
+			const data = await updateMutation.mutateAsync(newData);
 
 			message.success('update succeed');
 			return data;

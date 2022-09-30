@@ -78,6 +78,7 @@ export default function SaleRoundBoxTime(props: SaleRoundBoxTimeProps) {
 							disabled={isUpdate}
 							format={FORMAT_DATETIME_SALEROUND}
 							showTime
+							use12Hours
 						/>
 					</Form.Item>
 					<Form.Item
@@ -94,6 +95,7 @@ export default function SaleRoundBoxTime(props: SaleRoundBoxTimeProps) {
 							disabled={isUpdate}
 							format={FORMAT_DATETIME_SALEROUND}
 							showTime
+							use12Hours
 						/>
 					</Form.Item>
 				</Form>

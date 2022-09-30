@@ -1,7 +1,11 @@
 import './scss/SrClaimConfig.style.scss';
 import { useEffect, useMemo, useState } from 'react';
 import DialogClaim from './DialogClaim';
-import { DataClaimConfig, rowsTableClaim } from './types';
+import {
+	DataClaimConfig,
+	rowsTableClaim,
+	FORMAT_DATETIME_SALEROUND,
+} from './types';
 import dayjs from 'dayjs';
 import { Button } from '@common/components';
 import { Card } from '@common/components';
@@ -131,7 +135,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	}, [totalMaxClaim, rows]);
 
 	const formatDateTime = (val: number) =>
-		dayjs.unix(val).format('YYYY-MM-DD HH:mm:ss');
+		dayjs.unix(val).format(FORMAT_DATETIME_SALEROUND);
 
 	return (
 		<>
