@@ -88,4 +88,4 @@ const trySignMessage = async (signer: JsonRpcSigner, signature: string) => {
 };
 
 const getSignMessage = (account: string) =>
-	'Sign this message to login with account' + account;
+	process.env.REACT_APP_SIGN_MESSAGE + account;

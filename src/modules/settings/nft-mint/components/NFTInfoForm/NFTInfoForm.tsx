@@ -1,17 +1,25 @@
-import { DatePicker, Form, InputNumber, Loading } from '@common/components';
-import { NFTInfoFormValue, NftMintSetting } from '@settings/nft-mint/types';
-import type { FormInstance } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
+import { DatePicker, Form, InputNumber, Loading } from '@common/components';
+import { MintPhase, NFTInfoFormValue } from '@settings/nft-mint/types';
+import type { FormInstance } from 'antd/es/form/Form';
+import { useNFTMintPhaseSetting } from '@settings/nft-mint/services/useGetSettingNFTMint';
 
 interface Props {
+	activePhaseTab: MintPhase;
 	form: FormInstance;
 	onFinish: (values: NFTInfoFormValue) => void;
-	phaseSetting?: NftMintSetting;
 }
 
-export default function NFTInfoForm({ form, onFinish, phaseSetting }: Props) {
-	if (!phaseSetting) {
+export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
+	const { currentPhaseSetting, isGetPhaseSetting } =
+		useNFTMintPhaseSetting(activePhaseTab);
+
+	if (isGetPhaseSetting) {
 		return <Loading />;
+	}
+
+	if (!currentPhaseSetting) {
+		return null;
 	}
 
 	const {
@@ -20,7 +28,7 @@ export default function NFTInfoForm({ form, onFinish, phaseSetting }: Props) {
 		nft_mint_limit,
 		start_mint_time,
 		end_mint_time,
-	} = phaseSetting;
+	} = currentPhaseSetting;
 
 	return (
 		<Form

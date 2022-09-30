@@ -29,3 +29,9 @@ export interface NFTInfoFormValue
 	> {
 	mint_time: number[];
 }
+
+export interface MintNFTUser {
+	_id: string;
+	email: string;
+	wallet_address: string;
+}

@@ -15,12 +15,7 @@ export const useNFTMintPhaseSetting = (mintPhase: MintPhase) => {
 		return await dNFTContract.salePhaseStatistics(rqBody._id);
 	};
 
-	const getCurrentSalePhase = async () => {
-		if (!dNFTContract) return;
-		return await dNFTContract.currentSalePhase();
-	};
-
-	const { data: currentPhaseSetting } = useQuery(
+	const { data: currentPhaseSetting, isFetching: isGetPhaseSetting } = useQuery(
 		['salePhaseStatistics', mintPhase],
 		() => getSalePhaseSetting({ _id: mintPhase }),
 		{
@@ -53,15 +48,5 @@ export const useNFTMintPhaseSetting = (mintPhase: MintPhase) => {
 		}
 	);
 
-	const { data: currentPhase } = useQuery(
-		['getCurrentSalePhase'],
-		() => getCurrentSalePhase(),
-		{
-			select(data) {
-				return data as MintPhase | undefined;
-			},
-		}
-	);
-
-	return { currentPhase, currentPhaseSetting };
+	return { isGetPhaseSetting, currentPhaseSetting };
 };
