@@ -8,6 +8,8 @@ export const MESSAGES = {
 	MC7: 'Invalid Last name',
 	MC8: 'Update successfully',
 	MC9: 'Update failed',
+	MSC26: 'Updated failed!',
+	MSC25: 'Register successfully!',
 	MSC115: 'This field is required',
 	MSC121: 'Invalid Wallet Address',
 	MSC110: 'Please enter a correct email, example "abc@mail.com"',
