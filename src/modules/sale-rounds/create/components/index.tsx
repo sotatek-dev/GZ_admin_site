@@ -9,11 +9,6 @@ import BoxTime from './BoxTime';
 import AboutSaleRaound from './AboutSaleRaound';
 import ListUser from './ListUser';
 import { Col, Row, Form } from 'antd';
-import {
-	ISaleRoundCreateForm,
-	SaleRoundCreateForm,
-	rowsTableClaim,
-} from './types';
 import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { PATHS } from '@common/constants/paths';
@@ -21,6 +16,9 @@ import {
 	MessageValidations,
 	SaleRoundExchangeRateType,
 	SaleRoundDetailsType,
+	ISaleRoundCreateForm,
+	SaleRoundCreateForm,
+	rowsTableClaim,
 } from './types';
 import {
 	useCreateSaleRound,

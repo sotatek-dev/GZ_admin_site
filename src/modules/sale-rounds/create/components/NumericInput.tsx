@@ -9,11 +9,12 @@ interface NumericInputProps {
 	onChange: (value: string) => void;
 }
 
-const formatNumber = (value: number) =>
-	String(new Intl.NumberFormat().format(value));
-
 export default function NumericInput(props: NumericInputProps) {
 	const { value, onChange } = props;
+
+	const regex2 = /(\d)(?=(\d{3})+(?!\d))/g;
+
+	const formatNumber2 = (value: string) => value.replace(regex2, '$1,');
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value: inputValue } = e.target;
@@ -26,7 +27,7 @@ export default function NumericInput(props: NumericInputProps) {
 				inputValue.charAt(inputValue.length - 1) === '.' ||
 				inputValue.charAt(inputValue.length - 1) === '0'
 			) {
-				onChange(inputValue);
+				onChange(formatNumber2(temp));
 				return;
 			}
 			if (temp === '') {
@@ -34,7 +35,12 @@ export default function NumericInput(props: NumericInputProps) {
 				return;
 			}
 
-			onChange(formatNumber(Number(temp)));
+			onChange(formatNumber2(temp));
+			return;
+		}
+		if (temp.length < 2) {
+			const newValue = String(temp.match(reg) || '');
+			onChange(formatNumber2(newValue));
 		}
 	};
 
