@@ -46,7 +46,7 @@ export default function SaleRoundList() {
 	const { data, isLoading } = useSaleRoundGetDetail(id);
 
 	const isUpdateSaleRound = useMemo(() => {
-		if (data && data.is_current_sale_round) return true;
+		if (data && data.status === 'deployed') return true;
 		return false;
 	}, [isLoading]);
 
