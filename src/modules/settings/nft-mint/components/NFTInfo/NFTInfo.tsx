@@ -55,7 +55,7 @@ export default function NFTInfo({
 							type='primary'
 							onClick={() => setCurrentRound(activePhaseTab)}
 							loading={isSetCurrentRound}
-							disabled={!currentPhase || currentPhase >= activePhaseTab}
+							disabled={!currentPhase}
 						>
 							Set Current Round
 						</Button>,
