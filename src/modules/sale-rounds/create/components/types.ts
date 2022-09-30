@@ -13,7 +13,7 @@ export enum MessageValidations {
 	MSC_1_4__M500 = 'Please enter less than 500!',
 }
 
-export const FORMAT_DATETIME_SALEROUND = 'YYYY-MM-DD hh:mm';
+export const FORMAT_DATETIME_SALEROUND = 'YYYY-MM-DD hh:mm A';
 
 export interface SrTokenInforForm {
 	address: string;

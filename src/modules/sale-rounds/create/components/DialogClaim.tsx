@@ -100,6 +100,7 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 									format={FORMAT_DATETIME_SALEROUND}
 									className='dialog-claim-datetime'
 									showTime
+									use12Hours
 								/>
 							</Form.Item>
 							<Form.Item
