@@ -17,7 +17,11 @@ import {
 import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { PATHS } from '@common/constants/paths';
-import { MessageValidations } from './types';
+import {
+	MessageValidations,
+	SaleRoundExchangeRateType,
+	SaleRoundDetailsType,
+} from './types';
 import {
 	useCreateSaleRound,
 	useUpdateSaleRound,
@@ -165,16 +169,15 @@ export default function SaleRoundList() {
 				start_time: 0,
 				end_time: 0,
 			},
-			exchange_rate: 1,
+			exchange_rate: '1',
 		};
 
 		await formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]
 			.validateFields()
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			.then((data: any) => {
+			.then((data: SaleRoundDetailsType) => {
 				payload = {
 					...payload,
-					name: data.name,
+					name: data.name || '',
 				};
 			})
 			.catch(() => {
@@ -212,11 +215,10 @@ export default function SaleRoundList() {
 
 		await formsSaleRound[SaleRoundCreateForm.SR_DETAIL]
 			.validateFields()
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			.then((data: any) => {
-				payload.details.network = data.network;
+			.then((data: SaleRoundDetailsType) => {
+				payload.details.network = data.network || '';
 				payload.details.buy_limit = Number(data.buyLimit) || 0;
-				payload.token_info.address = data.address;
+				payload.token_info.address = data.address || '';
 				payload.token_info.total_sold_coin = Number(data.total_sold_coin);
 			})
 			.catch(() => {
@@ -225,9 +227,8 @@ export default function SaleRoundList() {
 
 		await formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE]
 			.validateFields()
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			.then((data: any) => {
-				payload.exchange_rate = (1 / Number(data.ex_rate_get)) | 1;
+			.then((data: SaleRoundExchangeRateType) => {
+				payload.exchange_rate = data.ex_rate_have;
 			})
 			.catch(() => {
 				satusValidate = false;
@@ -390,7 +391,7 @@ export default function SaleRoundList() {
 							<Col span={12}>
 								<div className='w-100'>
 									<Generalinfor
-										key={data?.name}
+										key='Generalinfor'
 										isUpdate={isUpdateSaleRound}
 										form={formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]}
 										srName={data?.name}
@@ -398,6 +399,7 @@ export default function SaleRoundList() {
 								</div>
 								<div className='w-100 pt-42'>
 									<SrClaimConfig
+										key='SrClaimConfig'
 										isUpdate={isUpdateSaleRound}
 										data={data?.claim_configs || []}
 										message={messageErrClaimConfig}

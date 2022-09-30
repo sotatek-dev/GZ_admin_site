@@ -40,9 +40,19 @@ export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
 						name='ex_rate_have'
 						className='w-45'
 						label='You have'
-						initialValue='1'
+						rules={[
+							{ required: true, message: MessageValidations.MSC_1_15 },
+							handlerYouGetChange,
+						]}
+						initialValue={ex_rate_get || '0.00'}
 					>
-						<Input disabled className='ip-sr-exchange-rate' suffix='BUSD' />
+						<NumericInputGet
+							disabled={isUpdate}
+							className='ip-sr-exchange-rate'
+							suffix={<div>BUSD</div>}
+							value={getRates}
+							onChange={setGetRates}
+						/>
 					</Form.Item>
 					<div className='pt-31 icon-arrow-exchange'>
 						<img src={arrowLeft} alt='' />
@@ -51,23 +61,9 @@ export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
 						name='ex_rate_get'
 						className='w-45'
 						label='You get'
-						rules={[
-							{ required: true, message: MessageValidations.MSC_1_15 },
-							handlerYouGetChange,
-						]}
-						initialValue={
-							ex_rate_get
-								? new BigNumber(1).div(new BigNumber(ex_rate_get)).toString()
-								: '0.00'
-						}
+						initialValue='1'
 					>
-						<NumericInputGet
-							disabled={isUpdate}
-							className='ip-sr-exchange-rate'
-							suffix={<div>GXZ</div>}
-							value={getRates}
-							onChange={setGetRates}
-						/>
+						<Input disabled className='ip-sr-exchange-rate' suffix='GXZ' />
 					</Form.Item>
 				</Form>
 			</div>
