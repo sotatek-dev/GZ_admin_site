@@ -1,5 +1,4 @@
 import './scss/SrDetails.style.scss';
-// import aboutIcon from './icons/about-icon.svg';
 import { Radio, Checkbox } from 'antd';
 import {
 	MessageValidations,
@@ -29,7 +28,16 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 	const handlerCheckboxChange = (e: CheckboxChangeEvent) => {
 		setCheckedBuyLimit(e.target.checked);
 		setDisabledBuyLimit(e.target.checked);
+		if (e.target.checked) {
+			setBuyLimit('0.00');
+			form.resetFields(['buyLimit']);
+			form.setFieldValue('buyLimit', '0.00');
+		} else {
+			setBuyLimit('');
+			form.setFieldValue('buyLimit', '');
+		}
 	};
+
 	useEffect(() => {
 		if (!tokenInfo || !details) return;
 		if (details && details.buy_limit === 0) {
@@ -56,7 +64,6 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 						</Radio.Group>
 					</Form.Item>
 					<Form.Item
-						key={`${checkedBuyLimit}`}
 						name='buyLimit'
 						label={
 							<div className='SR-contents-title d-flex'>
@@ -75,11 +82,17 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 						}
 						className='pt-14 mb-9'
 						initialValue={details?.buy_limit}
+						rules={[
+							{
+								required: !checkedBuyLimit,
+								message: MessageValidations.MSC_1_15,
+							},
+						]}
 					>
 						<NumericInput
-							disabled={disabledBuyLimit}
-							key='buyLimit-key'
-							className='ip-sale-round-detail'
+							key='buyLimit'
+							disabled={disabledBuyLimit || isUpdate}
+							className=''
 							suffix=''
 							value={buyLimit}
 							onChange={setBuyLimit}

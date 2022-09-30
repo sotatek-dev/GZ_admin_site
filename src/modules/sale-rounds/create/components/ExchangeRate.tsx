@@ -5,12 +5,22 @@ import { useState } from 'react';
 import NumericInputGet from './NumericInput';
 import type { FormInstance } from 'antd/es/form/Form';
 import { Card, Form, Input } from '@common/components';
+import BigNumber from 'bignumber.js';
 
 interface ExchangeRatePropsForm {
 	form: FormInstance;
 	ex_rate_get: string | undefined;
 	isUpdate: boolean;
 }
+
+const handlerYouGetChange = () => ({
+	validator(_: unknown, value: string) {
+		if (value && new BigNumber(value).gt(0)) return Promise.resolve();
+		if (value && !Number(value))
+			return Promise.reject(new Error('Must be geater than 0'));
+		return Promise.reject();
+	},
+});
 
 export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
 	const { form, ex_rate_get, isUpdate } = props;
@@ -41,8 +51,15 @@ export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
 						name='ex_rate_get'
 						className='w-45'
 						label='You get'
-						rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
-						initialValue={ex_rate_get ? String(1 / Number(ex_rate_get)) : ''}
+						rules={[
+							{ required: true, message: MessageValidations.MSC_1_15 },
+							handlerYouGetChange,
+						]}
+						initialValue={
+							ex_rate_get
+								? new BigNumber(1).div(new BigNumber(ex_rate_get)).toString()
+								: '0.00'
+						}
 					>
 						<NumericInputGet
 							disabled={isUpdate}

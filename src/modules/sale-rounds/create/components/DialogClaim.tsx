@@ -125,7 +125,7 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 								onClick={handlerSubmit}
 								className='d-flex align-items-center justify-content-center'
 							>
-								<span>Apply</span>
+								<span>{!handlerEdit ? 'Create' : 'Update'}</span>
 							</Button>
 							<Button
 								danger
