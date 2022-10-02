@@ -27,7 +27,6 @@ export const useUpdateSystem = () => {
 	const updateMintDaySystemAdmin = async (object: UpdateSystemProps) => {
 		try {
 			await updateMutation.mutateAsync(object);
-			message.success(MESSAGES.MSC25);
 		} catch (error) {
 			message.error(MESSAGES.MSC26);
 		}
