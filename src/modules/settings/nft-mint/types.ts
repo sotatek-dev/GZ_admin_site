@@ -1,3 +1,6 @@
+/**
+ * Interact with SC, use `string` type instead others because React `key` type
+ */
 export enum MintPhase {
 	WhiteList = '1',
 	Presale1 = '2',
@@ -12,7 +15,7 @@ export const MinPhaseLabel = {
 	[MintPhase.Public]: 'Public',
 };
 
-export interface NftMintSetting {
+export interface NftMintPhaseSetting {
 	_id: string;
 	type: MintPhase;
 	price: string;
@@ -24,7 +27,7 @@ export interface NftMintSetting {
 
 export interface NFTInfoFormValue
 	extends Pick<
-		NftMintSetting,
+		NftMintPhaseSetting,
 		'price' | 'price_after_24h' | 'nft_mint_limit' | 'start_mint_time'
 	> {
 	mint_time: number[];
