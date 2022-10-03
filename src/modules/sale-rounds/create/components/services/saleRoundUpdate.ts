@@ -46,11 +46,7 @@ export const useCreateSaleRound = () => {
 			const exchange_rate = formatNumberPush(payload.exchange_rate);
 			const network = payload.details.network;
 			const buy_limit = formatNumberPush(payload.details.buy_limit);
-			console.log(
-				total_sold_coin,
-				payload.token_info.total_sold_coin,
-				payload.details.buy_limit
-			);
+
 			const newData = {
 				...payload,
 				details: {
