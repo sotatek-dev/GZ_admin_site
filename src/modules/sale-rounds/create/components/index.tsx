@@ -161,7 +161,7 @@ export default function SaleRoundList() {
 			description: '',
 			token_info: {
 				address: '',
-				total_sold_coin: 0,
+				total_sold_coin: '0',
 			},
 			buy_time: {
 				start_time: 0,
@@ -217,7 +217,7 @@ export default function SaleRoundList() {
 				payload.details.network = data.network || '';
 				payload.details.buy_limit = Number(data.buyLimit) || 0;
 				payload.token_info.address = data.address || '';
-				payload.token_info.total_sold_coin = Number(data.total_sold_coin);
+				payload.token_info.total_sold_coin = String(data.total_sold_coin);
 			})
 			.catch(() => {
 				satusValidate = false;

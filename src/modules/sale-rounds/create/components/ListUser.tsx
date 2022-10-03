@@ -1,14 +1,12 @@
 import './scss/ListUser.style.scss';
-import { Checkbox } from 'antd';
-import { Pagination } from 'antd';
+import { Checkbox, Upload, Popconfirm, Pagination } from 'antd';
 import type { PaginationProps } from 'antd';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
+import type { UploadProps } from 'antd';
+import React, { useEffect, useState } from 'react';
 import prevImgae from './icons/prev-icon.svg';
 import nextImgae from './icons/next-icons.svg';
 import copyIcon from './icons/copy-icon.svg';
-import React, { useEffect, useState } from 'react';
-import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { Upload } from 'antd';
-import type { UploadProps } from 'antd';
 import { message } from '@common/components';
 import { getCookieStorage } from '@common/helpers/storage';
 import {
@@ -17,8 +15,6 @@ import {
 	useSrWhiteListUpdate,
 	useSrWhiteListDelete,
 } from './services/whiteListUserGetUpdate';
-import { Loading } from '@common/components';
-import { Popconfirm } from 'antd';
 import {
 	Button,
 	Form,
@@ -27,6 +23,7 @@ import {
 	Table,
 	Card,
 	Typography,
+	Loading,
 } from '@common/components';
 import { useQueryClient } from 'react-query';
 
@@ -139,7 +136,6 @@ export default function SaleRoundListUser(props: {
 				idSaleRound || ''
 			);
 			setEditingKey('');
-			// setkeyCount(keyCount + 1);
 		} catch (errInfo) {
 			// eslint-disable-next-line no-console
 			console.log('Validate Failed:', errInfo);
@@ -167,6 +163,7 @@ export default function SaleRoundListUser(props: {
 			dataIndex: 'Wallet',
 			key: 'Wallet',
 			editable: true,
+			width: 500,
 			render: (text: string) => (
 				<>
 					<div className='w-100'>
@@ -192,6 +189,7 @@ export default function SaleRoundListUser(props: {
 			dataIndex: 'Email',
 			key: 'Email',
 			editable: true,
+			width: 350,
 			render: (text: string) => (
 				<>
 					<div className='table-td-wallet d-flex pr-15'>
@@ -205,6 +203,7 @@ export default function SaleRoundListUser(props: {
 		{
 			title: 'Action',
 			key: 'action',
+			width: 200,
 			render: (_: unknown, record: DataType) => {
 				const editable = isEditing(record);
 
@@ -336,7 +335,6 @@ export default function SaleRoundListUser(props: {
 				<div className='sr-listuser-table--h'>
 					<Form form={form} component={false}>
 						<Table
-							// key={`sr-listuser-table-${keyCount}`}
 							bordered
 							columns={mergedColumns}
 							components={{
@@ -346,7 +344,7 @@ export default function SaleRoundListUser(props: {
 							}}
 							dataSource={_rowsTable}
 							pagination={{ pageSize: 50, position: [] }}
-							scroll={{ y: 305 }}
+							scroll={{ y: 305, x: 1050 }}
 						/>
 					</Form>
 				</div>

@@ -1,13 +1,13 @@
 import './scss/SrDetails.style.scss';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
+import type { FormInstance } from 'antd/es/form/Form';
 import { Radio, Checkbox } from 'antd';
 import {
 	MessageValidations,
 	SrTokenInforForm,
 	SrTokenDetailForm,
 } from './types';
-import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { useEffect, useState } from 'react';
-import type { FormInstance } from 'antd/es/form/Form';
 import NumericInput from './NumericInput';
 import { Card, Form, Input } from '@common/components';
 

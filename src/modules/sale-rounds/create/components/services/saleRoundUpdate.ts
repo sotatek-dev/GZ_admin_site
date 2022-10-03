@@ -34,18 +34,23 @@ export const useCreateSaleRound = () => {
 
 	const createSaleRound = async (payload: any) => {
 		try {
+			const total_sold_coin = formatNumberPush(
+				payload?.token_info?.total_sold_coin
+			);
+			const address = payload?.token_info?.address;
+			const exchange_rate = formatNumberPush(payload?.exchange_rate);
+			const network = payload?.details?.network;
+			const buy_limit = formatNumberPush(payload?.details?.buy_limit);
 			const newData = {
 				...payload,
 				details: {
-					network: payload?.details?.network,
-					buy_limit: formatNumberPush(payload?.details?.buy_limit),
+					network,
+					buy_limit,
 				},
-				exchange_rate: formatNumberPush(payload?.exchange_rate),
+				exchange_rate,
 				token_info: {
-					address: payload?.token_info?.address,
-					total_sold_coin: formatNumberPush(
-						payload?.token_info?.total_sold_coin
-					),
+					address,
+					total_sold_coin,
 				},
 			};
 			const data = await createMutation.mutateAsync(newData);
@@ -90,18 +95,23 @@ export const useUpdateSaleRound = () => {
 
 	const updateSaleRound = async (newPayload: any) => {
 		try {
+			const total_sold_coin = formatNumberPush(
+				newPayload?.token_info?.total_sold_coin
+			);
+			const address = newPayload?.token_info?.address;
+			const exchange_rate = formatNumberPush(newPayload?.exchange_rate);
+			const network = newPayload?.details?.network;
+			const buy_limit = formatNumberPush(newPayload?.details?.buy_limit);
 			const newData = {
 				...newPayload,
 				details: {
-					network: newPayload?.details?.network,
-					buy_limit: formatNumberPush(newPayload?.details?.buy_limit),
+					network,
+					buy_limit,
 				},
-				exchange_rate: formatNumberPush(newPayload?.exchange_rate),
+				exchange_rate,
 				token_info: {
-					address: newPayload?.token_info?.address,
-					total_sold_coin: formatNumberPush(
-						newPayload?.token_info?.total_sold_coin
-					),
+					address,
+					total_sold_coin,
 				},
 			};
 

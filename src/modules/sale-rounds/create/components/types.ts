@@ -17,7 +17,7 @@ export const FORMAT_DATETIME_SALEROUND = 'YYYY-MM-DD hh:mm A';
 
 export interface SrTokenInforForm {
 	address: string;
-	total_sold_coin: number;
+	total_sold_coin: number | string;
 }
 export interface SrTokenDetailForm {
 	network: string;
