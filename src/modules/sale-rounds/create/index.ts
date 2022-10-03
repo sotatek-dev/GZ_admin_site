@@ -1,1 +1,1 @@
-export { default } from './components/index';
+export { default } from './Create';

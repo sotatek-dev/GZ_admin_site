@@ -1,13 +1,13 @@
-import './scss/SaleRoundCreate.style.scss';
-import './scss/DialogClaim.style.scss';
+import './components/scss/SaleRoundCreate.style.scss';
+import './components/scss/DialogClaim.style.scss';
 
-import Generalinfor from './Generalinfor';
-import SrDetails from './SrDetails';
-import SrClaimConfig from './SrClaimConfig';
-import ExchangeRate from './ExchangeRate';
-import BoxTime from './BoxTime';
-import AboutSaleRaound from './AboutSaleRaound';
-import ListUser from './ListUser';
+import Generalinfor from './components/Generalinfor';
+import SrDetails from './components/SrDetails';
+import SrClaimConfig from './components/SrClaimConfig';
+import ExchangeRate from './components/ExchangeRate';
+import BoxTime from './components/BoxTime';
+import AboutSaleRaound from './components/AboutSaleRaound';
+import ListUser from './components/ListUser';
 import { Col, Row, Form } from 'antd';
 import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -19,18 +19,20 @@ import {
 	ISaleRoundCreateForm,
 	SaleRoundCreateForm,
 	rowsTableClaim,
-} from './types';
+	MAXCLAIM_TO_SC,
+} from './components/types';
 import {
 	useCreateSaleRound,
 	useUpdateSaleRound,
 	useUpdateSaleRoundDeployed,
-} from './services/saleRoundUpdate';
-import { useSaleRoundGetDetail } from './services/saleRoundGetDetail';
+} from './components/services/saleRoundUpdate';
+import { useSaleRoundGetDetail } from './components/services/saleRoundGetDetail';
 import { usePresalePoolContract } from '@web3/contracts';
 import { useActiveWeb3React } from '@web3/hooks';
 import { message } from '@common/components';
 import BigNumber from 'bignumber.js';
 import { Loading, Button } from '@common/components';
+import dayjs from 'dayjs';
 
 export default function SaleRoundList() {
 	const { account } = useActiveWeb3React();
@@ -83,7 +85,7 @@ export default function SaleRoundList() {
 	const [claimConfig, setClaimConfig] = useState<rowsTableClaim[]>([]);
 	const [messageErrClaimConfig, setMessageErrClaimConfig] =
 		useState<string>('');
-	const [isEvryCanJoin, setEveryCanJoin] = useState<boolean>(false);
+	const [isEvryCanJoin, setEveryCanJoin] = useState<boolean>(true);
 
 	const formsSaleRound = {
 		[SaleRoundCreateForm.GENERAL_INFOR]: Form.useForm()[0],
@@ -184,8 +186,7 @@ export default function SaleRoundList() {
 
 		await formsSaleRound[SaleRoundCreateForm.SR_ABOUNT]
 			.validateFields()
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			.then((data: any) => {
+			.then((data: { description: string }) => {
 				payload = {
 					...payload,
 					description: data.description,
@@ -197,8 +198,7 @@ export default function SaleRoundList() {
 
 		await formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
 			.validateFields()
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			.then((data: any) => {
+			.then((data: { end_time: dayjs.Dayjs; start_time: dayjs.Dayjs }) => {
 				payload = {
 					...payload,
 					buy_time: {
@@ -249,9 +249,10 @@ export default function SaleRoundList() {
 			if (el.startTime < payload.buy_time.end_time) {
 				checkClaimTime = false;
 			}
+			// total maxclaim in sc is 10000
 			claim_configs.push({
 				start_time: Number(el.startTime),
-				max_claim: Number(el.maxClaim) * 100,
+				max_claim: Number(el.maxClaim) * MAXCLAIM_TO_SC,
 			});
 
 			totalMaxClaim += Number(el.maxClaim);
@@ -340,8 +341,7 @@ export default function SaleRoundList() {
 		let name = '';
 		await formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]
 			.validateFields()
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			.then((data: any) => {
+			.then((data: { name: string }) => {
 				name = data.name;
 			})
 			.catch(() => {
@@ -349,8 +349,7 @@ export default function SaleRoundList() {
 			});
 		await formsSaleRound[SaleRoundCreateForm.SR_ABOUNT]
 			.validateFields()
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			.then((data: any) => {
+			.then((data: { description: string }) => {
 				description = data.description;
 			})
 			.catch(() => {
