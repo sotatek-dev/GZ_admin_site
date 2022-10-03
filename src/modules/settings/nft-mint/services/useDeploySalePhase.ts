@@ -2,6 +2,7 @@ import { useMutation } from 'react-query';
 import { useDNFTContract } from '@web3/contracts/useDNFTContract';
 import { NftMintPhaseSetting } from '@settings/nft-mint/types';
 import { message } from '@common/components';
+import BigNumber from 'bignumber.js';
 
 export const useDeploySalePhase = () => {
 	const dNFTContract = useDNFTContract();
@@ -22,8 +23,8 @@ export const useDeploySalePhase = () => {
 			_salePhase,
 			start_mint_time,
 			end_mint_time,
-			price,
-			price_after_24h,
+			new BigNumber(price).times(1e18).toString(),
+			new BigNumber(price_after_24h).times(1e18).toString(),
 			nft_mint_limit
 		);
 		return await tx.wait();
