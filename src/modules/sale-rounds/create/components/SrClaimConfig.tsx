@@ -24,6 +24,12 @@ function createData(val: rowsTableClaim): rowsTableClaim {
 	return val;
 }
 
+const initDefaultClaim = () => ({
+	id: 0,
+	maxClaim: '0',
+	startTime: 0,
+});
+
 const removeItem = (arr: Array<rowsTableClaim>, item: number) =>
 	arr.filter((e) => e.id !== item);
 
@@ -33,20 +39,17 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	const [open, setOpen] = useState<boolean>(() => false);
 	const [totalMaxClaim, setTotalMaxClaim] = useState<number>(() => 0);
 	const [rows, setRows] = useState<Array<rowsTableClaim>>([]);
-	const [objectConfig, setobjectConfig] = useState<rowsTableClaim>({
-		id: 0,
-		maxClaim: 0,
-		startTime: 0,
-	});
+	const [objectConfig, setobjectConfig] =
+		useState<rowsTableClaim>(initDefaultClaim);
 	const [idCount, setIdcount] = useState<number>(0);
 	useEffect(() => {
 		if (data && data.length > 0) {
 			let sumTotal = 0;
 			const newData = data.map((el, idx) => {
-				sumTotal += el.max_claim / 100;
+				sumTotal += Number(el.max_claim) / 100;
 				return {
 					id: idx,
-					maxClaim: el.max_claim / 100,
+					maxClaim: String(Number(el.max_claim) / 100),
 					startTime: el.start_time,
 				};
 			});
@@ -77,18 +80,14 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 		const row: rowsTableClaim = {
 			id: idCount,
 			startTime: val.start_time,
-			maxClaim: Number(val.max_claim),
+			maxClaim: val.max_claim,
 		};
 		rows.push(createData(row));
 
 		setTotalMaxClaim(Number(totalMaxClaim) + Number(val.max_claim));
 
 		onSubmitClaimConfig(rows);
-		setobjectConfig({
-			id: 0,
-			maxClaim: 0,
-			startTime: 0,
-		});
+		setobjectConfig(initDefaultClaim);
 		setOpen(false);
 		setIdcount(idCount + 1);
 	};
@@ -96,16 +95,12 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	const handlerUpdate = (val: rowsTableClaim) => {
 		rows.forEach((el) => {
 			if (el.id === val.id) {
-				el.maxClaim = Number(val.maxClaim);
+				el.maxClaim = val.maxClaim;
 				el.startTime = val.startTime;
 			}
 		});
 		onSubmitClaimConfig(rows);
-		setobjectConfig({
-			id: 0,
-			maxClaim: 0,
-			startTime: 0,
-		});
+		setobjectConfig(initDefaultClaim);
 		setOpen(false);
 	};
 
@@ -114,11 +109,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 			setOpen(false);
 			return;
 		}
-		setobjectConfig({
-			id: 0,
-			maxClaim: 0,
-			startTime: 0,
-		});
+		setobjectConfig(initDefaultClaim);
 	};
 	const handlerRemove = (val: rowsTableClaim) => {
 		if (isUpdate) return;

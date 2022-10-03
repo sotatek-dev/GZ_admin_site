@@ -41,19 +41,18 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 	};
 
 	const handlerFinish = (values: {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		claim_start_time: any;
-		max_claim: number;
+		claim_start_time: dayjs.Dayjs;
+		max_claim: string;
 	}) => {
 		if (!handlerEdit) {
 			onCreate({
-				max_claim: values.max_claim || 10000,
+				max_claim: values.max_claim || '10000',
 				start_time: values.claim_start_time.unix(),
 			});
 		} else {
 			onUpdate({
 				id,
-				maxClaim: values.max_claim || 10000,
+				maxClaim: values.max_claim || '10000',
 				startTime: values.claim_start_time.unix(),
 			});
 		}

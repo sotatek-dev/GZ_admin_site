@@ -19,6 +19,7 @@ import {
 	ISaleRoundCreateForm,
 	SaleRoundCreateForm,
 	rowsTableClaim,
+	DataClaimConfig,
 	MAXCLAIM_TO_SC,
 } from './components/types';
 import {
@@ -55,30 +56,7 @@ export default function SaleRoundList() {
 	}, [isLoading]);
 
 	const navigate = useNavigate();
-	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>({
-		name: '',
-		details: {
-			network: 'BSC',
-			buy_limit: 0,
-		},
-		claim_configs: [
-			{
-				start_time: 1,
-				max_claim: 2,
-			},
-		],
-		have_list_user: true,
-		description: '',
-		token_info: {
-			address: '',
-			total_sold_coin: 0,
-		},
-		buy_time: {
-			start_time: 0,
-			end_time: 0,
-		},
-		exchange_rate: 0,
-	});
+	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let debounceCreate: any;
 
@@ -151,12 +129,12 @@ export default function SaleRoundList() {
 			name: '',
 			details: {
 				network: '',
-				buy_limit: 0,
+				buy_limit: '0',
 			},
 			claim_configs: [
 				{
 					start_time: 0,
-					max_claim: 0,
+					max_claim: '0',
 				},
 			],
 			have_list_user: isEvryCanJoin,
@@ -215,9 +193,9 @@ export default function SaleRoundList() {
 			.validateFields()
 			.then((data: SaleRoundDetailsType) => {
 				payload.details.network = data.network || '';
-				payload.details.buy_limit = Number(data.buyLimit) || 0;
+				payload.details.buy_limit = data.buyLimit || '0';
 				payload.token_info.address = data.address || '';
-				payload.token_info.total_sold_coin = String(data.total_sold_coin);
+				payload.token_info.total_sold_coin = data.total_sold_coin || '';
 			})
 			.catch(() => {
 				satusValidate = false;
@@ -238,10 +216,7 @@ export default function SaleRoundList() {
 				data: payload as ISaleRoundCreateForm,
 			};
 
-		let claim_configs: {
-			start_time: number;
-			max_claim: number;
-		}[] = [];
+		let claim_configs: DataClaimConfig[] = [];
 
 		let checkClaimTime = true;
 		let totalMaxClaim = 0;
@@ -252,7 +227,7 @@ export default function SaleRoundList() {
 			// total maxclaim in sc is 10000
 			claim_configs.push({
 				start_time: Number(el.startTime),
-				max_claim: Number(el.maxClaim) * MAXCLAIM_TO_SC,
+				max_claim: String(Number(el.maxClaim) * MAXCLAIM_TO_SC),
 			});
 
 			totalMaxClaim += Number(el.maxClaim);
@@ -267,10 +242,12 @@ export default function SaleRoundList() {
 		} else setMessageErrClaimConfig('');
 
 		claim_configs = claim_configs.sort((a, b) => a.start_time - b.start_time);
+
+		// if claimConfig is null then auto create default start time after end buy time and max claim is 10000
 		if (claimConfig.length === 0) {
 			claim_configs.push({
 				start_time: payload.buy_time.end_time + 10,
-				max_claim: 10000,
+				max_claim: '10000',
 			});
 			totalMaxClaim = 100;
 		}
@@ -302,7 +279,7 @@ export default function SaleRoundList() {
 	};
 
 	const handlerSubmitDeploy = async () => {
-		if (!tokenContract || !account || !_idSaleRound) {
+		if (!tokenContract || !account || !_idSaleRound || !saleroundForm) {
 			return;
 		}
 
@@ -313,10 +290,16 @@ export default function SaleRoundList() {
 				saleroundForm.buy_time.end_time,
 				saleroundForm.claim_configs.map((el) => el.start_time),
 				saleroundForm.claim_configs.map((el) => el.max_claim),
-				saleroundForm.details.buy_limit === 0 ? true : false,
-				new BigNumber(saleroundForm.details.buy_limit).times(1e18).toString(),
-				new BigNumber(saleroundForm.exchange_rate).times(1e18).toString(),
-				new BigNumber(saleroundForm.token_info.total_sold_coin)
+				saleroundForm.details.buy_limit === '0' ? true : false,
+				new BigNumber(saleroundForm.details.buy_limit.replace(/,/g, ''))
+					.times(1e18)
+					.toString(),
+				new BigNumber(saleroundForm.exchange_rate.replace(/,/g, ''))
+					.times(1e18)
+					.toString(),
+				new BigNumber(
+					saleroundForm.token_info.total_sold_coin.replace(/,/g, '')
+				)
 					.times(1e18)
 					.toString(),
 				saleroundForm.token_info.address
