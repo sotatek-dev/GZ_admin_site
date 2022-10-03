@@ -3,12 +3,12 @@ import { axiosClient } from '@common/services/apiClient';
 import { BE_MintPhase } from '@settings/nft-mint/SettingMintNFT.constant';
 import { MintPhase, NftMintPhaseSetting } from '@settings/nft-mint/types';
 
-const API = '/setting-mint';
+export const API_GET_SETTING_MINT = '/setting-mint';
 type Request = MintPhase;
 type Response = NftMintPhaseSetting;
 
 const getSalePhaseSetting = async (phase: Request) => {
-	return await axiosClient.get<Request, Response>(API, {
+	return await axiosClient.get<Request, Response>(API_GET_SETTING_MINT, {
 		params: {
 			type: BE_MintPhase[phase],
 		},
@@ -17,7 +17,7 @@ const getSalePhaseSetting = async (phase: Request) => {
 
 export const useNFTMintPhaseSetting = (phase: MintPhase) => {
 	const { data: currentPhaseSetting, isLoading: isGetPhaseSetting } = useQuery(
-		[API, phase],
+		[API_GET_SETTING_MINT, phase],
 		() => getSalePhaseSetting(phase)
 	);
 

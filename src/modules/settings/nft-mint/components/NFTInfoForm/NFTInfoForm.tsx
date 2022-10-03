@@ -60,7 +60,7 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 				name='nft_mint_limit'
 				rules={[{ required: true, message: 'Please input price!' }]}
 			>
-				<InputNumber addonAfter='BUSD' min={0} />
+				<InputNumber addonAfter='NFT' min={0} />
 			</Form.Item>
 			<Form.Item
 				label='Mint Time'
