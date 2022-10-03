@@ -210,8 +210,6 @@ export default function SaleRoundList() {
 				satusValidate = false;
 			});
 
-		console.log(payload);
-
 		if (!satusValidate)
 			return {
 				statusValidateForm: satusValidate as boolean,

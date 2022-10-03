@@ -33,6 +33,12 @@ interface DataType {
 	Email: string;
 }
 
+interface DataTypePropsTable {
+	_id: string;
+	wallet_address: string;
+	email: string;
+}
+
 interface PageingWhiteList {
 	page: number;
 	limit: number;
@@ -82,7 +88,6 @@ export default function SaleRoundListUser(props: {
 }) {
 	const [form] = Form.useForm<DataType>();
 	const { isEveryCanJoin, isUpdated, idSaleRound, isStateCanJoin } = props;
-	// const [checkTickEvryCanjoin, setCheckTickEvryCanjoin] = useState<boolean>(true)
 	const [editingKey, setEditingKey] = useState<string | number>('');
 	const [_rowsTable, setRowsTable] = useState<DataType[]>([...dataTable]);
 	const [payloadPaging, setPayloadPaging] =
@@ -98,8 +103,7 @@ export default function SaleRoundListUser(props: {
 
 	useEffect(() => {
 		setRowsTable(
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			data?.list.map((el: any) => ({
+			data?.list.map((el: DataTypePropsTable) => ({
 				key: el._id,
 				Wallet: el.wallet_address,
 				Email: el.email,
@@ -246,9 +250,6 @@ export default function SaleRoundListUser(props: {
 
 	const handlerCheckboxChange = (e: CheckboxChangeEvent) => {
 		isEveryCanJoin(!e.target.checked);
-		console.log(isStateCanJoin);
-
-		// setCheckTickEvryCanjoin(e.target.checked)
 	};
 	const accessToken = getCookieStorage('access_token');
 
