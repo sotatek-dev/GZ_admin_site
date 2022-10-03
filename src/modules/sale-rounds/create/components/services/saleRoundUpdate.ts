@@ -3,16 +3,19 @@ import { message } from '@common/components';
 import { axiosClient } from '@common/services/apiClient';
 import { useMutation } from 'react-query';
 import { formatNumberPush } from './helper';
+import { ISaleRoundCreateForm } from '../types';
 
 const APIs = {
 	createSaleRound: () => '/sale-round',
 	updateSaleRound: (id: string) => `/sale-round/${id}`,
 	updateSaleRoundDeployed: (id: string) => `/sale-round/info/${id}`,
 };
+type Request = ISaleRoundCreateForm;
+
 type Response = any;
 
-async function createFn(payload: any) {
-	return axiosClient.post<any, Response>(APIs.createSaleRound(), payload);
+async function createFn(payload: ISaleRoundCreateForm) {
+	return axiosClient.post<Request, Response>(APIs.createSaleRound(), payload);
 }
 
 async function updateFnDeployed(payload: any) {
@@ -32,15 +35,22 @@ async function updateFn(payload: any) {
 export const useCreateSaleRound = () => {
 	const createMutation = useMutation(createFn);
 
-	const createSaleRound = async (payload: any) => {
+	const createSaleRound = async (payload: ISaleRoundCreateForm) => {
+		if (!payload) return;
 		try {
 			const total_sold_coin = formatNumberPush(
-				payload?.token_info?.total_sold_coin
+				payload.token_info.total_sold_coin
 			);
-			const address = payload?.token_info?.address;
-			const exchange_rate = formatNumberPush(payload?.exchange_rate);
-			const network = payload?.details?.network;
-			const buy_limit = formatNumberPush(payload?.details?.buy_limit);
+
+			const address = payload.token_info.address;
+			const exchange_rate = formatNumberPush(payload.exchange_rate);
+			const network = payload.details.network;
+			const buy_limit = formatNumberPush(payload.details.buy_limit);
+			console.log(
+				total_sold_coin,
+				payload.token_info.total_sold_coin,
+				payload.details.buy_limit
+			);
 			const newData = {
 				...payload,
 				details: {

@@ -18,11 +18,11 @@ export const MAXCLAIM_TO_SC = 100;
 
 export interface SrTokenInforForm {
 	address: string;
-	total_sold_coin: number | string;
+	total_sold_coin: string;
 }
 export interface SrTokenDetailForm {
 	network: string;
-	buy_limit: number;
+	buy_limit: string;
 }
 export interface SRBoxTime {
 	start_time: number;
@@ -30,7 +30,7 @@ export interface SRBoxTime {
 }
 export interface DataClaimConfig {
 	start_time: number;
-	max_claim: number | string;
+	max_claim: string;
 }
 export interface ISaleRoundCreateForm {
 	name: string;
@@ -40,21 +40,21 @@ export interface ISaleRoundCreateForm {
 	claim_configs: DataClaimConfig[];
 	token_info: SrTokenInforForm;
 	buy_time: SRBoxTime;
-	exchange_rate: number | string;
+	exchange_rate: string;
 }
 
 export interface rowsTableClaim {
 	id: number;
 	startTime: number;
-	maxClaim: number;
+	maxClaim: string;
 }
 
 export interface SaleRoundDetailsType {
 	address?: string;
-	buyLimit?: string | number;
+	buyLimit?: string;
 	name?: string;
 	network?: string;
-	total_sold_coin?: string | number;
+	total_sold_coin?: string;
 }
 
 export interface SaleRoundExchangeRateType {

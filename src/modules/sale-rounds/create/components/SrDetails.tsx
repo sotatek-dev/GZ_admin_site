@@ -40,7 +40,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 
 	useEffect(() => {
 		if (!tokenInfo || !details) return;
-		if (details && details.buy_limit === 0) {
+		if (details && details.buy_limit === '0') {
 			setCheckedBuyLimit(true);
 			setDisabledBuyLimit(true);
 		} else {
