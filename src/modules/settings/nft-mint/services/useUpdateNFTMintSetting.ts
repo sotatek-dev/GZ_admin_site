@@ -1,46 +1,20 @@
 import { useMutation } from 'react-query';
 import { message } from '@common/components';
-import { useDNFTContract } from '@web3/contracts/useDNFTContract';
-import { MintPhase } from '../types';
-import BigNumber from 'bignumber.js';
+import { axiosClient } from '@common/services/apiClient';
+import { NftMintPhaseSetting } from '@settings/nft-mint/types';
 
-interface Request {
-	_id: MintPhase;
-	start_mint_time: number;
-	end_mint_time: number;
-	price: string;
-	price_after_24h: string;
-	nft_mint_limit: string;
-}
+const API = (id: string) => `/setting-mint/${id}`;
+type Request = Omit<NftMintPhaseSetting, 'type'>;
+
+const updateFn = async (rqBody: Request) => {
+	const { _id, ...newSetting } = rqBody;
+	return await axiosClient.put(API(_id), newSetting);
+};
 
 export const useUpdateNFTMintSetting = () => {
-	const dNFTContract = useDNFTContract();
-
-	const updateSalePhase = async (rqBody: Request) => {
-		if (!dNFTContract) return;
-
-		const {
-			_id,
-			end_mint_time,
-			nft_mint_limit,
-			price,
-			price_after_24h,
-			start_mint_time,
-		} = rqBody;
-		const tx = await dNFTContract.editSalePhase(
-			_id,
-			start_mint_time,
-			end_mint_time,
-			new BigNumber(price).multipliedBy(1e18).toString(),
-			new BigNumber(price_after_24h).multipliedBy(1e18).toString(),
-			new BigNumber(nft_mint_limit).multipliedBy(1e18).toString()
-		);
-		return await tx.wait();
-	};
-
-	const updateMutation = useMutation(updateSalePhase, {
+	const updateMutation = useMutation(updateFn, {
 		onSuccess() {
-			message.success('Update succeed');
+			message.success('Update successful');
 		},
 		onError() {
 			message.error('Update failed');

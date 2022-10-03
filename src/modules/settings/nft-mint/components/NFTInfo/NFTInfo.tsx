@@ -1,8 +1,9 @@
 import './NFTInfo.style.scss';
 import { Button, Card, Col, Row } from '@common/components';
 import { MinPhaseLabel, MintPhase } from '@settings/nft-mint/types';
-import { useSetCurrentRound } from '@settings/nft-mint/services/useSetCurrentRound';
+import { useDeploySalePhase } from '@settings/nft-mint/services/useDeploySalePhase';
 import { useGetCurrentPhase } from '@settings/nft-mint/services/useGetCurrentPhase';
+import { useNFTMintPhaseSetting } from '@settings/nft-mint/services/useGetSettingNFTMint';
 
 const TAB_LIST = [
 	{
@@ -35,10 +36,16 @@ export default function NFTInfo({
 	setCurrentPhaseTab,
 }: Props) {
 	const { currentPhase } = useGetCurrentPhase();
-	const { setCurrentRound, isSetCurrentRound } = useSetCurrentRound();
+	const { deploySalePhase, isDeploySalePhase } = useDeploySalePhase();
+	const { currentPhaseSetting } = useNFTMintPhaseSetting(activePhaseTab);
 
 	const onTabChange = (key: string) => {
 		setCurrentPhaseTab(key as MintPhase);
+	};
+
+	const handleSetCurrentRound = () => {
+		if (!currentPhaseSetting) return;
+		deploySalePhase({ ...currentPhaseSetting, _id: activePhaseTab });
 	};
 
 	return (
@@ -53,8 +60,8 @@ export default function NFTInfo({
 						<Button
 							key='setting-current-round'
 							type='primary'
-							onClick={() => setCurrentRound(activePhaseTab)}
-							loading={isSetCurrentRound}
+							onClick={handleSetCurrentRound}
+							loading={isDeploySalePhase}
 							disabled={!currentPhase}
 						>
 							Set Current Round

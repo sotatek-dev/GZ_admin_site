@@ -2,21 +2,24 @@ import './SettingNFTMint.style.scss';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { Button, Col, Form } from '@common/components';
-import NFTInfo from './components/NFTInfo';
-import Users from './components/Users';
-import { MintPhase, NFTInfoFormValue } from './types';
-import NFTInfoForm from './components/NFTInfoForm';
-import { useUpdateNFTMintSetting } from './services/useUpdateNFTMintSetting';
-import { useRedirectBack } from '@common/hooks';
+import {
+	BackButton,
+	NFTInfo,
+	Users,
+	NFTInfoForm,
+} from '@settings/nft-mint/components';
+import { useUpdateNFTMintSetting } from '@settings/nft-mint/services/useUpdateNFTMintSetting';
+import { MintPhase, NFTInfoFormValue } from '@settings/nft-mint/types';
+import { useNFTMintPhaseSetting } from './services/useGetSettingNFTMint';
 
 export default function SettingNFTMint() {
-	const goBack = useRedirectBack();
 	const [activePhaseTab, setActivePhaseTab] = useState<MintPhase>(
 		MintPhase.WhiteList
 	);
-
 	const { updateNftMintSetting, isUpdateNftMintSetting } =
 		useUpdateNFTMintSetting();
+
+	const { currentPhaseSetting } = useNFTMintPhaseSetting(activePhaseTab);
 
 	const forms = {
 		[MintPhase.WhiteList]: Form.useForm()[0],
@@ -26,10 +29,13 @@ export default function SettingNFTMint() {
 	};
 
 	function handleSaveSetting(values: NFTInfoFormValue) {
+		if (!currentPhaseSetting) return;
+
+		const { _id } = currentPhaseSetting;
 		const { price, price_after_24h, nft_mint_limit, mint_time } = values;
 
 		const newSetting = {
-			_id: activePhaseTab,
+			_id,
 			price,
 			price_after_24h,
 			nft_mint_limit,
@@ -46,7 +52,7 @@ export default function SettingNFTMint() {
 
 	return (
 		<Col className='setting-nft'>
-			<Button onClick={goBack}>Back</Button>
+			<BackButton />
 			<NFTInfo
 				activePhaseTab={activePhaseTab}
 				setCurrentPhaseTab={handleChangePhaseTab}
@@ -55,7 +61,6 @@ export default function SettingNFTMint() {
 						activePhaseTab={activePhaseTab}
 						form={forms[activePhaseTab]}
 						onFinish={handleSaveSetting}
-						key={activePhaseTab}
 					/>
 				}
 			/>

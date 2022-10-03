@@ -1,8 +1,9 @@
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
+import type { FormInstance } from 'antd/es/form/Form';
 import { DatePicker, Form, InputNumber, Loading } from '@common/components';
 import { MintPhase, NFTInfoFormValue } from '@settings/nft-mint/types';
-import type { FormInstance } from 'antd/es/form/Form';
 import { useNFTMintPhaseSetting } from '@settings/nft-mint/services/useGetSettingNFTMint';
+import dayjs from 'dayjs';
 
 interface Props {
 	activePhaseTab: MintPhase;
@@ -22,13 +23,7 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 		return null;
 	}
 
-	const {
-		price,
-		price_after_24h,
-		nft_mint_limit,
-		start_mint_time,
-		end_mint_time,
-	} = currentPhaseSetting;
+	const { start_mint_time, end_mint_time } = currentPhaseSetting;
 
 	return (
 		<Form
@@ -37,10 +32,14 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 			layout='vertical'
 			name='basic'
 			autoComplete='off'
+			initialValues={{
+				...currentPhaseSetting,
+				mint_time: [dayjs.unix(start_mint_time), dayjs.unix(end_mint_time)],
+			}}
+			key={activePhaseTab}
 		>
 			<Form.Item
 				wrapperCol={{ span: 12 }}
-				initialValue={price}
 				label='Price'
 				name='price'
 				rules={[{ required: true, message: 'Please input price!' }]}
@@ -49,7 +48,6 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 			</Form.Item>
 			<Form.Item
 				wrapperCol={{ span: 12 }}
-				initialValue={price_after_24h}
 				label='Price after 24h'
 				name='price_after_24h'
 				rules={[{ required: true, message: 'Please input price!' }]}
@@ -58,7 +56,6 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 			</Form.Item>
 			<Form.Item
 				wrapperCol={{ span: 12 }}
-				initialValue={nft_mint_limit}
 				label='NFT Mint Limit'
 				name='nft_mint_limit'
 				rules={[{ required: true, message: 'Please input price!' }]}
@@ -66,10 +63,6 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 				<InputNumber addonAfter='BUSD' min={0} />
 			</Form.Item>
 			<Form.Item
-				initialValue={[
-					start_mint_time && dayjs.unix(start_mint_time),
-					end_mint_time && dayjs.unix(end_mint_time),
-				]}
 				label='Mint Time'
 				name='mint_time'
 				rules={[{ required: true, message: 'Please input price!' }]}

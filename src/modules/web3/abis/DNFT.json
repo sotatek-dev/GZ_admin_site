@@ -1,9 +1,5 @@
 [
-	{
-		"inputs": [],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
+	{ "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
 	{
 		"anonymous": false,
 		"inputs": [
@@ -136,19 +132,6 @@
 		"inputs": [
 			{
 				"indexed": false,
-				"internalType": "uint8",
-				"name": "_currentSalePhase",
-				"type": "uint8"
-			}
-		],
-		"name": "CurrentSalePhaseChanged",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
 				"internalType": "address",
 				"name": "_DKEYNFTToken",
 				"type": "address"
@@ -259,6 +242,19 @@
 			{
 				"indexed": false,
 				"internalType": "address",
+				"name": "_priceFeed",
+				"type": "address"
+			}
+		],
+		"name": "PriceFeedChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
 				"name": "_buyer",
 				"type": "address"
 			},
@@ -357,7 +353,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "SalePhaseEdited",
+		"name": "SalePhaseDeployed",
 		"type": "event"
 	},
 	{
@@ -499,19 +495,12 @@
 		"name": "Unpaused",
 		"type": "event"
 	},
-	{
-		"stateMutability": "nonpayable",
-		"type": "fallback"
-	},
+	{ "stateMutability": "nonpayable", "type": "fallback" },
 	{
 		"inputs": [],
 		"name": "BUSDToken",
 		"outputs": [
-			{
-				"internalType": "contract IERC20",
-				"name": "",
-				"type": "address"
-			}
+			{ "internalType": "contract IERC20", "name": "", "type": "address" }
 		],
 		"stateMutability": "view",
 		"type": "function"
@@ -519,13 +508,7 @@
 	{
 		"inputs": [],
 		"name": "BUSD_DECIMALS",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
@@ -533,11 +516,7 @@
 		"inputs": [],
 		"name": "DKEYNFTToken",
 		"outputs": [
-			{
-				"internalType": "contract IERC721",
-				"name": "",
-				"type": "address"
-			}
+			{ "internalType": "contract IERC721", "name": "", "type": "address" }
 		],
 		"stateMutability": "view",
 		"type": "function"
@@ -546,105 +525,64 @@
 		"inputs": [],
 		"name": "GalactixToken",
 		"outputs": [
-			{
-				"internalType": "contract IERC20",
-				"name": "",
-				"type": "address"
-			}
+			{ "internalType": "contract IERC20", "name": "", "type": "address" }
 		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "MAX_SALE_AMOUNT",
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "MINT_TAX_RATE",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "ONE_DAY",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "ONE_HUNDRED_PERCENT",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "ONE_MONTH",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "RESCUE_TAX_RATE",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "SEVEN_DAYS",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
+			{ "internalType": "address", "name": "to", "type": "address" },
+			{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }
 		],
 		"name": "approve",
 		"outputs": [],
@@ -653,43 +591,23 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
+			{ "internalType": "address", "name": "owner", "type": "address" }
 		],
 		"name": "balanceOf",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "baseURI",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
+		"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }
 		],
 		"name": "burn",
 		"outputs": [],
@@ -698,21 +616,9 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint8",
-				"name": "_salePhase",
-				"type": "uint8"
-			},
-			{
-				"internalType": "address",
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"internalType": "bytes",
-				"name": "_signature",
-				"type": "bytes"
-			}
+			{ "internalType": "uint8", "name": "_salePhase", "type": "uint8" },
+			{ "internalType": "address", "name": "_to", "type": "address" },
+			{ "internalType": "bytes", "name": "_signature", "type": "bytes" }
 		],
 		"name": "buyUsingBNB",
 		"outputs": [],
@@ -721,21 +627,9 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint8",
-				"name": "_salePhase",
-				"type": "uint8"
-			},
-			{
-				"internalType": "address",
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"internalType": "bytes",
-				"name": "_signature",
-				"type": "bytes"
-			}
+			{ "internalType": "uint8", "name": "_salePhase", "type": "uint8" },
+			{ "internalType": "address", "name": "_to", "type": "address" },
+			{ "internalType": "bytes", "name": "_signature", "type": "bytes" }
 		],
 		"name": "buyUsingBUSD",
 		"outputs": [],
@@ -744,16 +638,9 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256[]",
-				"name": "_tokenIds",
-				"type": "uint256[]"
-			},
-			{
-				"internalType": "string",
-				"name": "_sessionId",
-				"type": "string"
-			}
+			{ "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" },
+			{ "internalType": "string", "name": "_sessionId", "type": "string" },
+			{ "internalType": "bytes", "name": "_signature", "type": "bytes" }
 		],
 		"name": "cancelTemporaryMerge",
 		"outputs": [],
@@ -762,11 +649,7 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_amountOfToken",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "_amountOfToken", "type": "uint256" }
 		],
 		"name": "claimPurchasedToken",
 		"outputs": [],
@@ -776,89 +659,41 @@
 	{
 		"inputs": [],
 		"name": "claimableTime",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_BNBAmount",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "_BNBAmount", "type": "uint256" }
 		],
 		"name": "convertBNBToBUSD",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_BUSDAmount",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "_BUSDAmount", "type": "uint256" }
 		],
 		"name": "convertBUSDToBNB",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "currentSalePhase",
-		"outputs": [
-			{
-				"internalType": "uint8",
-				"name": "",
-				"type": "uint8"
-			}
-		],
+		"outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint8",
-				"name": "_salePhase",
-				"type": "uint8"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_startTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_endTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_priceInBUSD",
-				"type": "uint256"
-			},
+			{ "internalType": "uint8", "name": "_salePhase", "type": "uint8" },
+			{ "internalType": "uint256", "name": "_startTime", "type": "uint256" },
+			{ "internalType": "uint256", "name": "_endTime", "type": "uint256" },
+			{ "internalType": "uint256", "name": "_priceInBUSD", "type": "uint256" },
 			{
 				"internalType": "uint256",
 				"name": "_priceAfter24Hours",
@@ -870,18 +705,14 @@
 				"type": "uint256"
 			}
 		],
-		"name": "editSalePhase",
+		"name": "deployNewSalePhase",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256[]",
-				"name": "_tokenIds",
-				"type": "uint256[]"
-			}
+			{ "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" }
 		],
 		"name": "executeTemporaryMerge",
 		"outputs": [],
@@ -890,110 +721,33 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }
 		],
 		"name": "getApproved",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
+		"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_buyer",
-				"type": "address"
-			}
+			{ "internalType": "address", "name": "_buyer", "type": "address" }
 		],
 		"name": "getClaimableAmountOfBuyer",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "getUnSoldTokenOfAllPhase",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint8",
-				"name": "_salePhase",
-				"type": "uint8"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_startTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_endTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_priceInBUSD",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_priceAfter24Hours",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_maxAmountUserCanBuy",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_maxSaleAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "initSalePhase",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "baseURI_",
-				"type": "string"
-			},
-			{
-				"internalType": "address",
-				"name": "_signer",
-				"type": "address"
-			},
+			{ "internalType": "string", "name": "baseURI_", "type": "string" },
+			{ "internalType": "address", "name": "_signer", "type": "address" },
 			{
 				"internalType": "contract IERC20",
 				"name": "_BUSDToken",
@@ -1012,134 +766,62 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			}
+			{ "internalType": "address", "name": "owner", "type": "address" },
+			{ "internalType": "address", "name": "operator", "type": "address" }
 		],
 		"name": "isApprovedForAll",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
+		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [{ "internalType": "string", "name": "", "type": "string" }],
+		"name": "isMergeSessionIdExist",
+		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "launchPrice",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "minimumGalactixTokenRequire",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "name",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
+		"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "nextTimeMerge",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"name": "nextTimeUsingKey",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
+		"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }
 		],
 		"name": "ownerOf",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
+		"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
@@ -1153,23 +835,13 @@
 	{
 		"inputs": [],
 		"name": "paused",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
+		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256[]",
-				"name": "_tokenIds",
-				"type": "uint256[]"
-			}
+			{ "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" }
 		],
 		"name": "permanentMerge",
 		"outputs": [],
@@ -1186,23 +858,13 @@
 	{
 		"inputs": [],
 		"name": "rescuePrice",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_keyTokenId",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "_keyTokenId", "type": "uint256" }
 		],
 		"name": "rescueUsingKey",
 		"outputs": [],
@@ -1211,50 +873,22 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_salePrice",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "_tokenId", "type": "uint256" },
+			{ "internalType": "uint256", "name": "_salePrice", "type": "uint256" }
 		],
 		"name": "royaltyInfo",
 		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
+			{ "internalType": "address", "name": "", "type": "address" },
+			{ "internalType": "uint256", "name": "", "type": "uint256" }
 		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
+			{ "internalType": "address", "name": "from", "type": "address" },
+			{ "internalType": "address", "name": "to", "type": "address" },
+			{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }
 		],
 		"name": "safeTransferFrom",
 		"outputs": [],
@@ -1263,26 +897,10 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bytes",
-				"name": "data",
-				"type": "bytes"
-			}
+			{ "internalType": "address", "name": "from", "type": "address" },
+			{ "internalType": "address", "name": "to", "type": "address" },
+			{ "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+			{ "internalType": "bytes", "name": "data", "type": "bytes" }
 		],
 		"name": "safeTransferFrom",
 		"outputs": [],
@@ -1290,30 +908,12 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint8",
-				"name": "",
-				"type": "uint8"
-			}
-		],
+		"inputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
 		"name": "salePhaseStatistics",
 		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "startTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "endTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "priceInBUSD",
-				"type": "uint256"
-			},
+			{ "internalType": "uint256", "name": "startTime", "type": "uint256" },
+			{ "internalType": "uint256", "name": "endTime", "type": "uint256" },
+			{ "internalType": "uint256", "name": "priceInBUSD", "type": "uint256" },
 			{
 				"internalType": "uint256",
 				"name": "priceAfter24Hours",
@@ -1324,32 +924,16 @@
 				"name": "maxAmountUserCanBuy",
 				"type": "uint256"
 			},
-			{
-				"internalType": "uint256",
-				"name": "maxSaleAmount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "totalSold",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "maxSaleAmount", "type": "uint256" },
+			{ "internalType": "uint256", "name": "totalSold", "type": "uint256" }
 		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			},
-			{
-				"internalType": "bool",
-				"name": "approved",
-				"type": "bool"
-			}
+			{ "internalType": "address", "name": "operator", "type": "address" },
+			{ "internalType": "bool", "name": "approved", "type": "bool" }
 		],
 		"name": "setApprovalForAll",
 		"outputs": [],
@@ -1358,11 +942,7 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "string",
-				"name": "baseURI_",
-				"type": "string"
-			}
+			{ "internalType": "string", "name": "baseURI_", "type": "string" }
 		],
 		"name": "setBaseURI",
 		"outputs": [],
@@ -1371,26 +951,9 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_claimableTime",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "_claimableTime", "type": "uint256" }
 		],
 		"name": "setClaimableTime",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint8",
-				"name": "_currentSalePhase",
-				"type": "uint8"
-			}
-		],
-		"name": "setCurrentSalePhase",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -1410,11 +973,7 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_launchPrice",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "_launchPrice", "type": "uint256" }
 		],
 		"name": "setLaunchPrice",
 		"outputs": [],
@@ -1436,11 +995,16 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_rescuePrice",
-				"type": "uint256"
-			}
+			{ "internalType": "address", "name": "_priceFeed", "type": "address" }
+		],
+		"name": "setPriceFeed",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{ "internalType": "uint256", "name": "_rescuePrice", "type": "uint256" }
 		],
 		"name": "setRescuePrice",
 		"outputs": [],
@@ -1449,11 +1013,7 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint96",
-				"name": "_feeRate",
-				"type": "uint96"
-			}
+			{ "internalType": "uint96", "name": "_feeRate", "type": "uint96" }
 		],
 		"name": "setRoyalty",
 		"outputs": [],
@@ -1462,11 +1022,7 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_signer",
-				"type": "address"
-			}
+			{ "internalType": "address", "name": "_signer", "type": "address" }
 		],
 		"name": "setSigner",
 		"outputs": [],
@@ -1489,60 +1045,31 @@
 	{
 		"inputs": [],
 		"name": "signer",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
+		"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "bytes4",
-				"name": "interfaceId",
-				"type": "bytes4"
-			}
+			{ "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
 		],
 		"name": "supportsInterface",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
+		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "symbol",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
+		"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256[]",
-				"name": "_tokenIds",
-				"type": "uint256[]"
-			},
-			{
-				"internalType": "string",
-				"name": "_sessionId",
-				"type": "string"
-			}
+			{ "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" },
+			{ "internalType": "string", "name": "_sessionId", "type": "string" },
+			{ "internalType": "bytes", "name": "_signature", "type": "bytes" }
 		],
 		"name": "temporaryMerge",
 		"outputs": [],
@@ -1551,66 +1078,32 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
+			{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }
 		],
 		"name": "tokenURI",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
+		"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "totalClaimed",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
 		"name": "totalRescued",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
+			{ "internalType": "address", "name": "from", "type": "address" },
+			{ "internalType": "address", "name": "to", "type": "address" },
+			{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }
 		],
 		"name": "transferFrom",
 		"outputs": [],
@@ -1619,11 +1112,7 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
+			{ "internalType": "address", "name": "newOwner", "type": "address" }
 		],
 		"name": "transferOwnership",
 		"outputs": [],
@@ -1633,13 +1122,7 @@
 	{
 		"inputs": [],
 		"name": "treasuryAddress",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
+		"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
@@ -1651,26 +1134,11 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
+		"inputs": [{ "internalType": "address", "name": "", "type": "address" }],
 		"name": "userClaimedAmount",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
-	{
-		"stateMutability": "payable",
-		"type": "receive"
-	}
+	{ "stateMutability": "payable", "type": "receive" }
 ]
