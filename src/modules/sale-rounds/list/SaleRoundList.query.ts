@@ -7,6 +7,8 @@ type Request = {
 	limit?: number;
 	page?: number;
 	query?: string;
+	sortBy?: string;
+	direction?: string;
 };
 
 type Response = {
@@ -22,6 +24,6 @@ const fetcher = async (rqBody: Request = { limit: 10, page: 1 }) => {
 	});
 };
 
-export const useGetSaleRounds = () => {
-	return useQuery([API], () => fetcher());
+export const useGetSaleRounds = (rqBody: Request) => {
+	return useQuery([API, rqBody], () => fetcher(rqBody));
 };

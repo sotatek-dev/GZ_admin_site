@@ -40,7 +40,9 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 
 	useEffect(() => {
 		if (!tokenInfo || !details) return;
-		if (details && details.buy_limit === '0') {
+
+		// BE handler buy limit is 0, it is mean use can buy no Limit -> CheckBox can be tick and disable input buy limit
+		if (details.buy_limit === '0') {
 			setCheckedBuyLimit(true);
 			setDisabledBuyLimit(true);
 		} else {
