@@ -19,6 +19,7 @@ import {
 	ISaleRoundCreateForm,
 	SaleRoundCreateForm,
 	rowsTableClaim,
+	MAXCLAIM_TO_SC,
 } from './components/types';
 import {
 	useCreateSaleRound,
@@ -248,9 +249,10 @@ export default function SaleRoundList() {
 			if (el.startTime < payload.buy_time.end_time) {
 				checkClaimTime = false;
 			}
+			// total maxclaim in sc is 10000
 			claim_configs.push({
 				start_time: Number(el.startTime),
-				max_claim: Number(el.maxClaim) * 100,
+				max_claim: Number(el.maxClaim) * MAXCLAIM_TO_SC,
 			});
 
 			totalMaxClaim += Number(el.maxClaim);
@@ -339,8 +341,7 @@ export default function SaleRoundList() {
 		let name = '';
 		await formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]
 			.validateFields()
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			.then((data: any) => {
+			.then((data: { name: string }) => {
 				name = data.name;
 			})
 			.catch(() => {
@@ -348,8 +349,7 @@ export default function SaleRoundList() {
 			});
 		await formsSaleRound[SaleRoundCreateForm.SR_ABOUNT]
 			.validateFields()
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			.then((data: any) => {
+			.then((data: { description: string }) => {
 				description = data.description;
 			})
 			.catch(() => {
