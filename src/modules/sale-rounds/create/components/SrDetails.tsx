@@ -29,9 +29,9 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 		setCheckedBuyLimit(e.target.checked);
 		setDisabledBuyLimit(e.target.checked);
 		if (e.target.checked) {
-			setBuyLimit('0.00');
+			setBuyLimit('');
 			form.resetFields(['buyLimit']);
-			form.setFieldValue('buyLimit', '0.00');
+			form.setFieldValue('buyLimit', '');
 		} else {
 			setBuyLimit('');
 			form.setFieldValue('buyLimit', '');
