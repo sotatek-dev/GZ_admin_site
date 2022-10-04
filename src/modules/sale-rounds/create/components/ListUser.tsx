@@ -251,14 +251,6 @@ export default function SaleRoundListUser(props: {
 		setPayloadPaging({ ...payloadPaging, page });
 	};
 
-	const handlerReloadAll = () => {
-		setPayloadPaging({
-			...payloadPaging,
-			page: 1,
-			limit: 10,
-		});
-	};
-
 	const handlerCheckboxChange = (e: CheckboxChangeEvent) => {
 		isEveryCanJoin(e.target.checked);
 		setCheckboxEvryCanJoin(e.target.checked);
@@ -334,12 +326,6 @@ export default function SaleRoundListUser(props: {
 					<div>
 						{!isUpdated && idSaleRound && (
 							<div className='d-flex pr-105'>
-								<Button
-									onClick={handlerReloadAll}
-									className='mr-12 d-flex justify-content-center align-items-center'
-								>
-									<span>Reload all</span>
-								</Button>
 								<Upload {...propsUploadFile}>
 									<Button className='d-flex justify-content-center align-items-center'>
 										<span>Add CSV File</span>
@@ -368,15 +354,17 @@ export default function SaleRoundListUser(props: {
 						/>
 					</Form>
 				</div>
-				<div className='d-flex justify-content-end pr-32'>
-					<Pagination
-						onChange={handlerPageChange}
-						current={payloadPaging.page}
-						total={pagingTotal}
-						pageSize={payloadPaging.limit}
-						itemRender={itemRender}
-					/>
-				</div>
+				{pagingTotal > 0 && (
+					<div className='d-flex justify-content-end pr-32'>
+						<Pagination
+							onChange={handlerPageChange}
+							current={payloadPaging.page}
+							total={pagingTotal}
+							pageSize={payloadPaging.limit}
+							itemRender={itemRender}
+						/>
+					</div>
+				)}
 			</div>
 		</Card>
 	);
