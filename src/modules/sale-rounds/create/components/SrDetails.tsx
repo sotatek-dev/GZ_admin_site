@@ -9,6 +9,7 @@ import {
 } from './types';
 import { useEffect, useState } from 'react';
 import NumericInput from './NumericInput';
+import BigNumber from 'bignumber.js';
 import { Card, Form, Input } from '@common/components';
 
 interface SrDetailProps {
@@ -29,14 +30,38 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 		setCheckedBuyLimit(e.target.checked);
 		setDisabledBuyLimit(e.target.checked);
 		if (e.target.checked) {
-			setBuyLimit('0.00');
+			setBuyLimit('');
 			form.resetFields(['buyLimit']);
-			form.setFieldValue('buyLimit', '0.00');
+			form.setFieldValue('buyLimit', '');
 		} else {
 			setBuyLimit('');
 			form.setFieldValue('buyLimit', '');
 		}
 	};
+
+	const handlerBuyLimitChangeRules = () => ({
+		validator(_: unknown, value: string) {
+			if (new BigNumber(value).isGreaterThan(0)) {
+				return Promise.resolve();
+			}
+			if (new BigNumber(value).isEqualTo(0))
+				return Promise.reject(new Error('Buy limit must be greater than 0'));
+			return Promise.reject();
+		},
+	});
+
+	const handlerTotalSoldCoinChangeRules = () => ({
+		validator(_: unknown, value: string) {
+			if (new BigNumber(value).isGreaterThan(0)) {
+				return Promise.resolve();
+			}
+			if (new BigNumber(value).isEqualTo(0))
+				return Promise.reject(
+					new Error('Total sold coin must be greater than 0')
+				);
+			return Promise.reject();
+		},
+	});
 
 	useEffect(() => {
 		if (!tokenInfo || !details) return;
@@ -89,6 +114,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 								required: !checkedBuyLimit,
 								message: MessageValidations.MSC_1_15,
 							},
+							handlerBuyLimitChangeRules,
 						]}
 					>
 						<NumericInput
@@ -113,7 +139,10 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 						name='total_sold_coin'
 						className='mb-22'
 						label='Total Sold Coin'
-						rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
+						rules={[
+							{ required: true, message: MessageValidations.MSC_1_15 },
+							handlerTotalSoldCoinChangeRules,
+						]}
 						initialValue={tokenInfo?.total_sold_coin}
 					>
 						<NumericInput
