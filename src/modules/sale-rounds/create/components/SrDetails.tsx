@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import NumericInput from './NumericInput';
 import BigNumber from 'bignumber.js';
 import { Card, Form, Input } from '@common/components';
+import { removeComanString } from './services/helper';
 
 interface SrDetailProps {
 	isUpdate: boolean;
@@ -41,25 +42,25 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 
 	const handlerBuyLimitChangeRules = () => ({
 		validator(_: unknown, value: string) {
-			if (new BigNumber(value).isGreaterThan(0)) {
+			if (new BigNumber(removeComanString(value)).isGreaterThan(0)) {
 				return Promise.resolve();
 			}
-			if (new BigNumber(value).isEqualTo(0))
+			if (new BigNumber(removeComanString(value)).isEqualTo(0))
 				return Promise.reject(new Error('Buy limit must be greater than 0'));
-			return Promise.reject();
+			return Promise.resolve();
 		},
 	});
 
 	const handlerTotalSoldCoinChangeRules = () => ({
 		validator(_: unknown, value: string) {
-			if (new BigNumber(value).isGreaterThan(0)) {
+			if (new BigNumber(removeComanString(value)).isGreaterThan(0)) {
 				return Promise.resolve();
 			}
-			if (new BigNumber(value).isEqualTo(0))
+			if (new BigNumber(removeComanString(value)).isEqualTo(0))
 				return Promise.reject(
 					new Error('Total sold coin must be greater than 0')
 				);
-			return Promise.reject();
+			return Promise.resolve();
 		},
 	});
 

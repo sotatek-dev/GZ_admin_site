@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from 'react-router';
 import { Button } from '@common/components';
+import { Popconfirm } from 'antd';
 import { useRedirectBack } from '@common/hooks';
 import {
 	useDeleteAdmin,
@@ -37,14 +38,16 @@ export default function EditAdmin() {
 	return (
 		<>
 			<Button onClick={goBack}>Back</Button>
-			<DeleteButton
-				danger
-				htmlType='submit'
-				loading={isDeleting}
-				onClick={handleDeleteAdmin}
+			<Popconfirm
+				className='pl-10'
+				title='Sure to remove'
+				onConfirm={handleDeleteAdmin}
 			>
-				Delete Admin
-			</DeleteButton>
+				<DeleteButton danger htmlType='submit' loading={isDeleting}>
+					Delete Admin
+				</DeleteButton>
+			</Popconfirm>
+
 			<AdminForm
 				title='EDIT ADMIN'
 				initData={{
