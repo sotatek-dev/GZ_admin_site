@@ -11,6 +11,7 @@ import {
 import { useUpdateNFTMintSetting } from '@settings/nft-mint/services/useUpdateNFTMintSetting';
 import { MintPhase, NFTInfoFormValue } from '@settings/nft-mint/types';
 import { useNFTMintPhaseSetting } from './services/useGetSettingNFTMint';
+import { toWei } from '@common/helpers/converts';
 
 export default function SettingNFTMint() {
 	const [activePhaseTab, setActivePhaseTab] = useState<MintPhase>(
@@ -36,8 +37,8 @@ export default function SettingNFTMint() {
 
 		const newSetting = {
 			_id,
-			price,
-			price_after_24h,
+			price: toWei(price),
+			price_after_24h: toWei(price_after_24h),
 			nft_mint_limit,
 			start_mint_time: dayjs(mint_time[0]).unix(),
 			end_mint_time: dayjs(mint_time[1]).unix(),
