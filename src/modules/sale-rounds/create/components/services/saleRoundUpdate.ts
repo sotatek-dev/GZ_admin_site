@@ -133,6 +133,6 @@ export const useUpdateSaleRound = () => {
 
 	return {
 		updateSaleRound,
-		isCreateSaleRound: updateMutation.isLoading,
+		isUpdateSaleRoundApi: updateMutation.isLoading,
 	};
 };
