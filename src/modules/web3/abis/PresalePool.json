@@ -443,6 +443,18 @@
 	},
 	{
 		"inputs": [
+			{ "internalType": "uint8", "name": "_salePhase", "type": "uint8" }
+		],
+		"name": "getClaimInfo",
+		"outputs": [
+			{ "internalType": "uint256[]", "name": "", "type": "uint256[]" },
+			{ "internalType": "uint256[]", "name": "", "type": "uint256[]" }
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
 			{ "internalType": "bytes32", "name": "_messageHash", "type": "bytes32" }
 		],
 		"name": "getEthSignedMessageHash",
@@ -469,51 +481,6 @@
 		],
 		"name": "getRemainingClaimableAmount",
 		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{ "internalType": "uint8", "name": "_salePhase", "type": "uint8" }
-		],
-		"name": "getSalePhaseInfo",
-		"outputs": [
-			{ "internalType": "uint256", "name": "startTime", "type": "uint256" },
-			{ "internalType": "uint256", "name": "endTime", "type": "uint256" },
-			{ "internalType": "uint256[]", "name": "claimTime", "type": "uint256[]" },
-			{ "internalType": "uint256[]", "name": "claimRate", "type": "uint256[]" },
-			{ "internalType": "bool", "name": "isNoBuyLimit", "type": "bool" },
-			{
-				"internalType": "uint256",
-				"name": "maxBUSDUserCanSpend",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "preSaleTokenPrice",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "maxPreSaleAmount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "totalSoldAmount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "totalClaimedAmount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "treasuryAddress",
-				"type": "address"
-			}
-		],
 		"stateMutability": "view",
 		"type": "function"
 	},

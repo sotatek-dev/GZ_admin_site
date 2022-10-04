@@ -42,6 +42,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 
 	const handlerBuyLimitChangeRules = () => ({
 		validator(_: unknown, value: string) {
+			if (details && checkedBuyLimit) return Promise.resolve();
 			if (new BigNumber(removeComanString(value)).isGreaterThan(0)) {
 				return Promise.resolve();
 			}
@@ -71,6 +72,7 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 		if (details.buy_limit === '0') {
 			setCheckedBuyLimit(true);
 			setDisabledBuyLimit(true);
+			form.setFieldValue('buyLimit', '');
 		} else {
 			setCheckedBuyLimit(false);
 			if (isUpdate) setDisabledBuyLimit(true);

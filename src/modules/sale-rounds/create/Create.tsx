@@ -39,7 +39,7 @@ export default function SaleRoundList() {
 	const { account } = useActiveWeb3React();
 	const tokenContract = usePresalePoolContract();
 	const { createSaleRound } = useCreateSaleRound();
-	const { updateSaleRound } = useUpdateSaleRound();
+	const { updateSaleRound, isUpdateSaleRoundApi } = useUpdateSaleRound();
 	const { updateSaleRoundDeployed } = useUpdateSaleRoundDeployed();
 	const [_idSaleRound, setIdSaleRound] = useState<number>();
 	const [isEvryCanJoin, setEveryCanJoin] = useState<boolean>(true);
@@ -172,6 +172,7 @@ export default function SaleRoundList() {
 			})
 			.catch(() => {
 				satusValidate = false;
+				handlerFnDebouceCreate;
 			});
 
 		await formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
@@ -453,6 +454,7 @@ export default function SaleRoundList() {
 					{!isDisableBtnAfterCreate && (
 						<Button
 							className='btn-update-round d-flex align-items-center justify-content-center'
+							loading={isUpdateSaleRoundApi}
 							onClick={handlerSubmitUpdate}
 						>
 							<span>
