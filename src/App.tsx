@@ -7,7 +7,9 @@ import { Web3ActiveReactProvider } from '@web3/contexts/web3ActiveReact';
 import { AppRoutes } from './router/routes';
 import { AuthProvider } from '@common/contexts/authContext';
 
+// eslint-disable-next-line no-console
 console.log('REACT_APP_DNFT_CONTRACT: ', process.env.REACT_APP_DNFT_CONTRACT || '-')
+// eslint-disable-next-line no-console
 console.log('REACT_APP_DNFT_CONTRACT: ', process.env.REACT_APP_DNFT_CONTRACT || '-')
 
 function App() {
