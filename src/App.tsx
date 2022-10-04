@@ -7,6 +7,9 @@ import { Web3ActiveReactProvider } from '@web3/contexts/web3ActiveReact';
 import { AppRoutes } from './router/routes';
 import { AuthProvider } from '@common/contexts/authContext';
 
+console.log('REACT_APP_DNFT_CONTRACT: ', process.env.REACT_APP_DNFT_CONTRACT || '-')
+console.log('REACT_APP_DNFT_CONTRACT: ', process.env.REACT_APP_DNFT_CONTRACT || '-')
+
 function App() {
 	const queryClient = new QueryClient({
 		defaultOptions: {
