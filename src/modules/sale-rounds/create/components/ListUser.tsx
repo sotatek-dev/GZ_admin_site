@@ -4,9 +4,9 @@ import type { PaginationProps } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UploadProps } from 'antd';
 import React, { useEffect, useState } from 'react';
-import prevImgae from './icons/prev-icon.svg';
-import nextImgae from './icons/next-icons.svg';
-import copyIcon from './icons/copy-icon.svg';
+import prevImgae from 'src/assets/icons/prev-icon.svg';
+import nextImgae from 'src/assets/icons/next-icons.svg';
+import copyIcon from 'src/assets/icons/copy-icon.svg';
 import { message } from '@common/components';
 import { getCookieStorage } from '@common/helpers/storage';
 import {

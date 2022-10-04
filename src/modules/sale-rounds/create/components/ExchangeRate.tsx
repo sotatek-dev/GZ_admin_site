@@ -1,5 +1,5 @@
 import './scss/ExchangeRate.style.scss';
-import arrowLeft from './icons/arrow-left-icon.svg';
+import arrowLeft from 'src/assets/icons/arrow-left-icon.svg';
 import { MessageValidations } from './types';
 import { useState } from 'react';
 import NumericInputGet from './NumericInput';

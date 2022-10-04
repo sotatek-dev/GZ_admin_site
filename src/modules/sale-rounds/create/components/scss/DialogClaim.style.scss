@@ -1,49 +1,49 @@
 .ant-modal-content {
-	border-radius: 15px;
+	border-radius: 0.938rem;
 }
 .Dialog-claim {
 	.Dialog-claim-contents {
-		padding-left: 43px;
-		padding-right: 45px;
-		padding-top: 30px;
-		padding-bottom: 76px;
+		padding-left: 2.688rem;
+		padding-right: 2.813rem;
+		padding-top: 1.875rem;
+		padding-bottom: 4.75rem;
 	}
 
 	.dl-claim-title {
 		font-weight: 600;
-		font-size: 16px;
+		font-size: 1rem;
 		line-height: 175%;
 		color: #001f4d;
 	}
 	.dialog-claim-contents-title {
 		font-weight: 400;
-		font-size: 14px;
+		font-size: 0.875rem;
 		line-height: 175%;
-		padding-bottom: 3px;
+		padding-bottom: 0.188rem;
 
 		color: #001f4d;
 	}
 	.dialog-claim-datetime {
-		height: 50px;
+		height: 3.125rem;
 		width: 100%;
 
-		border: 1px solid #001f4d;
-		border-radius: 10px;
+		border: 0.063rem solid #001f4d;
+		border-radius: 0.625rem;
 	}
 	.ipdl-claim-max {
-		height: 50px;
+		height: 3.125rem;
 
-		border: 1px solid #001f4d;
-		border-radius: 10px;
+		border: 0.063rem solid #001f4d;
+		border-radius: 0.625rem;
 	}
 	.dl-claim-btn-bot {
-		padding-top: 41px;
+		padding-top: 8.813rem;
 		width: 100%;
 		justify-content: space-around;
 	}
 	.btn-apply {
-		width: 100px;
-		height: 44px;
+		width: 6.25rem;
+		height: 2.75rem;
 
 		background: linear-gradient(
 			90deg,
@@ -52,24 +52,24 @@
 		);
 		/* 0048B2 Primary Color Shadow 25% */
 
-		box-shadow: 0px 2px 4px rgba(138, 146, 166, 0.3);
-		border-radius: 10px;
+		box-shadow: 0rem 0.125rem 0.25rem rgba(138, 146, 166, 0.3);
+		border-radius: 0.625rem;
 		font-weight: 600;
-		font-size: 16px;
+		font-size: 1rem;
 		line-height: 175%;
 
 		color: #ffffff;
 	}
 	.btn-cancel {
-		width: 100px;
-		height: 44px;
+		width: 6.25rem;
+		height: 2.75rem;
 
 		background: #000000;
 
-		box-shadow: 0px 2px 4px rgba(138, 146, 166, 0.3);
-		border-radius: 10px;
+		box-shadow: 0rem 0.125rem 0.25rem rgba(138, 146, 166, 0.3);
+		border-radius: 0.625rem;
 		font-weight: 600;
-		font-size: 16px;
+		font-size: 1rem;
 		line-height: 175%;
 
 		color: #ffffff;
