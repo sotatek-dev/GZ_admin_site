@@ -22,20 +22,6 @@
 			color: #001f4d;
 		}
 	}
-	.ant-form-item-label
-		> label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
-		display: none;
-	}
-	.ant-form-item-label
-		> label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::after {
-		display: inline-block;
-		margin-right: 0.25rem;
-		color: #ff4d4f;
-		font-size: 0.875rem;
-		font-family: SimSun, sans-serif;
-		line-height: 1;
-		content: '*';
-	}
 
 	.ip-sale-round-general {
 		height: 2.791rem;
