@@ -33,6 +33,12 @@ interface DataType {
 	Email: string;
 }
 
+interface DataTypePropsTable {
+	_id: string;
+	wallet_address: string;
+	email: string;
+}
+
 interface PageingWhiteList {
 	page: number;
 	limit: number;
@@ -78,15 +84,14 @@ export default function SaleRoundListUser(props: {
 	isEveryCanJoin: (val: boolean) => void;
 	isUpdated: boolean | undefined;
 	idSaleRound: string | undefined;
+	isStateCanJoin: boolean;
 }) {
 	const [form] = Form.useForm<DataType>();
-	const { isEveryCanJoin, isUpdated, idSaleRound } = props;
-	const [checkedEvCanJoin, setCheckedEvCanJoin] = useState(true);
+	const { isEveryCanJoin, isUpdated, idSaleRound, isStateCanJoin } = props;
 	const [editingKey, setEditingKey] = useState<string | number>('');
 	const [_rowsTable, setRowsTable] = useState<DataType[]>([...dataTable]);
 	const [payloadPaging, setPayloadPaging] =
 		useState<PageingWhiteList>(pageDefault);
-	// const [keyCount, setkeyCount] = useState<number>(0);
 	const [pagingTotal, setPagingTotal] = useState<number>(0);
 	const queryClient = useQueryClient();
 	const { updateSrWhiteList } = useSrWhiteListUpdate();
@@ -98,8 +103,7 @@ export default function SaleRoundListUser(props: {
 
 	useEffect(() => {
 		setRowsTable(
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			data?.list.map((el: any) => ({
+			data?.list.map((el: DataTypePropsTable) => ({
 				key: el._id,
 				Wallet: el.wallet_address,
 				Email: el.email,
@@ -245,8 +249,7 @@ export default function SaleRoundListUser(props: {
 	};
 
 	const handlerCheckboxChange = (e: CheckboxChangeEvent) => {
-		setCheckedEvCanJoin(e.target.checked);
-		isEveryCanJoin(e.target.checked);
+		isEveryCanJoin(!e.target.checked);
 	};
 	const accessToken = getCookieStorage('access_token');
 
@@ -308,7 +311,9 @@ export default function SaleRoundListUser(props: {
 			extra={
 				<div className='d-flex justify-content-center align-items-center'>
 					<Checkbox
-						checked={checkedEvCanJoin}
+						key={`isStateCanJoin-${isStateCanJoin}`}
+						disabled={isUpdated}
+						checked={isStateCanJoin}
 						onChange={handlerCheckboxChange}
 						className='sr-checkbox-user'
 					>
@@ -336,6 +341,7 @@ export default function SaleRoundListUser(props: {
 					<Form form={form} component={false}>
 						<Table
 							bordered
+							pagination={false}
 							columns={mergedColumns}
 							components={{
 								body: {
@@ -343,7 +349,6 @@ export default function SaleRoundListUser(props: {
 								},
 							}}
 							dataSource={_rowsTable}
-							pagination={{ pageSize: 50, position: [] }}
 							scroll={{ y: 305, x: 1050 }}
 						/>
 					</Form>
@@ -351,7 +356,7 @@ export default function SaleRoundListUser(props: {
 				<div className='d-flex justify-content-end pr-32'>
 					<Pagination
 						onChange={handlerPageChange}
-						defaultCurrent={payloadPaging.page}
+						current={payloadPaging.page}
 						total={pagingTotal}
 						pageSize={payloadPaging.limit}
 						itemRender={itemRender}

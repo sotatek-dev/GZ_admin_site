@@ -423,8 +423,12 @@ export default function SaleRoundList() {
 						</Row>
 						<Row className='pt-41'>
 							<Col span={24}>
+								{/* if have list use then BE saving is evry can join is False */}
 								<ListUser
 									idSaleRound={idSaleRoundUpdate || _idSaleRoundAfterCreate}
+									isStateCanJoin={
+										data?.have_list_user ? !isEvryCanJoin : isEvryCanJoin
+									}
 									isUpdated={isUpdateSaleRound}
 									isEveryCanJoin={setEveryCanJoin}
 								/>

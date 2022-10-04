@@ -8,6 +8,22 @@ import { useGetSaleRounds } from './SaleRoundList.query';
 import { SaleRoundStatusLabel } from './SaleRoundList.constants';
 import { SaleRound } from './types';
 import { MESSAGES } from '@common/constants/messages';
+import { Pagination } from 'antd';
+import { useState } from 'react';
+
+interface PageingWhiteList {
+	page: number;
+	limit: number;
+	sortBy: string;
+	direction: string;
+}
+
+const pageDefault = (): PageingWhiteList => ({
+	page: 1,
+	limit: 10,
+	sortBy: 'created_at',
+	direction: 'desc',
+});
 
 const columns: ColumnsType<SaleRound> = [
 	{
@@ -46,7 +62,9 @@ const columns: ColumnsType<SaleRound> = [
 
 const AdminList = () => {
 	const navigate = useNavigate();
-	const { isLoading, data, refetch, error } = useGetSaleRounds();
+	const [payloadPaging, setPayloadPaging] =
+		useState<PageingWhiteList>(pageDefault);
+	const { isLoading, data, refetch, error } = useGetSaleRounds(payloadPaging);
 
 	const handleRefreshList = async () => {
 		await refetch();
@@ -54,6 +72,10 @@ const AdminList = () => {
 		if (!error) {
 			message.success(MESSAGES.MC4);
 		}
+	};
+
+	const handlerPageChange = (page: number, pageSize: number) => {
+		setPayloadPaging({ ...payloadPaging, page, limit: pageSize });
 	};
 
 	return (
@@ -76,11 +98,18 @@ const AdminList = () => {
 						onClick: () => navigate(PATHS.saleRounds.edit(el._id)),
 					};
 				}}
+				scroll={{ y: 705 }}
 				pagination={false}
 				columns={columns}
 				dataSource={data?.list}
 				loading={isLoading}
 				className='admins-table'
+			/>
+			<Pagination
+				onChange={handlerPageChange}
+				current={payloadPaging.page}
+				total={data?.pagination.total}
+				pageSize={payloadPaging.limit}
 			/>
 		</>
 	);
