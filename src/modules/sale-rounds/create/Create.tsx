@@ -42,6 +42,7 @@ export default function SaleRoundList() {
 	const { updateSaleRound } = useUpdateSaleRound();
 	const { updateSaleRoundDeployed } = useUpdateSaleRoundDeployed();
 	const [_idSaleRound, setIdSaleRound] = useState<number>();
+	const [isEvryCanJoin, setEveryCanJoin] = useState<boolean>(true);
 	const [_idSaleRoundAfterCreate, setIdSaleRoundAfterCreate] =
 		useState<string>();
 
@@ -63,7 +64,6 @@ export default function SaleRoundList() {
 	const [claimConfig, setClaimConfig] = useState<rowsTableClaim[]>([]);
 	const [messageErrClaimConfig, setMessageErrClaimConfig] =
 		useState<string>('');
-	const [isEvryCanJoin, setEveryCanJoin] = useState<boolean>(true);
 
 	const formsSaleRound = {
 		[SaleRoundCreateForm.GENERAL_INFOR]: Form.useForm()[0],
@@ -137,7 +137,7 @@ export default function SaleRoundList() {
 					max_claim: '0',
 				},
 			],
-			have_list_user: isEvryCanJoin,
+			have_list_user: !isEvryCanJoin,
 			description: '',
 			token_info: {
 				address: '',
@@ -426,9 +426,7 @@ export default function SaleRoundList() {
 								{/* if have list use then BE saving is evry can join is False */}
 								<ListUser
 									idSaleRound={idSaleRoundUpdate || _idSaleRoundAfterCreate}
-									isStateCanJoin={
-										data?.have_list_user ? !isEvryCanJoin : isEvryCanJoin
-									}
+									isStateCanJoin={data?.have_list_user}
 									isUpdated={isUpdateSaleRound}
 									isEveryCanJoin={setEveryCanJoin}
 								/>

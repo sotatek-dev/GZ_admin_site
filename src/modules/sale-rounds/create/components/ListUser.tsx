@@ -89,6 +89,9 @@ export default function SaleRoundListUser(props: {
 	const [form] = Form.useForm<DataType>();
 	const { isEveryCanJoin, isUpdated, idSaleRound, isStateCanJoin } = props;
 	const [editingKey, setEditingKey] = useState<string | number>('');
+	const [checkboxEveryCanJoin, setCheckboxEvryCanJoin] = useState<boolean>(
+		!isStateCanJoin
+	);
 	const [_rowsTable, setRowsTable] = useState<DataType[]>([...dataTable]);
 	const [payloadPaging, setPayloadPaging] =
 		useState<PageingWhiteList>(pageDefault);
@@ -248,8 +251,17 @@ export default function SaleRoundListUser(props: {
 		setPayloadPaging({ ...payloadPaging, page });
 	};
 
+	const handlerReloadAll = () => {
+		setPayloadPaging({
+			...payloadPaging,
+			page: 1,
+			limit: 10,
+		});
+	};
+
 	const handlerCheckboxChange = (e: CheckboxChangeEvent) => {
-		isEveryCanJoin(!e.target.checked);
+		isEveryCanJoin(e.target.checked);
+		setCheckboxEvryCanJoin(e.target.checked);
 	};
 	const accessToken = getCookieStorage('access_token');
 
@@ -311,9 +323,9 @@ export default function SaleRoundListUser(props: {
 			extra={
 				<div className='d-flex justify-content-center align-items-center'>
 					<Checkbox
-						key={`isStateCanJoin-${isStateCanJoin}`}
+						key={`isStateCanJoin-${checkboxEveryCanJoin}`}
 						disabled={isUpdated}
-						checked={isStateCanJoin}
+						checked={checkboxEveryCanJoin}
 						onChange={handlerCheckboxChange}
 						className='sr-checkbox-user'
 					>
@@ -322,7 +334,10 @@ export default function SaleRoundListUser(props: {
 					<div>
 						{!isUpdated && idSaleRound && (
 							<div className='d-flex pr-105'>
-								<Button className='mr-12 d-flex justify-content-center align-items-center'>
+								<Button
+									onClick={handlerReloadAll}
+									className='mr-12 d-flex justify-content-center align-items-center'
+								>
 									<span>Reload all</span>
 								</Button>
 								<Upload {...propsUploadFile}>
