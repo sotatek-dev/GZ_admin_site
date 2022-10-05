@@ -6,6 +6,7 @@ import NumericInputGet from './NumericInput';
 import type { FormInstance } from 'antd/es/form/Form';
 import { Card, Form, Input } from '@common/components';
 import BigNumber from 'bignumber.js';
+import { removeComanString } from './services/helper';
 
 interface ExchangeRatePropsForm {
 	form: FormInstance;
@@ -15,8 +16,9 @@ interface ExchangeRatePropsForm {
 
 const handlerYouGetChange = () => ({
 	validator(_: unknown, value: string) {
-		if (value && new BigNumber(value).gt(0)) return Promise.resolve();
-		if (value && !Number(value))
+		if (value && new BigNumber(removeComanString(value)).gt(0))
+			return Promise.resolve();
+		if (value && !Number(removeComanString(value)))
 			return Promise.reject(new Error('Must be geater than 0'));
 		return Promise.reject();
 	},
