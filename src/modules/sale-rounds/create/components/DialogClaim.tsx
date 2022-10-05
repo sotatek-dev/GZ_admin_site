@@ -29,7 +29,7 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 	);
 
 	const [form] = Form.useForm();
-	const [ipMaxclaim, setIpMaxClaim] = useState<string>('');
+	const [ipMaxclaim, setIpMaxClaim] = useState<string>(maxClaim);
 
 	const handleClose = () => {
 		form.resetFields();
@@ -39,6 +39,16 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 	const handlerSubmit = () => {
 		form.submit();
 	};
+
+	const handlerMaxClaimChangeRules = () => ({
+		validator(_: unknown, value: string) {
+			if (value && (Number(value) <= 0 || Number(value) > 100))
+				return Promise.reject(
+					new Error('Please enter a valid number between 1 and 100')
+				);
+			return Promise.resolve();
+		},
+	});
 
 	const handlerFinish = (values: {
 		claim_start_time: dayjs.Dayjs;
@@ -107,8 +117,9 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 								className='pt-33'
 								rules={[
 									{ required: true, message: MessageValidations.MSC_1_15 },
+									handlerMaxClaimChangeRules,
 								]}
-								initialValue={(maxClaim && maxClaim) || ''}
+								initialValue={maxClaim || ''}
 							>
 								<NumericInput
 									disabled={false}

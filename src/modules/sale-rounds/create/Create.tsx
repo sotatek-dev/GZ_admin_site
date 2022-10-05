@@ -8,10 +8,14 @@ import ExchangeRate from './components/ExchangeRate';
 import BoxTime from './components/BoxTime';
 import AboutSaleRaound from './components/AboutSaleRaound';
 import ListUser from './components/ListUser';
-import { Col, Row, Form } from 'antd';
 import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { PATHS } from '@common/constants/paths';
+import { useSaleRoundGetDetail } from './components/services/saleRoundGetDetail';
+import { usePresalePoolContract } from '@web3/contracts';
+// import { useGetEndBuyTimePrevious } from '@web3/hooks';message
+import { Loading, Button, Col, Row, Form } from '@common/components';
+import { useDeploySaleRound } from './components/services/useDeploySaleRound.mutation';
 import {
 	MessageValidations,
 	SaleRoundExchangeRateType,
@@ -27,18 +31,14 @@ import {
 	useUpdateSaleRound,
 	useUpdateSaleRoundDeployed,
 } from './components/services/saleRoundUpdate';
-import { useSaleRoundGetDetail } from './components/services/saleRoundGetDetail';
-import { usePresalePoolContract } from '@web3/contracts';
-import { useActiveWeb3React } from '@web3/hooks';
-import { message } from '@common/components';
-import BigNumber from 'bignumber.js';
-import { Loading, Button } from '@common/components';
 import dayjs from 'dayjs';
 
 export default function SaleRoundList() {
-	const { account } = useActiveWeb3React();
 	const tokenContract = usePresalePoolContract();
+	// hidden to test
+	// const { data: endBuyTimePrevious, isLoading } = useGetEndBuyTimePrevious();
 	const { createSaleRound } = useCreateSaleRound();
+	const { deploySaleRound, isDeployState } = useDeploySaleRound();
 
 	const { updateSaleRound, isUpdateSaleRoundApi } = useUpdateSaleRound();
 	const { updateSaleRoundDeployed } = useUpdateSaleRoundDeployed();
@@ -135,7 +135,7 @@ export default function SaleRoundList() {
 			claim_configs: [
 				{
 					start_time: 0,
-					max_claim: '0',
+					max_claim: '',
 				},
 			],
 			have_list_user: !isEvryCanJoin,
@@ -285,51 +285,18 @@ export default function SaleRoundList() {
 		};
 	};
 
-	const handlerResetForm = () => {
-		formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR].resetFields();
-		formsSaleRound[SaleRoundCreateForm.SR_ABOUNT].resetFields();
-		formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME].resetFields();
-		formsSaleRound[SaleRoundCreateForm.SR_DETAIL].resetFields();
-		formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE].resetFields();
-	};
-
 	const handlerSubmitDeploy = async () => {
-		if (!tokenContract || !account || !_idSaleRound || !saleroundForm) {
+		if (!tokenContract || !_idSaleRound || !saleroundForm) {
 			return;
 		}
 
-		await tokenContract
-			.deployNewSalePhase(
-				_idSaleRound,
-				saleroundForm.buy_time.start_time,
-				saleroundForm.buy_time.end_time,
-				saleroundForm.claim_configs.map((el) => el.start_time),
-				saleroundForm.claim_configs.map((el) => el.max_claim),
-				saleroundForm.details.buy_limit === '0' ? true : false,
-				new BigNumber(saleroundForm.details.buy_limit.replace(/,/g, ''))
-					.times(1e18)
-					.toString(),
-				new BigNumber(saleroundForm.exchange_rate.replace(/,/g, ''))
-					.times(1e18)
-					.toString(),
-				new BigNumber(
-					saleroundForm.token_info.total_sold_coin.replace(/,/g, '')
-				)
-					.times(1e18)
-					.toString(),
-				saleroundForm.token_info.address
-			)
-			.then(() => {
-				message.success('Deploy success');
-				handlerResetForm();
-				navigate(PATHS.saleRounds.list());
-			})
-			.catch((err: unknown) => {
-				// eslint-disable-next-line no-console
-				console.log(err);
+		// if (endBuyTimePrevious && dayjs.unix(Number(endBuyTimePrevious)) > dayjs())
+		// 	return message.error(MessageValidations.MSC_3_5);
 
-				message.error('Deploy failed');
-			});
+		await deploySaleRound({
+			...saleroundForm,
+			salePhase: _idSaleRound,
+		});
 	};
 
 	const handlerUpdateSaleRound = async () => {
@@ -459,6 +426,7 @@ export default function SaleRoundList() {
 					{!isUpdateSaleRound && (
 						<Button
 							danger
+							loading={isDeployState}
 							className='btn-deploy-round d-flex align-items-center justify-content-center mr-41'
 							onClick={handlerSubmitDeploy}
 						>
