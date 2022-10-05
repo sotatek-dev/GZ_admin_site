@@ -4,19 +4,17 @@ import { Card, Form } from '@common/components';
 import { MessageValidations, FORMAT_DATETIME_SALEROUND } from './types';
 import dayjs from 'dayjs';
 import type { FormInstance } from 'antd/es/form/Form';
-// import { useGetEndBuyTimePrevious } from '@web3/hooks';
 
 interface SaleRoundBoxTimeProps {
 	isUpdate: boolean;
 	startTime: number;
 	endTime: number;
+	endBuyTimePrevious?: string;
 	form: FormInstance;
 }
 
 export default function SaleRoundBoxTime(props: SaleRoundBoxTimeProps) {
 	const { form, startTime, endTime, isUpdate } = props;
-	// hidden to test
-	// const { data: endBuyTimePrevious, isLoading } = useGetEndBuyTimePrevious();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const handlerStartDateChange = ({ getFieldValue }: any) => ({
@@ -25,9 +23,10 @@ export default function SaleRoundBoxTime(props: SaleRoundBoxTimeProps) {
 				return Promise.reject(
 					new Error('Start buy time must be after current')
 				);
+			// hidden to test
 			// if (endBuyTimePrevious && dayjs.unix(Number(endBuyTimePrevious)) > value)
 			// 	return Promise.reject(
-			// 		new Error('Start buy time must be after previous Sale Round period')
+			// 		new Error('MessageValidations.MSC_1_33')
 			// 	);
 			if (
 				!value ||
@@ -36,9 +35,7 @@ export default function SaleRoundBoxTime(props: SaleRoundBoxTimeProps) {
 			) {
 				return Promise.resolve();
 			}
-			return Promise.reject(
-				new Error('Start buy time must before End buy time')
-			);
+			return Promise.reject(new Error(MessageValidations.MSC_1_20));
 		},
 	});
 
@@ -59,10 +56,6 @@ export default function SaleRoundBoxTime(props: SaleRoundBoxTimeProps) {
 			);
 		},
 	});
-
-	// if (isLoading) {
-	// 	return <Loading />;
-	// }
 
 	return (
 		<Card title='Start/End Buy Time'>

@@ -1,11 +1,12 @@
 import './scss/ListUser.style.scss';
+import copyIcon from 'src/assets/icons/copy-icon.svg';
 import { Checkbox, Upload, Popconfirm, Pagination } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UploadProps } from 'antd';
 import React, { useEffect, useState } from 'react';
-import copyIcon from 'src/assets/icons/copy-icon.svg';
 import { message } from '@common/components';
 import { getCookieStorage } from '@common/helpers/storage';
+import { MessageValidations } from './types';
 import {
 	useSrWhiteListGet,
 	APIsWhiteList,
@@ -260,7 +261,7 @@ export default function SaleRoundListUser(props: {
 					APIsWhiteList.getWhitelist(idSaleRound || ''),
 				]);
 			} else if (info.file.status === 'error') {
-				message.error(`${info.file.name} file upload failed.`);
+				message.error(`${info.file.name} ${MessageValidations.MSC_1_31}`);
 			}
 		},
 		showUploadList: false,
