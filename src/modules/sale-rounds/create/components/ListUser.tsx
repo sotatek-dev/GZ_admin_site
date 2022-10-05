@@ -1,11 +1,8 @@
 import './scss/ListUser.style.scss';
 import { Checkbox, Upload, Popconfirm, Pagination } from 'antd';
-import type { PaginationProps } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UploadProps } from 'antd';
 import React, { useEffect, useState } from 'react';
-import prevImgae from 'src/assets/icons/prev-icon.svg';
-import nextImgae from 'src/assets/icons/next-icons.svg';
 import copyIcon from 'src/assets/icons/copy-icon.svg';
 import { message } from '@common/components';
 import { getCookieStorage } from '@common/helpers/storage';
@@ -57,29 +54,6 @@ const dataTable: DataType[] = [
 	},
 ];
 
-const itemRender: PaginationProps['itemRender'] = (
-	page,
-	type,
-	originalElement
-) => {
-	if (type === 'prev') {
-		return (
-			<a>
-				<img src={prevImgae} alt='' />
-			</a>
-		);
-	}
-	if (type === 'next') {
-		return (
-			<a>
-				<img src={nextImgae} alt='' />
-			</a>
-		);
-	}
-
-	return originalElement;
-};
-
 export default function SaleRoundListUser(props: {
 	isEveryCanJoin: (val: boolean) => void;
 	isUpdated: boolean | undefined;
@@ -113,6 +87,17 @@ export default function SaleRoundListUser(props: {
 			}))
 		);
 		if (data) {
+			// use case user remove item in table. Must update pagination if current page greater than page count. Set page_count into page
+			if (data?.pagination?.page_count < payloadPaging.page) {
+				setPayloadPaging({
+					...payloadPaging,
+					page: data?.pagination?.page_count,
+				});
+				setPagingTotal(data?.pagination?.total);
+				return;
+			}
+
+			// use case page geater than page count
 			setPayloadPaging({
 				...payloadPaging,
 				page: data?.pagination?.page,
@@ -236,7 +221,7 @@ export default function SaleRoundListUser(props: {
 						</Typography.Link>
 						<Popconfirm
 							className='pl-10'
-							title='Sure to remove'
+							title='Are you sure to remove this address?'
 							onConfirm={() => handlerRemoveRows(record)}
 						>
 							<a>Remove</a>
@@ -361,7 +346,6 @@ export default function SaleRoundListUser(props: {
 							current={payloadPaging.page}
 							total={pagingTotal}
 							pageSize={payloadPaging.limit}
-							itemRender={itemRender}
 						/>
 					</div>
 				)}
