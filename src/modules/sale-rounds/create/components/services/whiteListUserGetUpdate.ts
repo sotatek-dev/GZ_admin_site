@@ -56,7 +56,13 @@ export const useSrWhiteListUpdate = () => {
 			]);
 			message.success('Update succeed');
 			return data;
-		} catch (error) {
+		} catch (error: any) {
+			if (error?.response?.data?.message === 'ERROR_DUPLICATED') {
+				message.error(
+					`The address ${payload.wallet_address} already on the list, please enter another`
+				);
+				return;
+			}
 			message.error('Update failed');
 			return;
 		}
