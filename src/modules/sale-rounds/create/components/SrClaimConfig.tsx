@@ -133,7 +133,11 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 			<Card title='Claim Configuration'>
 				<div className='sale-round-contents sr-claimconfig-showip--h'>
 					<div className='sr-detail-box-radio'>
-						<Button disabled={isDisableBtnCreate} onClick={handleClickOpen}>
+						<Button
+							id='btn-create-config-claim'
+							disabled={isDisableBtnCreate}
+							onClick={handleClickOpen}
+						>
 							<span>Create</span>
 						</Button>
 						<div className='ant-form-item-explain-error'>{message}</div>

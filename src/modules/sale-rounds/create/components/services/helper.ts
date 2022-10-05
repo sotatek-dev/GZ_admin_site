@@ -12,6 +12,6 @@ const formatNumberPush = (val: string) => {
 	return temp;
 };
 
-const removeComanString = (val: string) => val.replace(/,/g, '');
+const removeComanString = (val: string) => (val ? val.replace(/,/g, '') : '');
 
 export { formatNumberClaim, formatNumberPush, removeComanString };
