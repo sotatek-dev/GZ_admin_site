@@ -105,12 +105,14 @@ const AdminList = () => {
 				loading={isLoading}
 				className='admins-table'
 			/>
-			<Pagination
-				onChange={handlerPageChange}
-				current={payloadPaging.page}
-				total={data?.pagination.total}
-				pageSize={payloadPaging.limit}
-			/>
+			<div className='d-flex justify-content-end'>
+				<Pagination
+					onChange={handlerPageChange}
+					current={payloadPaging.page}
+					total={data?.pagination.total}
+					pageSize={payloadPaging.limit}
+				/>
+			</div>
 		</>
 	);
 };
