@@ -161,6 +161,9 @@ export default function SaleRoundList() {
 			})
 			.catch(() => {
 				satusValidate = false;
+				formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]
+					.getFieldInstance('name')
+					?.focus();
 			});
 
 		await formsSaleRound[SaleRoundCreateForm.SR_ABOUNT]
@@ -173,7 +176,6 @@ export default function SaleRoundList() {
 			})
 			.catch(() => {
 				satusValidate = false;
-				handlerFnDebouceCreate;
 			});
 
 		await formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
@@ -189,6 +191,9 @@ export default function SaleRoundList() {
 			})
 			.catch(() => {
 				satusValidate = false;
+				formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
+					.getFieldInstance('start_time')
+					?.focus();
 			});
 
 		await formsSaleRound[SaleRoundCreateForm.SR_DETAIL]
@@ -201,6 +206,9 @@ export default function SaleRoundList() {
 			})
 			.catch(() => {
 				satusValidate = false;
+				formsSaleRound[SaleRoundCreateForm.SR_DETAIL]
+					.getFieldInstance('network')
+					?.focus();
 			});
 
 		await formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE]
@@ -210,6 +218,9 @@ export default function SaleRoundList() {
 			})
 			.catch(() => {
 				satusValidate = false;
+				formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE]
+					.getFieldInstance('ex_rate_have')
+					?.focus();
 			});
 
 		if (!satusValidate)
@@ -237,6 +248,7 @@ export default function SaleRoundList() {
 
 		if (!checkClaimTime) {
 			setMessageErrClaimConfig(MessageValidations.MSC_1_27);
+			location.href = '#btn-create-config-claim';
 			return {
 				statusValidateForm: false,
 				data: payload as ISaleRoundCreateForm,
@@ -256,6 +268,7 @@ export default function SaleRoundList() {
 
 		if (totalMaxClaim < 100 || totalMaxClaim > 100) {
 			setMessageErrClaimConfig(MessageValidations.MSC_1_16);
+			location.href = '#btn-create-config-claim';
 			return {
 				statusValidateForm: false,
 				data: payload as ISaleRoundCreateForm,
