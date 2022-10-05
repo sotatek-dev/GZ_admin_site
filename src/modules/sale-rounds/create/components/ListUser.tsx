@@ -381,12 +381,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 				<Form.Item
 					name={dataIndex}
 					style={{ margin: 0 }}
-					rules={[
-						{
-							required: true,
-							message: `Please Input ${title}!`,
-						},
-					]}
+					rules={[{ ...findRuleValidation(title) }]}
 				>
 					{inputNode}
 				</Form.Item>
@@ -395,4 +390,24 @@ const EditableCell: React.FC<EditableCellProps> = ({
 			)}
 		</td>
 	);
+};
+
+const objectRulesEditing = {
+	Wallet: {
+		required: true,
+		message: `Please Input wallet address!`,
+	},
+	Email: {
+		required: true,
+		message: `Please Input wallet email!`,
+	},
+};
+
+const findRuleValidation = (val: string) => {
+	if (val === 'Wallet') return objectRulesEditing.Wallet;
+	if (val === 'Email') return objectRulesEditing.Email;
+	return {
+		required: true,
+		message: `Please Input wallet address!`,
+	};
 };

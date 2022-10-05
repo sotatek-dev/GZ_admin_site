@@ -26,7 +26,7 @@ function createData(val: rowsTableClaim): rowsTableClaim {
 
 const initDefaultClaim = () => ({
 	id: 0,
-	maxClaim: '0',
+	maxClaim: '',
 	startTime: 0,
 });
 

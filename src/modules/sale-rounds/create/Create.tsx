@@ -135,7 +135,7 @@ export default function SaleRoundList() {
 			claim_configs: [
 				{
 					start_time: 0,
-					max_claim: '0',
+					max_claim: '',
 				},
 			],
 			have_list_user: !isEvryCanJoin,
