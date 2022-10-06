@@ -1,12 +1,16 @@
 import './scss/ListUser.style.scss';
 import copyIcon from 'src/assets/icons/copy-icon.svg';
-import { Checkbox, Upload, Popconfirm, Pagination } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UploadProps } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { Checkbox, Upload, Popconfirm, Pagination } from 'antd';
 import { message } from '@common/components';
 import { getCookieStorage } from '@common/helpers/storage';
-import { MessageValidations } from './types';
+import {
+	MessageValidations,
+	PageingWhiteList,
+	DataTypePropsTable,
+} from './types';
 import {
 	useSrWhiteListGet,
 	APIsWhiteList,
@@ -34,17 +38,6 @@ interface DataType {
 	key: string;
 	Wallet: string;
 	Email: string;
-}
-
-interface DataTypePropsTable {
-	_id: string;
-	wallet_address: string;
-	email: string;
-}
-
-interface PageingWhiteList {
-	page: number;
-	limit: number;
 }
 
 const pageDefault = () => ({
@@ -82,9 +75,10 @@ export default function SaleRoundListUser(props: {
 
 	const isEditing = (record: DataType) => record.key === editingKey;
 
-	const { data, isLoading } = useSrWhiteListGet(idSaleRound, payloadPaging);
+	const { data, isLoading } = useSrWhiteListGet(payloadPaging, idSaleRound);
 
 	useEffect(() => {
+		if (!data) return;
 		setRowsTable(
 			data?.list.map((el: DataTypePropsTable) => ({
 				key: el._id,
@@ -92,24 +86,22 @@ export default function SaleRoundListUser(props: {
 				Email: el.email,
 			}))
 		);
-		if (data) {
-			// use case user remove item in table. Must update pagination if current page greater than page count. Set page_count into page
-			if (data?.pagination?.page_count < payloadPaging.page) {
-				setPayloadPaging({
-					...payloadPaging,
-					page: data?.pagination?.page_count,
-				});
-				setPagingTotal(data?.pagination?.total);
-				return;
-			}
-
-			// use case page geater than page count
+		// use case user remove item in table. Must update pagination if current page greater than page count. Set page_count into page
+		if (data?.pagination?.page_count < payloadPaging.page) {
 			setPayloadPaging({
 				...payloadPaging,
-				page: data?.pagination?.page,
+				page: data?.pagination?.page_count,
 			});
 			setPagingTotal(data?.pagination?.total);
+			return;
 		}
+
+		// use case page geater than page count
+		setPayloadPaging({
+			...payloadPaging,
+			page: data?.pagination?.page,
+		});
+		setPagingTotal(data?.pagination?.total);
 	}, [data]);
 
 	const edit = (record: Partial<DataType> & { key: React.Key }) => {
@@ -127,7 +119,7 @@ export default function SaleRoundListUser(props: {
 
 			await updateSrWhiteList(
 				{
-					id: key,
+					_id: String(key),
 					email: row.Email,
 					wallet_address: row.Wallet,
 				},

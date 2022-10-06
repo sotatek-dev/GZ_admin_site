@@ -69,3 +69,14 @@ export interface SaleRoundExchangeRateType {
 	ex_rate_get: string;
 	ex_rate_have: string;
 }
+
+export interface PageingWhiteList {
+	page: number;
+	limit: number;
+}
+
+export interface DataTypePropsTable {
+	_id: string;
+	wallet_address: string;
+	email: string;
+}

@@ -1,9 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { message } from '@common/components';
 import { axiosClient } from '@common/services/apiClient';
 import { useMutation } from 'react-query';
 import { formatNumberPush } from './helper';
 import { ISaleRoundCreateForm } from '../types';
+
+interface SaleRoundFormDeployed {
+	description: string;
+	name: string;
+	_id: string;
+}
 
 const APIs = {
 	createSaleRound: () => '/sale-round',
@@ -12,21 +17,24 @@ const APIs = {
 };
 type Request = ISaleRoundCreateForm;
 
-type Response = any;
+type Response = ISaleRoundCreateForm & {
+	sale_round: number;
+	_id: string;
+};
 
 async function createFn(payload: ISaleRoundCreateForm) {
 	return axiosClient.post<Request, Response>(APIs.createSaleRound(), payload);
 }
 
-async function updateFnDeployed(payload: any) {
-	return axiosClient.put<any, Response>(
+async function updateFnDeployed(payload: SaleRoundFormDeployed) {
+	return axiosClient.put<Response, Response>(
 		APIs.updateSaleRoundDeployed(payload._id),
 		payload
 	);
 }
 
-async function updateFn(payload: any) {
-	return axiosClient.put<any, Response>(
+async function updateFn(payload: ISaleRoundCreateForm & { _id: string }) {
+	return axiosClient.put<Response, Response>(
 		APIs.updateSaleRound(payload._id),
 		payload
 	);
@@ -78,7 +86,7 @@ export const useCreateSaleRound = () => {
 export const useUpdateSaleRoundDeployed = () => {
 	const updateMutation = useMutation(updateFnDeployed);
 
-	const updateSaleRoundDeployed = async (newPayload: any) => {
+	const updateSaleRoundDeployed = async (newPayload: SaleRoundFormDeployed) => {
 		try {
 			const data = await updateMutation.mutateAsync(newPayload);
 
@@ -99,7 +107,9 @@ export const useUpdateSaleRoundDeployed = () => {
 export const useUpdateSaleRound = () => {
 	const updateMutation = useMutation(updateFn);
 
-	const updateSaleRound = async (newPayload: any) => {
+	const updateSaleRound = async (
+		newPayload: ISaleRoundCreateForm & { _id: string }
+	) => {
 		try {
 			const total_sold_coin = formatNumberPush(
 				newPayload?.token_info?.total_sold_coin
