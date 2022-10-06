@@ -31,6 +31,9 @@ interface Props {
 	activePhaseTab: MintPhase;
 }
 
+type EditableTableProps = Parameters<typeof Table>[0];
+type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
+
 export default function UserList({ activePhaseTab }: Props) {
 	const [form] = Form.useForm<DataType>();
 	const [editingKey, setEditingKey] = useState<string | number>('');
@@ -123,15 +126,18 @@ export default function UserList({ activePhaseTab }: Props) {
 			title: 'Wallet',
 			dataIndex: 'wallet_address',
 			editable: true,
+			width: '40%',
 		},
 		{
 			title: 'Email',
 			dataIndex: 'email',
 			editable: true,
+			width: '40%',
 		},
 		{
 			title: 'Actions',
 			dataIndex: 'actions',
+			width: '20%',
 			render: (_: unknown, record: DataType) => {
 				const editable = isEditing(record);
 
@@ -211,7 +217,7 @@ export default function UserList({ activePhaseTab }: Props) {
 									cell: EditableCell,
 								},
 							}}
-							columns={mergedColumns}
+							columns={mergedColumns as ColumnTypes}
 							dataSource={tempData}
 							pagination={{
 								defaultCurrent: 1,

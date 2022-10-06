@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { formatEther } from 'ethers/lib/utils';
+import { formatEther } from 'ethers/lib.esm/utils';
 import { useQuery } from 'react-query';
 import { BIG_ZERO } from '@common/constants/bignumbers';
 import { useErc20Contract } from '@web3/contracts';
