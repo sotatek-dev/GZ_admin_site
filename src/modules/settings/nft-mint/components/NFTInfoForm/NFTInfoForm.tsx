@@ -1,9 +1,8 @@
-// import dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import type { FormInstance } from 'antd/es/form/Form';
 import { DatePicker, Form, InputNumber, Loading } from '@common/components';
 import { MintPhase, NFTInfoFormValue } from '@settings/nft-mint/types';
 import { useNFTMintPhaseSetting } from '@settings/nft-mint/services/useGetSettingNFTMint';
-import dayjs from 'dayjs';
 
 interface Props {
 	activePhaseTab: MintPhase;
@@ -24,6 +23,7 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 	}
 
 	const { start_mint_time, end_mint_time } = currentPhaseSetting;
+	const mint_time = [dayjs.unix(start_mint_time), dayjs.unix(end_mint_time)];
 
 	return (
 		<Form
@@ -34,7 +34,7 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 			autoComplete='off'
 			initialValues={{
 				...currentPhaseSetting,
-				mint_time: [dayjs.unix(start_mint_time), dayjs.unix(end_mint_time)],
+				mint_time,
 			}}
 			key={activePhaseTab}
 		>
