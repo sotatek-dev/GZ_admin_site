@@ -23,6 +23,11 @@ import {
 	Typography,
 	Loading,
 } from '@common/components';
+import {
+	addressValidator,
+	emailValidator,
+	requiredValidate,
+} from '@common/helpers/validate';
 import { useQueryClient } from 'react-query';
 
 interface DataType {
@@ -381,7 +386,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 				<Form.Item
 					name={dataIndex}
 					style={{ margin: 0 }}
-					rules={[{ ...findRuleValidation(title) }]}
+					rules={findRuleValidation(title)}
 				>
 					{inputNode}
 				</Form.Item>
@@ -393,21 +398,27 @@ const EditableCell: React.FC<EditableCellProps> = ({
 };
 
 const objectRulesEditing = {
-	Wallet: {
-		required: true,
-		message: `Please Input wallet address!`,
-	},
-	Email: {
-		required: true,
-		message: `Please Input wallet email!`,
-	},
+	Wallet: [
+		requiredValidate(),
+		{
+			validator: addressValidator,
+		},
+	],
+	Email: [
+		requiredValidate(),
+		{
+			validator: emailValidator,
+		},
+	],
 };
 
 const findRuleValidation = (val: string) => {
 	if (val === 'Wallet') return objectRulesEditing.Wallet;
 	if (val === 'Email') return objectRulesEditing.Email;
-	return {
-		required: true,
-		message: `Please Input wallet address!`,
-	};
+	return [
+		{
+			required: true,
+			message: `Please Input wallet address!`,
+		},
+	];
 };
