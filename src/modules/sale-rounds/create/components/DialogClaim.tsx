@@ -2,10 +2,10 @@ import { Modal, Form } from 'antd';
 import DatePicker from 'src/modules/common/components/DatePicker';
 import {
 	DataClaimConfig,
-	MessageValidations,
 	FORMAT_DATETIME_SALEROUND,
 	rowsTableClaim,
 } from './types';
+import { MessageValidations } from '@common/helpers/message';
 import NumericInput from './NumericInput';
 import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';

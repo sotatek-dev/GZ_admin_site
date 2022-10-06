@@ -1,7 +1,8 @@
 import './scss/BoxTime.style.scss';
 import DatePicker from 'src/modules/common/components/DatePicker';
 import { Card, Form } from '@common/components';
-import { MessageValidations, FORMAT_DATETIME_SALEROUND } from './types';
+import { FORMAT_DATETIME_SALEROUND } from './types';
+import { MessageValidations } from '@common/helpers/message';
 import dayjs from 'dayjs';
 import type { FormInstance } from 'antd/es/form/Form';
 

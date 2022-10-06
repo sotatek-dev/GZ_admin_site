@@ -1,6 +1,8 @@
 /**
  * Interact with SC, use `string` type instead others because React `key` type
  */
+import dayjs from 'dayjs';
+
 export enum MintPhase {
 	WhiteList = '1',
 	Presale1 = '2',
@@ -30,7 +32,8 @@ export interface NFTInfoFormValue
 		NftMintPhaseSetting,
 		'price' | 'price_after_24h' | 'nft_mint_limit' | 'start_mint_time'
 	> {
-	mint_time: number[];
+	start_time: dayjs.Dayjs;
+	end_time: dayjs.Dayjs;
 }
 
 export interface MintNFTUser {

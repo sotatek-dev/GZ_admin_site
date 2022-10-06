@@ -1,12 +1,12 @@
 import './scss/ExchangeRate.style.scss';
 import arrowLeft from 'src/assets/icons/arrow-left-icon.svg';
-import { MessageValidations } from './types';
-import { useState } from 'react';
-import NumericInputGet from './NumericInput';
-import type { FormInstance } from 'antd/es/form/Form';
+import { MessageValidations } from '@common/helpers/message';
 import { Card, Form, Input } from '@common/components';
-import BigNumber from 'bignumber.js';
 import { removeComanString } from './services/helper';
+import { useState } from 'react';
+import type { FormInstance } from 'antd/es/form/Form';
+import NumericInputGet from './NumericInput';
+import BigNumber from 'bignumber.js';
 
 interface ExchangeRatePropsForm {
 	form: FormInstance;

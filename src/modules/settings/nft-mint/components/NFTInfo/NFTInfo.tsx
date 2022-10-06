@@ -1,9 +1,6 @@
 import './NFTInfo.style.scss';
-import { Button, Card, Col, Row } from '@common/components';
+import { Card, Col, Row } from '@common/components';
 import { MinPhaseLabel, MintPhase } from '@settings/nft-mint/types';
-import { useDeploySalePhase } from '@settings/nft-mint/services/useDeploySalePhase';
-import { useGetCurrentPhase } from '@settings/nft-mint/services/useGetCurrentPhase';
-import { useNFTMintPhaseSetting } from '@settings/nft-mint/services/useGetSettingNFTMint';
 
 const TAB_LIST = [
 	{
@@ -28,25 +25,25 @@ interface Props {
 	form: React.ReactNode;
 	activePhaseTab: MintPhase;
 	setCurrentPhaseTab: (phase: MintPhase) => void;
+	// setStatusDeploySettingMint: (val: boolean) => void;
 }
 
 export default function NFTInfo({
 	form,
 	activePhaseTab,
 	setCurrentPhaseTab,
-}: Props) {
-	const { currentPhase } = useGetCurrentPhase();
-	const { deploySalePhase, isDeploySalePhase } = useDeploySalePhase();
-	const { currentPhaseSetting } = useNFTMintPhaseSetting(activePhaseTab);
-
+}: // setStatusDeploySettingMint,
+Props) {
 	const onTabChange = (key: string) => {
 		setCurrentPhaseTab(key as MintPhase);
 	};
 
-	const handleSetCurrentRound = () => {
-		if (!currentPhaseSetting) return;
-		deploySalePhase({ ...currentPhaseSetting, _id: activePhaseTab });
-	};
+	// setStatusDeploySettingMint(false)
+
+	// const handleSetCurrentRound = () => {
+	// 	if (!currentPhaseSetting) return;
+	// 	deploySalePhase({ ...currentPhaseSetting, _id: activePhaseTab });
+	// };
 
 	return (
 		<Row className='nft-info'>
@@ -56,17 +53,18 @@ export default function NFTInfo({
 					tabBarExtraContent='NFT Info'
 					activeTabKey={activePhaseTab}
 					onTabChange={onTabChange}
-					actions={[
-						<Button
-							key='setting-current-round'
-							type='primary'
-							onClick={handleSetCurrentRound}
-							loading={isDeploySalePhase}
-							disabled={!currentPhase}
-						>
-							Set Current Round
-						</Button>,
-					]}
+					// actions={[
+					// 	<Button
+					// 		key='setting-current-round'
+					// 		type='primary'
+					// 		htmlType="submit"
+					// 		onClick={handleSetCurrentRound}
+					// 		loading={isDeploySalePhase}
+					// 		disabled={!currentPhase}
+					// 	>
+					// 		Set Current Round
+					// 	</Button>,
+					// ]}
 				>
 					{form}
 				</Card>
