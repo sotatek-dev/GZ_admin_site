@@ -7,7 +7,7 @@ import BigNumber from 'bignumber.js';
 export const useDeploySalePhase = () => {
 	const dNFTContract = useDNFTContract();
 
-	const deployFn = async (phaseSetting: NftMintPhaseSetting) => {
+	const deployFn = async (phaseSetting: Omit<NftMintPhaseSetting, 'type'>) => {
 		if (!dNFTContract) return;
 
 		const {

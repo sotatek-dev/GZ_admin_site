@@ -28,7 +28,7 @@ export interface NftMintPhaseSetting {
 export interface NFTInfoFormValue
 	extends Pick<
 		NftMintPhaseSetting,
-		'price' | 'price_after_24h' | 'nft_mint_limit' | 'start_mint_time'
+		'price' | 'price_after_24h' | 'nft_mint_limit'
 	> {
 	mint_time: number[];
 }

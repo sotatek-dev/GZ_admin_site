@@ -1,9 +1,16 @@
 import './NFTInfo.style.scss';
+import type { FormInstance } from 'antd/es/form';
 import { Button, Card, Col, Row } from '@common/components';
-import { MinPhaseLabel, MintPhase } from '@settings/nft-mint/types';
+import {
+	MinPhaseLabel,
+	MintPhase,
+	NFTInfoFormValue,
+} from '@settings/nft-mint/types';
 import { useDeploySalePhase } from '@settings/nft-mint/services/useDeploySalePhase';
 import { useGetCurrentPhase } from '@settings/nft-mint/services/useGetCurrentPhase';
-import { useNFTMintPhaseSetting } from '@settings/nft-mint/services/useGetSettingNFTMint';
+import NFTInfoForm from '../NFTInfoForm';
+import { toWei } from '@common/helpers/converts';
+import dayjs from 'dayjs';
 
 const TAB_LIST = [
 	{
@@ -25,8 +32,11 @@ const TAB_LIST = [
 ];
 
 interface Props {
-	form: React.ReactNode;
 	activePhaseTab: MintPhase;
+	form: {
+		instance: FormInstance<NFTInfoFormValue>;
+		onFinish: (values: NFTInfoFormValue) => void;
+	};
 	setCurrentPhaseTab: (phase: MintPhase) => void;
 }
 
@@ -37,15 +47,23 @@ export default function NFTInfo({
 }: Props) {
 	const { currentPhase } = useGetCurrentPhase();
 	const { deploySalePhase, isDeploySalePhase } = useDeploySalePhase();
-	const { currentPhaseSetting } = useNFTMintPhaseSetting(activePhaseTab);
 
 	const onTabChange = (key: string) => {
 		setCurrentPhaseTab(key as MintPhase);
 	};
 
 	const handleSetCurrentRound = () => {
-		if (!currentPhaseSetting) return;
-		deploySalePhase({ ...currentPhaseSetting, _id: activePhaseTab });
+		const { nft_mint_limit, price, price_after_24h, mint_time } =
+			form.instance.getFieldsValue();
+
+		deploySalePhase({
+			_id: activePhaseTab,
+			price: toWei(price),
+			price_after_24h: toWei(price_after_24h),
+			nft_mint_limit,
+			start_mint_time: dayjs(mint_time[0]).unix(),
+			end_mint_time: dayjs(mint_time[1]).unix(),
+		});
 	};
 
 	return (
@@ -68,7 +86,11 @@ export default function NFTInfo({
 						</Button>,
 					]}
 				>
-					{form}
+					<NFTInfoForm
+						activePhaseTab={activePhaseTab}
+						form={form.instance}
+						onFinish={form.onFinish}
+					/>
 				</Card>
 			</Col>
 		</Row>

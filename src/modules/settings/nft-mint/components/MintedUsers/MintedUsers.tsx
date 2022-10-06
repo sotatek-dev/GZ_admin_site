@@ -16,6 +16,25 @@ interface Props {
 	activePhaseTab: MintPhase;
 }
 
+type EditableTableProps = Parameters<typeof Table>[0];
+type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
+
+const columns: (ColumnTypes[number] & {
+	editable?: boolean;
+	dataIndex: string;
+})[] = [
+	{
+		title: 'Wallet',
+		dataIndex: 'wallet_address',
+		width: 120,
+	},
+	{
+		title: 'Email',
+		dataIndex: 'email',
+		width: 120,
+	},
+];
+
 export default function UserList({ activePhaseTab }: Props) {
 	const [form] = Form.useForm<DataType>();
 	const [page, setPage] = useState(1);
@@ -25,19 +44,6 @@ export default function UserList({ activePhaseTab }: Props) {
 		page,
 		phase: activePhaseTab,
 	});
-
-	const columns = [
-		{
-			title: 'Wallet',
-			dataIndex: 'wallet_address',
-			editable: true,
-		},
-		{
-			title: 'Email',
-			dataIndex: 'email',
-			editable: true,
-		},
-	];
 
 	const onPageChange: PaginationProps['onChange'] = (current) => {
 		setPage(current);
