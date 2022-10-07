@@ -51,7 +51,7 @@ export default function NumericInput(props: NumericInputProps) {
 		if (value.charAt(value.length - 1) === '.' || value === '-') {
 			valueTemp = value.slice(0, -1);
 		}
-		onChange(valueTemp.replace(/0*(\d+)/, '$1'));
+		onChange(valueTemp.replace(/,/g, '').replace(/0*(\d+)/, '$1'));
 	};
 
 	return <Input {...props} onChange={handleChange} onBlur={handleBlur} />;

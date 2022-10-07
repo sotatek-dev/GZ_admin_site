@@ -65,7 +65,7 @@ export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
 						label='You get'
 						initialValue='1'
 					>
-						<Input disabled className='ip-sr-exchange-rate' suffix='GXZ' />
+						<Input disabled className='ip-sr-exchange-rate' suffix='GXC' />
 					</Form.Item>
 				</Form>
 			</div>
