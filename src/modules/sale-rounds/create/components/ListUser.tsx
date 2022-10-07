@@ -42,13 +42,7 @@ const pageDefault = () => ({
 	limit: 10,
 });
 
-const dataTable: DataType[] = [
-	{
-		key: '1',
-		Wallet: 'John Brown',
-		Email: 'New York No. 1 Lake Park',
-	},
-];
+const dataTable: DataType[] = [];
 
 export default function SaleRoundListUser(props: {
 	isEveryCanJoin: (val: boolean) => void;
