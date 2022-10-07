@@ -31,7 +31,7 @@ export default function SettingNFTMint() {
 		[MintPhase.Public]: Form.useForm()[0],
 	};
 
-	function handleSaveSetting(values: NFTInfoFormValue) {
+	async function handleSaveSetting(values: NFTInfoFormValue) {
 		if (!currentPhaseSetting) return;
 
 		const { _id } = currentPhaseSetting;
@@ -47,7 +47,10 @@ export default function SettingNFTMint() {
 			end_mint_time: end_time.unix(),
 		};
 
-		updateNftMintSetting(newSetting);
+		const result = await updateNftMintSetting(newSetting);
+
+		if (!result) return;
+
 		if (!currentPhaseSetting) return;
 		deploySalePhase({ ...currentPhaseSetting, _id: activePhaseTab });
 	}
