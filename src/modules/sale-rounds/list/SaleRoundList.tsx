@@ -48,7 +48,7 @@ const columns: ColumnsType<SaleRound> = [
 		title: 'Token Symbol',
 		dataIndex: 'token_info',
 		render(value: SaleRound['token_info']) {
-			return value.symbol;
+			return value.symbol || 'GXZ';
 		},
 	},
 	{
