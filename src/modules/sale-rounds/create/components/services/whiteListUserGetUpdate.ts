@@ -2,6 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { message } from '@common/components';
 import { axiosClient } from '@common/services/apiClient';
+import { PageingWhiteList, DataTypePropsTable } from '../types';
 
 export const APIsWhiteList = {
 	getWhitelist: (id: string) => `/whitelisted-user/sale-round/${id}`,
@@ -9,31 +10,35 @@ export const APIsWhiteList = {
 	getWhiteDelete: (id: string) => `/whitelisted-user/${id}`,
 };
 
-type Request = any;
+type Request = PageingWhiteList & { _id: string };
 
-type Response = any;
+type Response = {
+	list: DataTypePropsTable[];
+	pagination: PageingWhiteList & {
+		page_count: number;
+		total: number;
+	};
+};
 
-const fetcher = async (_id: Request, payload: any) => {
+const fetcher = async (_id: string, payload: PageingWhiteList) => {
 	return await axiosClient.get<Request, Response>(
 		APIsWhiteList.getWhitelist(_id),
 		{ params: payload }
 	);
 };
 
-const updateFn = async (payload: any) => {
-	return await axiosClient.put<Request, Response>(
-		APIsWhiteList.getWhiteUpdate(payload.id),
+const updateFn = async (payload: DataTypePropsTable) => {
+	return await axiosClient.put(
+		APIsWhiteList.getWhiteUpdate(payload._id),
 		payload
 	);
 };
 
 const deleteFn = async (id: string) => {
-	return await axiosClient.delete<Request, Response>(
-		APIsWhiteList.getWhiteDelete(id)
-	);
+	return await axiosClient.delete(APIsWhiteList.getWhiteDelete(id));
 };
 
-export const useSrWhiteListGet = (id?: string, payload?: any) => {
+export const useSrWhiteListGet = (payload: PageingWhiteList, id?: string) => {
 	const saleroundId = id as string;
 	return useQuery(
 		[APIsWhiteList.getWhitelist(saleroundId), payload],
@@ -48,7 +53,10 @@ export const useSrWhiteListUpdate = () => {
 	const updateMutation = useMutation(updateFn);
 	const queryClient = useQueryClient();
 
-	const updateSrWhiteList = async (payload: any, _idSaleRound: string) => {
+	const updateSrWhiteList = async (
+		payload: DataTypePropsTable,
+		_idSaleRound: string
+	) => {
 		try {
 			const data = await updateMutation.mutateAsync(payload);
 			await queryClient.refetchQueries([

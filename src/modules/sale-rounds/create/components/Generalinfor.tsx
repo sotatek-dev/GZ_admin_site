@@ -1,7 +1,7 @@
 import './scss/Generalinfor.style.scss';
 import { Form } from 'antd';
 import type { FormInstance } from 'antd/es/form/Form';
-import { MessageValidations } from './types';
+import { MessageValidations } from '@common/helpers/message';
 import { Card, Input } from '@common/components';
 interface GeneralInforProps {
 	srName: string;

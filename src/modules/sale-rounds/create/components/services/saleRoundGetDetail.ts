@@ -7,11 +7,11 @@ const APIs = {
 	getSaleRound: (id: string) => `/sale-round/${id}`,
 };
 
-type Request = any;
+type Request = string;
 
 type Response = any;
 
-const fetcher = async (_id: Request) => {
+const fetcher = async (_id: string) => {
 	return await axiosClient.get<Request, Response>(APIs.getSaleRound(_id));
 };
 
@@ -25,7 +25,7 @@ export const useSaleRoundGetDetail = (id?: string) => {
 		}
 	);
 
-	if (!queryInfo.isFetched) return queryInfo;
+	if (!queryInfo.isFetched || !queryInfo?.data) return queryInfo;
 
 	return {
 		...queryInfo,

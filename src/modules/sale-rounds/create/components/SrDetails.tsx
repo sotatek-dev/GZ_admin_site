@@ -2,16 +2,13 @@ import './scss/SrDetails.style.scss';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { FormInstance } from 'antd/es/form/Form';
 import { Radio, Checkbox } from 'antd';
-import {
-	MessageValidations,
-	SrTokenInforForm,
-	SrTokenDetailForm,
-} from './types';
+import { MessageValidations } from '@common/helpers/message';
+import { SrTokenInforForm, SrTokenDetailForm } from './types';
+import { Card, Form, Input } from '@common/components';
 import { useEffect, useState } from 'react';
+import { removeComanString } from './services/helper';
 import NumericInput from './NumericInput';
 import BigNumber from 'bignumber.js';
-import { Card, Form, Input } from '@common/components';
-import { removeComanString } from './services/helper';
 
 interface SrDetailProps {
 	isUpdate: boolean;

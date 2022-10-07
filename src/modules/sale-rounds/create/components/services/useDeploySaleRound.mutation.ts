@@ -1,7 +1,8 @@
 import { useMutation } from 'react-query';
 import { usePresalePoolContract } from '@web3/contracts';
 import { message } from '@common/components';
-import { ISaleRoundCreateForm, MessageValidations } from '../types';
+import { MessageValidations } from '@common/helpers/message';
+import { ISaleRoundCreateForm } from '../types';
 import { removeComanString } from './helper';
 import { useNavigate } from 'react-router';
 import { PATHS } from '@common/constants/paths';
