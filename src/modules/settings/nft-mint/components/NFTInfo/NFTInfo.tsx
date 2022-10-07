@@ -1,6 +1,16 @@
 import './NFTInfo.style.scss';
-import { Card, Col, Row } from '@common/components';
-import { MinPhaseLabel, MintPhase } from '@settings/nft-mint/types';
+import type { FormInstance } from 'antd/es/form';
+import { Button, Card, Col, Row } from '@common/components';
+import {
+	MinPhaseLabel,
+	MintPhase,
+	NFTInfoFormValue,
+} from '@settings/nft-mint/types';
+import { useDeploySalePhase } from '@settings/nft-mint/services/useDeploySalePhase';
+import { useGetCurrentPhase } from '@settings/nft-mint/services/useGetCurrentPhase';
+import NFTInfoForm from '../NFTInfoForm';
+import { toWei } from '@common/helpers/converts';
+import dayjs from 'dayjs';
 
 const TAB_LIST = [
 	{
@@ -22,28 +32,39 @@ const TAB_LIST = [
 ];
 
 interface Props {
-	form: React.ReactNode;
 	activePhaseTab: MintPhase;
+	form: {
+		instance: FormInstance<NFTInfoFormValue>;
+		onFinish: (values: NFTInfoFormValue) => void;
+	};
 	setCurrentPhaseTab: (phase: MintPhase) => void;
-	// setStatusDeploySettingMint: (val: boolean) => void;
 }
 
 export default function NFTInfo({
 	form,
 	activePhaseTab,
 	setCurrentPhaseTab,
-}: // setStatusDeploySettingMint,
-Props) {
+}: Props) {
+	const { currentPhase } = useGetCurrentPhase();
+	const { deploySalePhase, isDeploySalePhase } = useDeploySalePhase();
+
 	const onTabChange = (key: string) => {
 		setCurrentPhaseTab(key as MintPhase);
 	};
 
-	// setStatusDeploySettingMint(false)
+	const handleSetCurrentRound = () => {
+		const { nft_mint_limit, price, price_after_24h, mint_time } =
+			form.instance.getFieldsValue();
 
-	// const handleSetCurrentRound = () => {
-	// 	if (!currentPhaseSetting) return;
-	// 	deploySalePhase({ ...currentPhaseSetting, _id: activePhaseTab });
-	// };
+		deploySalePhase({
+			_id: activePhaseTab,
+			price: toWei(price),
+			price_after_24h: toWei(price_after_24h),
+			nft_mint_limit,
+			start_mint_time: dayjs(mint_time[0]).unix(),
+			end_mint_time: dayjs(mint_time[1]).unix(),
+		});
+	};
 
 	return (
 		<Row className='nft-info'>
@@ -53,20 +74,23 @@ Props) {
 					tabBarExtraContent='NFT Info'
 					activeTabKey={activePhaseTab}
 					onTabChange={onTabChange}
-					// actions={[
-					// 	<Button
-					// 		key='setting-current-round'
-					// 		type='primary'
-					// 		htmlType="submit"
-					// 		onClick={handleSetCurrentRound}
-					// 		loading={isDeploySalePhase}
-					// 		disabled={!currentPhase}
-					// 	>
-					// 		Set Current Round
-					// 	</Button>,
-					// ]}
+					actions={[
+						<Button
+							key='setting-current-round'
+							type='primary'
+							onClick={handleSetCurrentRound}
+							loading={isDeploySalePhase}
+							disabled={!currentPhase}
+						>
+							Set Current Round
+						</Button>,
+					]}
 				>
-					{form}
+					<NFTInfoForm
+						activePhaseTab={activePhaseTab}
+						form={form.instance}
+						onFinish={form.onFinish}
+					/>
 				</Card>
 			</Col>
 		</Row>

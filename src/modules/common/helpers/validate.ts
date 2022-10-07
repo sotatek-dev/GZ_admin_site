@@ -1,6 +1,6 @@
-import type { Rule } from 'antd/lib/form';
+import type { Rule } from 'antd/es/form';
 import { MESSAGES } from '@common/constants/messages';
-import { isAddress } from 'ethers/lib/utils';
+import { isAddress } from 'ethers/lib.esm/utils';
 
 const EMAIL_REGEX = /^[\w]{1,64}@([\w]{1,253}\.)+(com|org|net)$/;
 

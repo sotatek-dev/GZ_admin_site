@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import BigNumber from 'bignumber.js';
 import { constants } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
+import { formatEther } from 'ethers/lib.esm/utils';
 import { toast } from 'react-toastify';
 import { useErc20Contract } from '../contracts/useErc20Contract';
 import { useActiveWeb3React } from './useActiveWeb3React';

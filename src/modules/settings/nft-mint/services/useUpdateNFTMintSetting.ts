@@ -14,22 +14,19 @@ const updateFn = async (rqBody: Request) => {
 
 export const useUpdateNFTMintSetting = () => {
 	const queryClient = useQueryClient();
-	const updateMutation = useMutation(updateFn);
 
-	const updateNftMintSetting = async (rqBody: Request) => {
-		try {
-			const data = await updateMutation.mutateAsync(rqBody);
+	const updateMutation = useMutation(updateFn, {
+		onSuccess() {
 			message.success('Update successful');
-			queryClient.invalidateQueries([API_GET_SETTING_MINT]);
-			return data;
-		} catch (error) {
+			return queryClient.invalidateQueries([API_GET_SETTING_MINT]);
+		},
+		onError() {
 			message.error('Update failed');
-			return;
-		}
-	};
+		},
+	});
 
 	return {
-		updateNftMintSetting,
+		updateNftMintSetting: updateMutation.mutate,
 		isUpdateNftMintSetting: updateMutation.isLoading,
 	};
 };
