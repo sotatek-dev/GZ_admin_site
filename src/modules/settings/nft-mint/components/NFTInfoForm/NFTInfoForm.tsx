@@ -50,6 +50,9 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 				wrapperCol={{ span: 12 }}
 				label='Price after 24h'
 				name='price_after_24h'
+				tooltip={{
+					title: 'Set this value equal to price if you don’t want to change',
+				}}
 				rules={[{ required: true, message: 'Please input price!' }]}
 			>
 				<InputNumber addonAfter='BUSD' min={0} />
@@ -58,6 +61,9 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 				wrapperCol={{ span: 12 }}
 				label='NFT Mint Limit'
 				name='nft_mint_limit'
+				tooltip={{
+					title: 'Set this value to 0 for no limitation how much user can buy',
+				}}
 				rules={[{ required: true, message: 'Please input price!' }]}
 			>
 				<InputNumber addonAfter='NFT' min={0} />

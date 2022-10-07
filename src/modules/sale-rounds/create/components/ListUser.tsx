@@ -7,6 +7,7 @@ import { Checkbox, Upload, Popconfirm, Pagination } from 'antd';
 import { message } from '@common/components';
 import { getCookieStorage } from '@common/helpers/storage';
 import { MessageValidations } from '@common/helpers/message';
+import { copyWalletAddress } from '@common/helpers/converts';
 import { PageingWhiteList, DataTypePropsTable } from './types';
 import {
 	useSrWhiteListGet,
@@ -127,15 +128,6 @@ export default function SaleRoundListUser(props: {
 		record: Partial<DataType> & { key: React.Key }
 	) => {
 		await deleteSrWhiteList(record.key, idSaleRound || '');
-	};
-
-	const copyWalletAddress = async (text: string) => {
-		try {
-			await navigator.clipboard.writeText(text);
-			message.success('Copy Sucess');
-		} catch (_err: unknown) {
-			message.error('Failed to copy!');
-		}
 	};
 
 	const columns = [

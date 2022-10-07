@@ -9,11 +9,13 @@ import {
 	Loading,
 } from '@common/components';
 import { addressValidator, requiredValidate } from '@common/helpers/validate';
-import { useRedirectBack } from '@common/hooks';
+import { useNavigate } from 'react-router';
 import { MESSAGES } from '@common/constants/messages';
+import { PATHS } from '@common/constants/paths';
 import useSetting from './services/useSetting';
 export default function SystemSetting() {
-	const goBack = useRedirectBack();
+	const navigate = useNavigate();
+	const goBack = () => navigate(PATHS.saleRounds.list());
 	const defaultPriceType = 'BUSD';
 	const {
 		disableUpdateBtn,

@@ -1,4 +1,5 @@
 import './WhiteListedUser.style.scss';
+import copyIcon from 'src/assets/icons/copy-icon.svg';
 import React, { useEffect, useState } from 'react';
 import { PaginationProps, Popconfirm } from 'antd';
 import {
@@ -12,6 +13,7 @@ import {
 	Space,
 } from '@common/components';
 import { useGetNftUsers } from '@settings/nft-mint/services/useGetMintNftUsers';
+import { copyWalletAddress } from '@common/helpers/converts';
 import { MintPhase } from '@settings/nft-mint/types';
 import {
 	useDeleteWhiteListedUser,
@@ -20,6 +22,7 @@ import {
 import UploadCSV from '@common/components/UploadCSV';
 import { useUploadWhitelistUsers } from '@settings/nft-mint/services/useUploadWhitelistUsers';
 import { DEFAULT_PAGINATION } from '@common/constants/pagination';
+import { Tooltip } from 'antd';
 
 interface DataType {
 	_id: string;
@@ -127,6 +130,25 @@ export default function UserList({ activePhaseTab }: Props) {
 			dataIndex: 'wallet_address',
 			editable: true,
 			width: '40%',
+			render: (text: string) => (
+				<>
+					<div className='d-flex'>
+						<div className='d-flex justify-content-center align-items-center'>
+							<span>{text}</span>
+						</div>
+						<div className='d-flex justify-content-center align-items-center'>
+							<Tooltip title='copy'>
+								<span
+									onClick={() => copyWalletAddress(text)}
+									className='icon-copy-wallet cursor-pointer'
+								>
+									<img src={copyIcon} alt='' />
+								</span>
+							</Tooltip>
+						</div>
+					</div>
+				</>
+			),
 		},
 		{
 			title: 'Email',
