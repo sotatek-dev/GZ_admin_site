@@ -21,15 +21,15 @@ function App() {
 
 	return (
 		<Web3ActiveReactProvider>
-			<Web3Layout>
-				<QueryClientProvider client={queryClient}>
-					<BrowserRouter>
-						<AuthProvider>
+			<QueryClientProvider client={queryClient}>
+				<BrowserRouter>
+					<AuthProvider>
+						<Web3Layout>
 							<AppRoutes />
-						</AuthProvider>
-					</BrowserRouter>
-				</QueryClientProvider>
-			</Web3Layout>
+						</Web3Layout>
+					</AuthProvider>
+				</BrowserRouter>
+			</QueryClientProvider>
 		</Web3ActiveReactProvider>
 	);
 }
