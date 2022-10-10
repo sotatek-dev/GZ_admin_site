@@ -14,11 +14,15 @@ export function useWalletListener() {
 		const { ethereum } = window;
 
 		if (connector && connector.on && !error) {
-			connector.on('Web3ReactUpdate', signOut);
+			const updateFn = () => {
+				signOut();
+			};
+
+			connector.on('Web3ReactUpdate', updateFn);
 
 			return () => {
 				if (ethereum.removeListener) {
-					connector.removeListener('Web3ReactUpdate', signOut);
+					connector.removeListener('Web3ReactUpdate', updateFn);
 				}
 			};
 		}
