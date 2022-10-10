@@ -1,4 +1,6 @@
+import { MESSAGES } from '@common/constants/messages';
 import { setTokenCookie } from '@common/helpers/storage';
+import { message } from 'antd';
 import { useMutation } from 'react-query';
 import { axiosClient } from '../apiClient';
 
@@ -39,15 +41,19 @@ export const useLogin = () => {
 		sign_message: string,
 		signature: string
 	) => {
-		const {
-			auth: { token },
-		} = await loginMutation.mutateAsync({
-			wallet_address,
-			sign_message,
-			signature,
-		});
+		try {
+			const {
+				auth: { token },
+			} = await loginMutation.mutateAsync({
+				wallet_address,
+				sign_message,
+				signature,
+			});
 
-		setTokenCookie(token);
+			setTokenCookie(token);
+		} catch {
+			message.error(MESSAGES.MC4);
+		}
 	};
 
 	return { login };
