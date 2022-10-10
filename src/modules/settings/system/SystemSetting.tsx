@@ -13,7 +13,9 @@ const TitleComponent = ({ title }: { title: string }) => {
 	);
 };
 const ErrorComponent = ({ value }: { value: string }) => {
-	return value === '' || value === '0' ? (
+	return value === '' ||
+		parseFloat(value) <= 0 ||
+		value.charAt(value.length - 1) === '.' ? (
 		<p className='system-setting-form__titleError'>{MESSAGES.MSC115}</p>
 	) : (
 		<div></div>
@@ -40,7 +42,13 @@ const InputComponent = ({
 				suffix={priceType ? priceType : ''}
 				onChange={(e) => handleRegexField(e, keyValue)}
 				value={value}
-				status={value === '' || value === '0' ? 'error' : ''}
+				status={
+					value === '' ||
+					parseFloat(value) <= 0 ||
+					value.charAt(value.length - 1) === '.'
+						? 'error'
+						: ''
+				}
 			/>
 			<ErrorComponent value={value} />
 		</>
