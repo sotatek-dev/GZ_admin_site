@@ -59,7 +59,7 @@ export default function SystemSetting() {
 		isLoadingSystemStatus,
 		handleSubmit,
 		isLoadingInitialData,
-		statusAddressAfterRegex,
+		treasuryAddressCommon,
 		fieldCommon,
 		disableUpdateBtn,
 		handleRegexAddress,
@@ -81,10 +81,12 @@ export default function SystemSetting() {
 					<TitleComponent title='Treasury Address' />
 					<Input
 						onChange={handleRegexAddress}
-						value={fieldCommon.treasury_address}
-						status={statusAddressAfterRegex ? 'error' : ''}
+						value={treasuryAddressCommon.treasury_address}
+						status={
+							treasuryAddressCommon.statusAddressAfterRegex ? 'error' : ''
+						}
 					/>
-					{statusAddressAfterRegex && (
+					{treasuryAddressCommon.statusAddressAfterRegex && (
 						<p className='system-setting-form__titleError'>{MESSAGES.MSC121}</p>
 					)}
 					<InputComponent

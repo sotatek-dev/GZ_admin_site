@@ -15,7 +15,6 @@ type FieldCommon<T> = {
 	launch_price: T;
 	rescure_price: T;
 	key_price: T;
-	treasury_address: T;
 };
 const useSetting = () => {
 	const {
@@ -32,16 +31,20 @@ const useSetting = () => {
 	const { data: initialData, isLoading: isLoadingInitialData } =
 		useGetSystemSetting() as UseQueryResult<InitialProps, unknown>;
 	const reloadTime = 500;
+	const [treasuryAddressCommon, setTreasuryAddressCommon] = useState<{
+		statusAddressAfterRegex: boolean;
+		treasury_address: string;
+	}>({
+		statusAddressAfterRegex: false,
+		treasury_address: '0',
+	});
 	const [disableUpdateBtn, setDisableUpdateBtn] = useState<boolean>(true);
-	const [statusAddressAfterRegex, setStatusAddressAfterRegex] =
-		useState<boolean>(false);
 	const [fieldCommon, setFieldCommon] = useState<FieldCommon<string>>({
 		mint_days: '0',
 		key_mint_min_token: '0',
 		launch_price: '0',
 		rescure_price: '0',
 		key_price: '0',
-		treasury_address: '0',
 	});
 	const price: {
 		min: number;
@@ -112,16 +115,17 @@ const useSetting = () => {
 	};
 	const handleSubmit = async () => {
 		const listPromiseFieldChange: Promise<ContractReceipt | undefined>[] = [];
-		const listKeys = Object.keys(fieldCommon);
+		const objectMerge = { ...fieldCommon, ...treasuryAddressCommon };
+		const listKeys = Object.keys(objectMerge);
 		listKeys?.length > 0 &&
 			listKeys.forEach((item) => {
 				switch (item) {
 					case 'treasury_address': {
-						if (fieldCommon[item] !== initialData?.[item]) {
+						if (objectMerge[item] !== initialData?.[item]) {
 							listPromiseFieldChange.push(
 								...listPromiseFieldChange,
-								updateTreasuryAddressKeyNFTSC(fieldCommon[item]),
-								updateTreasuryAddressDNFTSC(fieldCommon[item])
+								updateTreasuryAddressKeyNFTSC(objectMerge[item]),
+								updateTreasuryAddressDNFTSC(objectMerge[item])
 							);
 						}
 						break;
@@ -208,9 +212,12 @@ const useSetting = () => {
 		}
 	};
 	const handleInitialInput = () => {
+		setTreasuryAddressCommon({
+			...treasuryAddressCommon,
+			treasury_address: String(initialData?.treasury_address || 0) || '0',
+		});
 		setFieldCommon({
 			...fieldCommon,
-			treasury_address: String(initialData?.treasury_address || 0) || '0',
 			key_mint_min_token: String(initialData?.key_mint_min_token || 0) || '0',
 			mint_days: String(initialData?.mint_days || 0) || '0',
 			launch_price: String(initialData?.launch_price || 0) || '0',
@@ -220,10 +227,10 @@ const useSetting = () => {
 	};
 	const handleRegexAddress = (e: ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
-		setStatusAddressAfterRegex(!isAddress(value));
-		setFieldCommon({
-			...fieldCommon,
+		setTreasuryAddressCommon({
+			...treasuryAddressCommon,
 			treasury_address: value,
+			statusAddressAfterRegex: !isAddress(value),
 		});
 	};
 	useEffect(() => {
@@ -242,7 +249,7 @@ const useSetting = () => {
 		price,
 		handleRegexAddress,
 		isLoadingInitialData,
-		statusAddressAfterRegex,
+		treasuryAddressCommon,
 		handleRegexField,
 		initialData,
 		fieldCommon,
