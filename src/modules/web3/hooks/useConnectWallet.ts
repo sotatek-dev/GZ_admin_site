@@ -1,5 +1,4 @@
 import { UnsupportedChainIdError } from '@web3-react/core';
-import { UserRejectedRequestError as UserRejectedRequestErrorInjected } from '@web3-react/injected-connector';
 import { useActiveWeb3React } from '@web3/hooks/useActiveWeb3React';
 import { ConnectorKey, connectors } from '@web3/connectors';
 import { CONNECTOR_KEY } from '@web3/constants/storages';
@@ -24,10 +23,6 @@ export const useConnectWallet = () => {
 			await activate(connector, undefined, true);
 			setStorageWallet(connectorKey);
 		} catch (error) {
-			if (error instanceof UserRejectedRequestErrorInjected) {
-				message.error(MESSAGES.MC1);
-			}
-
 			if (error instanceof UnsupportedChainIdError) {
 				message.error({ content: MESSAGES.MC2, key: MESSAGES.MC2 });
 				const provider = await connector.getProvider();
@@ -38,8 +33,6 @@ export const useConnectWallet = () => {
 					return;
 				}
 			}
-
-			throw error;
 		}
 	}
 

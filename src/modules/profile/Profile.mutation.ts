@@ -28,10 +28,10 @@ export const useUpdateProfile = () => {
 		try {
 			await updateMutation.mutateAsync(newAdmin);
 			await queryClient.invalidateQueries([API_PROFILE]);
-			message.success(MESSAGES.MC8);
+			message.success(MESSAGES.MSC22);
 			navigate(PATHS.admins.list());
 		} catch (error) {
-			message.error(MESSAGES.MC9);
+			message.error(MESSAGES.MSC26);
 		}
 	};
 

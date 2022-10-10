@@ -1,3 +1,4 @@
+import { useAuth } from '@common/hooks';
 import { useEffect } from 'react';
 import { useActiveWeb3React } from './useActiveWeb3React';
 
@@ -7,17 +8,21 @@ import { useActiveWeb3React } from './useActiveWeb3React';
  */
 export function useWalletListener() {
 	const { error, activate, connector } = useActiveWeb3React();
+	const { signOut } = useAuth();
 
 	useEffect(() => {
 		const { ethereum } = window;
 
 		if (connector && connector.on && !error) {
-			const update = () => {};
-			connector.on('Web3ReactUpdate', update);
+			const updateFn = () => {
+				signOut();
+			};
+
+			connector.on('Web3ReactUpdate', updateFn);
 
 			return () => {
 				if (ethereum.removeListener) {
-					connector.removeListener('Web3ReactUpdate', update);
+					connector.removeListener('Web3ReactUpdate', updateFn);
 				}
 			};
 		}

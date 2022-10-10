@@ -9,13 +9,9 @@ import {
 	Loading,
 } from '@common/components';
 import { addressValidator, requiredValidate } from '@common/helpers/validate';
-import { useNavigate } from 'react-router';
 import { MESSAGES } from '@common/constants/messages';
-import { PATHS } from '@common/constants/paths';
 import useSetting from './services/useSetting';
 export default function SystemSetting() {
-	const navigate = useNavigate();
-	const goBack = () => navigate(PATHS.saleRounds.list());
 	const defaultPriceType = 'BUSD';
 	const {
 		disableUpdateBtn,
@@ -33,7 +29,6 @@ export default function SystemSetting() {
 	}
 	return (
 		<>
-			<Button onClick={goBack}>Back</Button>
 			<Col span={12} offset={6} className='system-setting'>
 				<Card
 					size='small'
@@ -112,7 +107,7 @@ export default function SystemSetting() {
 							/>
 						</Form.Item>
 						<Form.Item
-							label='User must have minimum (x) token to mint key'
+							label='User must hold (x) dNFT to mint key'
 							name='key_mint_min_token'
 							rules={[{ required: true, message: MESSAGES.MSC115 }]}
 						>

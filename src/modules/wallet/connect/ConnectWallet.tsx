@@ -20,15 +20,23 @@ export default function ConnectWallet() {
 	const [isSignIn, setIsSignIn] = useState(false);
 
 	async function handleConnect() {
+		const isMetamaskInstalled = window?.ethereum?.isMetaMask;
+
 		try {
 			setIsSignIn(true);
+
+			if (!isMetamaskInstalled) {
+				setIsSignIn(false);
+				message.error({ content: MESSAGES.MC3, key: MESSAGES.MC3 });
+				return;
+			}
+
 			if (!active) {
 				await connectWallet(ConnectorKey.injected);
 				return;
 			}
+
 			await signIn(ConnectorKey.injected);
-		} catch {
-			message.error({ content: MESSAGES.MC4, key: MESSAGES.MC4 });
 		} finally {
 			setIsSignIn(false);
 		}
