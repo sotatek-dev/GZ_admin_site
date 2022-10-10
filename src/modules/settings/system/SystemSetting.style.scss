@@ -1,6 +1,22 @@
 .system-setting {
 	&-form {
 		margin-top: 2rem;
+		&__btn {
+			margin-top: 20px;
+			text-align: center;
+		}
+		&__title {
+			margin: 20px 0 5px 0;
+			&__star {
+				color: red;
+				margin-left: 2.5px;
+				font-size: 0.65rem;
+			}
+		}
+		&__titleError {
+			margin: 1.5px 0 0 0;
+			color: red;
+		}
 	}
 
 	.ant-card-head {
