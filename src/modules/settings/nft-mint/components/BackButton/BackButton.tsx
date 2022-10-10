@@ -1,7 +1,9 @@
 import { Button } from '@common/components';
-import { useRedirectBack } from '@common/hooks';
+import { useNavigate } from 'react-router';
+import { PATHS } from '@common/constants/paths';
 
 export default function BackButton() {
-	const goBack = useRedirectBack();
+	const navigate = useNavigate();
+	const goBack = () => navigate(PATHS.saleRounds.list());
 	return <Button onClick={goBack}>Back</Button>;
 }

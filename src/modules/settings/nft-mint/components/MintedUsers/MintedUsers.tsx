@@ -1,9 +1,12 @@
 import './MintedUsers.style.scss';
+import copyIcon from 'src/assets/icons/copy-icon.svg';
 import React, { useState } from 'react';
 import { Card, Col, Form, Row, Table } from '@common/components';
 import { useGetNftUsers } from '@settings/nft-mint/services/useGetMintNftUsers';
 import { MintPhase } from '@settings/nft-mint/types';
+import { copyWalletAddress } from '@common/helpers/converts';
 import { DEFAULT_PAGINATION } from '@common/constants/pagination';
+import { Tooltip } from 'antd';
 import type { PaginationProps } from 'antd';
 
 interface DataType {
@@ -27,6 +30,25 @@ const columns: (ColumnTypes[number] & {
 		title: 'Wallet',
 		dataIndex: 'wallet_address',
 		width: 120,
+		render: (text: string) => (
+			<>
+				<div className='d-flex'>
+					<div className='d-flex justify-content-center align-items-center'>
+						<span>{text}</span>
+					</div>
+					<div className='d-flex justify-content-center align-items-center'>
+						<Tooltip title='copy'>
+							<span
+								onClick={() => copyWalletAddress(text)}
+								className='icon-copy-wallet cursor-pointer'
+							>
+								<img src={copyIcon} alt='' />
+							</span>
+						</Tooltip>
+					</div>
+				</div>
+			</>
+		),
 	},
 	{
 		title: 'Email',
