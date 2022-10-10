@@ -2,10 +2,11 @@ import './ConnectWallet.style.scss';
 import { useState } from 'react';
 import { ConnectorKey } from '@web3/connectors';
 import { useActiveWeb3React, useConnectWallet } from '@web3/hooks';
-import { Col, Row, Space, Typography } from '@common/components';
+import { Col, message, Row, Space, Typography } from '@common/components';
 import { useAuth } from '@common/hooks/useAuth';
 import { useConnectedRedirect } from './ConnectWallet.hooks';
 import { Address, ConnectButton, Logo } from './components';
+import { MESSAGES } from '@common/constants/messages';
 
 const { Title } = Typography;
 
@@ -19,8 +20,17 @@ export default function ConnectWallet() {
 	const [isSignIn, setIsSignIn] = useState(false);
 
 	async function handleConnect() {
+		const isMetamaskInstalled = window?.ethereum?.isMetaMask;
+
 		try {
 			setIsSignIn(true);
+
+			if (!isMetamaskInstalled) {
+				setIsSignIn(false);
+				message.error({ content: MESSAGES.MC3, key: MESSAGES.MC3 });
+				return;
+			}
+
 			if (!active) {
 				await connectWallet(ConnectorKey.injected);
 				return;
