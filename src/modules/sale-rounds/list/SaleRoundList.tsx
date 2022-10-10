@@ -70,7 +70,7 @@ const AdminList = () => {
 		await refetch();
 
 		if (!error) {
-			message.success(MESSAGES.MC4);
+			message.success(MESSAGES.MSC22);
 		}
 	};
 
