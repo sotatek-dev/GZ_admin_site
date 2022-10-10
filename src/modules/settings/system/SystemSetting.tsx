@@ -19,11 +19,39 @@ const ErrorComponent = ({ value }: { value: string }) => {
 		<div></div>
 	);
 };
+const InputComponent = ({
+	priceType,
+	value,
+	title,
+	keyValue,
+	handleRegexField,
+}: {
+	priceType?: string;
+	value: string;
+	title: string;
+	keyValue: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	handleRegexField: any;
+}) => {
+	return (
+		<>
+			<TitleComponent title={title} />
+			<Input
+				suffix={priceType ? priceType : ''}
+				onChange={(e) => handleRegexField(e, keyValue)}
+				value={value}
+				status={value === '' || value === '0' ? 'error' : ''}
+			/>
+			<ErrorComponent value={value} />
+		</>
+	);
+};
 export default function SystemSetting() {
 	const goBack = useRedirectBack();
 	const {
 		isLoadingSystemStatus,
 		handleSubmit,
+		isLoadingInitialData,
 		fieldCommon,
 		disableUpdateBtn,
 		handleFieldChange,
@@ -31,10 +59,9 @@ export default function SystemSetting() {
 		form,
 	} = useSetting();
 	const defaultPriceType = 'BUSD';
-	if (isLoadingSystemStatus) {
+	if (isLoadingSystemStatus || isLoadingInitialData) {
 		return <Loading />;
 	}
-	console.log(fieldCommon);
 	return (
 		<>
 			<Button onClick={goBack}>Back</Button>
@@ -64,67 +91,39 @@ export default function SystemSetting() {
 						>
 							<Input />
 						</Form.Item>
-						<TitleComponent title='Key Price' />
-						<Input
-							suffix={defaultPriceType}
-							onChange={(e) => handleRegexField(e, 'key_price')}
+						<InputComponent
+							priceType={defaultPriceType}
 							value={fieldCommon.key_price}
-							status={
-								fieldCommon?.key_price === '' || fieldCommon?.key_price === '0'
-									? 'error'
-									: ''
-							}
+							title='Key Price'
+							keyValue='key_price'
+							handleRegexField={handleRegexField}
 						/>
-						<ErrorComponent value={fieldCommon?.key_price} />
-						<TitleComponent title='Rescue Price' />
-						<Input
-							suffix={defaultPriceType}
-							onChange={(e) => handleRegexField(e, 'rescure_price')}
+						<InputComponent
+							priceType={defaultPriceType}
 							value={fieldCommon.rescure_price}
-							status={
-								fieldCommon?.rescure_price === '' ||
-								fieldCommon?.rescure_price === '0'
-									? 'error'
-									: ''
-							}
+							title='Rescue Price'
+							keyValue='rescure_price'
+							handleRegexField={handleRegexField}
 						/>
-						<ErrorComponent value={fieldCommon?.rescure_price} />
-						<TitleComponent title='Launch Price' />
-						<Input
-							suffix={defaultPriceType}
-							onChange={(e) => handleRegexField(e, 'launch_price')}
+						<InputComponent
+							priceType={defaultPriceType}
 							value={fieldCommon.launch_price}
-							status={
-								fieldCommon?.launch_price === '0' ||
-								fieldCommon?.launch_price === ''
-									? 'error'
-									: ''
-							}
+							title='Launch Price'
+							keyValue='launch_price'
+							handleRegexField={handleRegexField}
 						/>
-						<ErrorComponent value={fieldCommon?.launch_price} />
-						<TitleComponent title='Users may mint key for the first (x) days of the month' />
-						<Input
-							onChange={(e) => handleRegexField(e, 'mint_days')}
+						<InputComponent
 							value={fieldCommon.mint_days}
-							status={
-								fieldCommon?.mint_days === '0' || fieldCommon?.mint_days === ''
-									? 'error'
-									: ''
-							}
+							title='Users may mint key for the first (x) days of the month'
+							keyValue='mint_days'
+							handleRegexField={handleRegexField}
 						/>
-						<ErrorComponent value={fieldCommon?.mint_days} />
-						<TitleComponent title='User must have minimum (x) token to mint key' />
-						<Input
-							onChange={(e) => handleRegexField(e, 'key_mint_min_token')}
+						<InputComponent
 							value={fieldCommon.key_mint_min_token}
-							status={
-								fieldCommon?.key_mint_min_token === '' ||
-								fieldCommon?.key_mint_min_token === '0'
-									? 'error'
-									: ''
-							}
+							title='User must have minimum (x) token to mint key'
+							keyValue='key_mint_min_token'
+							handleRegexField={handleRegexField}
 						/>
-						<ErrorComponent value={fieldCommon?.key_mint_min_token} />
 						<Form.Item className='system-setting-form__btn'>
 							<Button disabled={disableUpdateBtn} htmlType='submit'>
 								Update

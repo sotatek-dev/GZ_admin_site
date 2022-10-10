@@ -29,15 +29,13 @@ const useSetting = () => {
 		updateTreasuryAddressKeyNFTSC,
 		updatePriceKeyNFTSC,
 	} = useUpdateKeyNFTSC();
-	const { data: initialData } = useGetSystemSetting() as UseQueryResult<
-		InitialProps,
-		unknown
-	>;
+	const { data: initialData, isLoading: isLoadingInitialData } =
+		useGetSystemSetting() as UseQueryResult<InitialProps, unknown>;
 	const [form] = Form.useForm();
 	const reloadTime = 500;
 	const [disableUpdateBtn, setDisableUpdateBtn] = useState<boolean>(true);
 	const [fieldCommon, setFieldCommon] = useState<FieldCommon<string>>({
-		mint_days: '0', // need number but right now is string
+		mint_days: '0',
 		key_mint_min_token: '0',
 		launch_price: '0',
 		rescure_price: '0',
@@ -124,8 +122,6 @@ const useSetting = () => {
 			const listPromiseFieldChange: Promise<ContractReceipt | undefined>[] = [];
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const objectAfterMerge: any = { ...values, ...fieldCommon };
-			console.log(objectAfterMerge);
-			console.log(initialData);
 			const listKeys = Object.keys(objectAfterMerge);
 			listKeys?.length > 0 &&
 				listKeys.forEach((item) => {
@@ -249,6 +245,7 @@ const useSetting = () => {
 		handleSubmit,
 		disableUpdateBtn,
 		price,
+		isLoadingInitialData,
 		handleRegexField,
 		initialData,
 		fieldCommon,
