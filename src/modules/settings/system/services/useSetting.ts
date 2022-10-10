@@ -1,7 +1,5 @@
-import { Form } from '@common/components';
-import { useEffect, useState, ChangeEvent, useCallback } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { MESSAGES } from '@common/constants/messages';
-import { FieldData } from 'rc-field-form/es/interface';
 import { message } from '@common/components';
 import { useUpdateKeyNFTSC } from '@admins/setting/mutations/useUpdateKeyNFTSC';
 import { useUpdateDNFTSC } from '@admins/setting/mutations/useUpdateDNFTSC';
@@ -10,12 +8,14 @@ import BigNumber from 'bignumber.js';
 import { ContractReceipt } from 'ethers';
 import { InitialProps } from '../type';
 import { useGetSystemSetting, useUpdateSystem } from './useGetSystemSetting';
+import { isAddress } from 'ethers/lib/utils';
 type FieldCommon<T> = {
 	mint_days: T;
 	key_mint_min_token: T;
 	launch_price: T;
 	rescure_price: T;
 	key_price: T;
+	treasury_address: T;
 };
 const useSetting = () => {
 	const {
@@ -31,15 +31,17 @@ const useSetting = () => {
 	} = useUpdateKeyNFTSC();
 	const { data: initialData, isLoading: isLoadingInitialData } =
 		useGetSystemSetting() as UseQueryResult<InitialProps, unknown>;
-	const [form] = Form.useForm();
 	const reloadTime = 500;
 	const [disableUpdateBtn, setDisableUpdateBtn] = useState<boolean>(true);
+	const [statusAddressAfterRegex, setStatusAddressAfterRegex] =
+		useState<boolean>(false);
 	const [fieldCommon, setFieldCommon] = useState<FieldCommon<string>>({
 		mint_days: '0',
 		key_mint_min_token: '0',
 		launch_price: '0',
 		rescure_price: '0',
 		key_price: '0',
+		treasury_address: '0',
 	});
 	const price: {
 		min: number;
@@ -108,29 +110,27 @@ const useSetting = () => {
 			setFieldCommon({ ...fieldCommon, [type]: '' });
 		}
 	};
-	const handleSubmit = async (values: { treasury_address: string }) => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const objectAfterMerge: any = { ...values, ...fieldCommon };
+	const handleSubmit = async () => {
 		const listPromiseFieldChange: Promise<ContractReceipt | undefined>[] = [];
-		const listKeys = Object.keys(objectAfterMerge);
+		const listKeys = Object.keys(fieldCommon);
 		listKeys?.length > 0 &&
 			listKeys.forEach((item) => {
 				switch (item) {
 					case 'treasury_address': {
-						if (objectAfterMerge[item] !== initialData?.[item]) {
+						if (fieldCommon[item] !== initialData?.[item]) {
 							listPromiseFieldChange.push(
 								...listPromiseFieldChange,
-								updateTreasuryAddressKeyNFTSC(objectAfterMerge[item]),
-								updateTreasuryAddressDNFTSC(objectAfterMerge[item])
+								updateTreasuryAddressKeyNFTSC(fieldCommon[item]),
+								updateTreasuryAddressDNFTSC(fieldCommon[item])
 							);
 						}
 						break;
 					}
 					case 'key_price': {
-						if (parseFloat(objectAfterMerge[item]) !== initialData?.[item]) {
+						if (parseFloat(fieldCommon[item]) !== initialData?.[item]) {
 							listPromiseFieldChange.push(
 								updatePriceKeyNFTSC(
-									new BigNumber(objectAfterMerge[item])
+									new BigNumber(fieldCommon[item])
 										.times(price.fromBUSDToSC)
 										.toString()
 								)
@@ -139,10 +139,10 @@ const useSetting = () => {
 						break;
 					}
 					case 'rescure_price': {
-						if (parseFloat(objectAfterMerge[item]) !== initialData?.[item]) {
+						if (parseFloat(fieldCommon[item]) !== initialData?.[item]) {
 							listPromiseFieldChange.push(
 								updateRescurPriceDNFTSC(
-									new BigNumber(objectAfterMerge[item])
+									new BigNumber(fieldCommon[item])
 										.times(price.fromBUSDToSC)
 										.toString()
 								)
@@ -152,19 +152,19 @@ const useSetting = () => {
 					}
 					case 'launch_price': {
 						if (
-							parseFloat(objectAfterMerge?.[item]) ||
+							parseFloat(fieldCommon?.[item]) ||
 							'' !== initialData?.[item] ||
 							''
 						) {
 							listPromiseFieldChange.push(
 								...listPromiseFieldChange,
 								updateLaunchPriceDNFTSC(
-									new BigNumber(objectAfterMerge[item])
+									new BigNumber(fieldCommon[item])
 										.times(price.fromBUSDToSC)
 										.toString()
 								),
 								updateLaunchPriceKeyNFTSC(
-									new BigNumber(objectAfterMerge[item])
+									new BigNumber(fieldCommon[item])
 										.times(price.fromBUSDToSC)
 										.toString()
 								)
@@ -174,12 +174,12 @@ const useSetting = () => {
 					}
 					case 'key_mint_min_token': {
 						if (
-							parseFloat(objectAfterMerge?.[item]) ||
+							parseFloat(fieldCommon?.[item]) ||
 							'' !== initialData?.[item] ||
 							''
 						) {
 							listPromiseFieldChange.push(
-								updateMinimumMintKeyDNFTSC(parseFloat(objectAfterMerge[item]))
+								updateMinimumMintKeyDNFTSC(parseFloat(fieldCommon[item]))
 							);
 						}
 						break;
@@ -188,9 +188,9 @@ const useSetting = () => {
 						break;
 				}
 			});
-		if (parseFloat(objectAfterMerge.mint_days) !== initialData?.mint_days) {
+		if (parseFloat(fieldCommon.mint_days) !== initialData?.mint_days) {
 			updateMintDaySystemAdmin({
-				mint_days: parseFloat(objectAfterMerge.mint_days),
+				mint_days: parseFloat(fieldCommon.mint_days),
 			});
 		}
 		try {
@@ -207,18 +207,10 @@ const useSetting = () => {
 			}, reloadTime);
 		}
 	};
-	const handleFieldChange = useCallback(
-		(_: FieldData[], allFields: FieldData[]) => {
-			setDisableUpdateBtn(!allFields?.some((item) => item.value));
-		},
-		[]
-	);
-	const handleInitialForm = () => {
-		form.setFieldsValue({ treasury_address: initialData?.treasury_address });
-	};
 	const handleInitialInput = () => {
 		setFieldCommon({
 			...fieldCommon,
+			treasury_address: String(initialData?.treasury_address || 0) || '0',
 			key_mint_min_token: String(initialData?.key_mint_min_token || 0) || '0',
 			mint_days: String(initialData?.mint_days || 0) || '0',
 			launch_price: String(initialData?.launch_price || 0) || '0',
@@ -226,8 +218,15 @@ const useSetting = () => {
 			key_price: String(initialData?.key_price || 0) || '0',
 		});
 	};
+	const handleRegexAddress = (e: ChangeEvent<HTMLInputElement>) => {
+		const { value } = e.target;
+		setStatusAddressAfterRegex(!isAddress(value));
+		setFieldCommon({
+			...fieldCommon,
+			treasury_address: value,
+		});
+	};
 	useEffect(() => {
-		handleInitialForm();
 		handleInitialInput();
 	}, [initialData]);
 	useEffect(() => {
@@ -237,16 +236,16 @@ const useSetting = () => {
 			setDisableUpdateBtn(statusDisableBtn);
 	}, [fieldCommon]);
 	return {
-		handleFieldChange,
 		isLoadingSystemStatus,
 		handleSubmit,
 		disableUpdateBtn,
 		price,
+		handleRegexAddress,
 		isLoadingInitialData,
+		statusAddressAfterRegex,
 		handleRegexField,
 		initialData,
 		fieldCommon,
-		form,
 	};
 };
 export default useSetting;

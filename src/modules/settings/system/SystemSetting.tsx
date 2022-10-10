@@ -1,6 +1,5 @@
 import './SystemSetting.style.scss';
-import { Button, Card, Col, Form, Input, Loading } from '@common/components';
-import { addressValidator, requiredValidate } from '@common/helpers/validate';
+import { Button, Card, Col, Input, Loading } from '@common/components';
 import { useRedirectBack } from '@common/hooks';
 import { MESSAGES } from '@common/constants/messages';
 import useSetting from './services/useSetting';
@@ -60,11 +59,11 @@ export default function SystemSetting() {
 		isLoadingSystemStatus,
 		handleSubmit,
 		isLoadingInitialData,
+		statusAddressAfterRegex,
 		fieldCommon,
 		disableUpdateBtn,
-		handleFieldChange,
+		handleRegexAddress,
 		handleRegexField,
-		form,
 	} = useSetting();
 	const defaultPriceType = 'BUSD';
 	if (isLoadingSystemStatus || isLoadingInitialData) {
@@ -79,65 +78,53 @@ export default function SystemSetting() {
 					title='System Setting'
 					className='system-setting-form'
 				>
-					<Form
-						form={form}
-						layout='vertical'
-						onFieldsChange={handleFieldChange}
-						name='basic'
-						onFinish={handleSubmit}
-						autoComplete='off'
-					>
-						<Form.Item
-							label='Treasury Address'
-							name='treasury_address'
-							rules={[
-								requiredValidate(),
-								{
-									validator: addressValidator,
-								},
-							]}
-						>
-							<Input />
-						</Form.Item>
-						<InputComponent
-							priceType={defaultPriceType}
-							value={fieldCommon.key_price}
-							title='Key Price'
-							keyValue='key_price'
-							handleRegexField={handleRegexField}
-						/>
-						<InputComponent
-							priceType={defaultPriceType}
-							value={fieldCommon.rescure_price}
-							title='Rescue Price'
-							keyValue='rescure_price'
-							handleRegexField={handleRegexField}
-						/>
-						<InputComponent
-							priceType={defaultPriceType}
-							value={fieldCommon.launch_price}
-							title='Launch Price'
-							keyValue='launch_price'
-							handleRegexField={handleRegexField}
-						/>
-						<InputComponent
-							value={fieldCommon.mint_days}
-							title='Users may mint key for the first (x) days of the month'
-							keyValue='mint_days'
-							handleRegexField={handleRegexField}
-						/>
-						<InputComponent
-							value={fieldCommon.key_mint_min_token}
-							title='User must have minimum (x) token to mint key'
-							keyValue='key_mint_min_token'
-							handleRegexField={handleRegexField}
-						/>
-						<Form.Item className='system-setting-form__btn'>
-							<Button disabled={disableUpdateBtn} htmlType='submit'>
-								Update
-							</Button>
-						</Form.Item>
-					</Form>
+					<TitleComponent title='Treasury Address' />
+					<Input
+						onChange={handleRegexAddress}
+						value={fieldCommon.treasury_address}
+						status={statusAddressAfterRegex ? 'error' : ''}
+					/>
+					{statusAddressAfterRegex && (
+						<p className='system-setting-form__titleError'>{MESSAGES.MSC121}</p>
+					)}
+					<InputComponent
+						priceType={defaultPriceType}
+						value={fieldCommon.key_price}
+						title='Key Price'
+						keyValue='key_price'
+						handleRegexField={handleRegexField}
+					/>
+					<InputComponent
+						priceType={defaultPriceType}
+						value={fieldCommon.rescure_price}
+						title='Rescue Price'
+						keyValue='rescure_price'
+						handleRegexField={handleRegexField}
+					/>
+					<InputComponent
+						priceType={defaultPriceType}
+						value={fieldCommon.launch_price}
+						title='Launch Price'
+						keyValue='launch_price'
+						handleRegexField={handleRegexField}
+					/>
+					<InputComponent
+						value={fieldCommon.mint_days}
+						title='Users may mint key for the first (x) days of the month'
+						keyValue='mint_days'
+						handleRegexField={handleRegexField}
+					/>
+					<InputComponent
+						value={fieldCommon.key_mint_min_token}
+						title='User must have minimum (x) token to mint key'
+						keyValue='key_mint_min_token'
+						handleRegexField={handleRegexField}
+					/>
+					<div className='system-setting-form__btn'>
+						<Button onClick={handleSubmit} disabled={disableUpdateBtn}>
+							Update
+						</Button>
+					</div>
 				</Card>
 			</Col>
 		</>
