@@ -45,31 +45,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}
 
 	async function signIn(connectorKey: ConnectorKey) {
-		const connector = connectors[connectorKey];
+		try {
+			const connector = connectors[connectorKey];
 
-		// Ignore signing message
-		const isNotSignedIn = !hasStorageJwtToken() || isJwtTokenExpired();
-		if (isNotSignedIn) {
-			const provider = await connector.getProvider();
-			const signer = new Web3Provider(provider).getSigner();
-			const account = await signer.getAddress();
-			const signMessage = getSignMessage(account);
-			const signature = await trySignMessage(signer, signMessage);
-			await login(account, signMessage, signature);
+			// Ignore signing message
+			const isNotSignedIn = !hasStorageJwtToken() || isJwtTokenExpired();
+			if (isNotSignedIn) {
+				const provider = await connector.getProvider();
+				const signer = new Web3Provider(provider).getSigner();
+				const account = await signer.getAddress();
+				const signMessage = getSignMessage(account);
+				const signature = await trySignMessage(signer, signMessage);
+
+				await login(account, signMessage, signature);
+			}
+
+			if (location.state) {
+				const { returnUrl } = location.state as LocationState;
+				navigate(returnUrl);
+				return;
+			}
+
+			navigate(PATHS.saleRounds.list());
+		} catch (error) {
+			// eslint-disable-next-line no-console
+			console.error(error);
 		}
-
-		if (location.state) {
-			const { returnUrl } = location.state as LocationState;
-			navigate(returnUrl);
-			return;
-		}
-
-		navigate(PATHS.saleRounds.list());
 	}
 
 	function signOut() {
-		removeStorageJwtToken();
 		disconnectWallet();
+		removeStorageJwtToken();
 		queryClient.clear();
 		navigate(PATHS.connectWallet());
 	}
