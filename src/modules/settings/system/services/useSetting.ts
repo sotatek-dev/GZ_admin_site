@@ -33,8 +33,10 @@ const useSetting = () => {
 		getKeyPrice,
 		getTreasuryAddress,
 	} = useUpdateKeyNFTSC();
-	const { data: initialData, isLoading: isLoadingInitialData } =
-		useGetSystemSetting() as UseQueryResult<InitialProps, unknown>;
+	const { data: initialData } = useGetSystemSetting() as UseQueryResult<
+		InitialProps,
+		unknown
+	>;
 	const reloadTime = 500;
 	const [statusDetectOnchange, setStatusDetectOnchange] =
 		useState<boolean>(false);
@@ -305,7 +307,9 @@ const useSetting = () => {
 				rescure_price,
 				key_price,
 			});
-			setIsLoadingSystemStatus(false);
+			setTimeout(() => {
+				setIsLoadingSystemStatus(false);
+			}, reloadTime);
 		} catch (error) {
 			message.error(MESSAGES.MSC26);
 			setIsLoadingSystemStatus(false);
@@ -342,7 +346,6 @@ const useSetting = () => {
 		disableUpdateBtn,
 		price,
 		handleRegexAddress,
-		isLoadingInitialData,
 		treasuryAddressCommon,
 		handleRegexField,
 		initialData,

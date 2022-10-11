@@ -58,7 +58,6 @@ export default function SystemSetting() {
 	const {
 		isLoadingSystemStatus,
 		handleSubmit,
-		isLoadingInitialData,
 		treasuryAddressCommon,
 		fieldCommon,
 		disableUpdateBtn,
@@ -66,7 +65,7 @@ export default function SystemSetting() {
 		handleRegexField,
 	} = useSetting();
 	const defaultPriceType = 'BUSD';
-	if (isLoadingSystemStatus || isLoadingInitialData) {
+	if (isLoadingSystemStatus) {
 		return <Loading />;
 	}
 	return (
