@@ -5,6 +5,7 @@ interface NumericInputProps {
 	className?: string;
 	disabled?: boolean;
 	suffix?: ReactNode | string;
+	addonAfter?: string;
 	value: string;
 	onChange: (value: string) => void;
 }

@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
 import type { FormInstance } from 'antd/es/form/Form';
-import { DatePicker, Form, InputNumber, Loading } from '@common/components';
+import { DatePicker, Form, Loading } from '@common/components';
 import { MintPhase, NFTInfoFormValue } from '@settings/nft-mint/types';
 import { useNFTMintPhaseSetting } from '@settings/nft-mint/services/useGetSettingNFTMint';
 import { MessageValidations } from '@common/helpers/message';
+import NumericInput from '@common/components/NumericInput';
+import { useState } from 'react';
 
 interface Props {
 	activePhaseTab: MintPhase;
@@ -14,6 +16,9 @@ interface Props {
 export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 	const { currentPhaseSetting, isGetPhaseSetting } =
 		useNFTMintPhaseSetting(activePhaseTab);
+	const [price, setPrice] = useState<string>('');
+	const [priceAfter24h, setPriceAfter24h] = useState<string>('');
+	const [nftMintLimit, setNftMintLimit] = useState<string>('');
 
 	if (isGetPhaseSetting) {
 		return <Loading />;
@@ -45,7 +50,7 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 				name='price'
 				rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 			>
-				<InputNumber addonAfter='BUSD' min={0} />
+				<NumericInput addonAfter='BUSD' value={price} onChange={setPrice} />
 			</Form.Item>
 			<Form.Item
 				wrapperCol={{ span: 12 }}
@@ -56,7 +61,11 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 				}}
 				rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 			>
-				<InputNumber addonAfter='BUSD' min={0} />
+				<NumericInput
+					addonAfter='BUSD'
+					value={priceAfter24h}
+					onChange={setPriceAfter24h}
+				/>
 			</Form.Item>
 			<Form.Item
 				wrapperCol={{ span: 12 }}
@@ -67,7 +76,11 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 				}}
 				rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 			>
-				<InputNumber addonAfter='NFT' min={0} />
+				<NumericInput
+					addonAfter='NFT'
+					value={nftMintLimit}
+					onChange={setNftMintLimit}
+				/>
 			</Form.Item>
 			<Form.Item
 				label='Mint Time'
