@@ -10,11 +10,3 @@ export type InitialProps =
 			_id: string;
 	  }
 	| undefined;
-export type SubmitProps<T> = {
-	treasury_address: string;
-	key_price: T;
-	rescure_price: T;
-	launch_price: T;
-	mint_days: T;
-	key_mint_min_token: T;
-};

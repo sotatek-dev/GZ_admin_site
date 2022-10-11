@@ -1,7 +1,6 @@
 import { useQuery } from 'react-query';
 import { axiosClient } from '@common/services/apiClient';
 import { useMutation } from 'react-query';
-import { MESSAGES } from '@common/constants/messages';
 import { message } from '@common/components';
 import { Admin, Pagination } from '@admins/common/types';
 type Response = {
@@ -27,8 +26,9 @@ export const useUpdateSystem = () => {
 	const updateMintDaySystemAdmin = async (object: UpdateSystemProps) => {
 		try {
 			await updateMutation.mutateAsync(object);
-		} catch (error) {
-			message.error(MESSAGES.MSC26);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			message.error(error?.response?.data?.message || '');
 		}
 	};
 

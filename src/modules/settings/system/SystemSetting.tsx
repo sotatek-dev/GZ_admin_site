@@ -1,126 +1,138 @@
 import './SystemSetting.style.scss';
-import {
-	Button,
-	Card,
-	Col,
-	Form,
-	Input,
-	InputNumber,
-	Loading,
-} from '@common/components';
-import { addressValidator, requiredValidate } from '@common/helpers/validate';
+import { Button, Card, Col, Input, Loading, Row } from '@common/components';
+import { useRedirectBack } from '@common/hooks';
 import { MESSAGES } from '@common/constants/messages';
 import useSetting from './services/useSetting';
+const TitleComponent = ({ title }: { title: string }) => {
+	return (
+		<p className='system-setting-form__title'>
+			{title}
+			<span className='system-setting-form__title__star'>*</span>
+		</p>
+	);
+};
+const ErrorComponent = ({ value }: { value: string }) => {
+	return value === '' ||
+		parseFloat(value) <= 0 ||
+		value.charAt(value.length - 1) === '.' ? (
+		<p className='system-setting-form__titleError'>{MESSAGES.MSC115}</p>
+	) : (
+		<div></div>
+	);
+};
+const InputComponent = ({
+	priceType,
+	value,
+	title,
+	keyValue,
+	handleRegexField,
+}: {
+	priceType?: string;
+	value: string;
+	title: string;
+	keyValue: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	handleRegexField: any;
+}) => {
+	return (
+		<>
+			<TitleComponent title={title} />
+			<Input
+				suffix={priceType ? priceType : ''}
+				onChange={(e) => handleRegexField(e, keyValue)}
+				value={value}
+				status={
+					value === '' ||
+					parseFloat(value) <= 0 ||
+					value.charAt(value.length - 1) === '.'
+						? 'error'
+						: ''
+				}
+			/>
+			<ErrorComponent value={value} />
+		</>
+	);
+};
 export default function SystemSetting() {
-	const defaultPriceType = 'BUSD';
+	const goBack = useRedirectBack();
 	const {
-		disableUpdateBtn,
-		handleFieldChange,
 		isLoadingSystemStatus,
 		handleSubmit,
-		price,
-		form,
+		isLoadingInitialData,
+		treasuryAddressCommon,
+		fieldCommon,
+		disableUpdateBtn,
+		handleRegexAddress,
+		handleRegexField,
 	} = useSetting();
-	const formatPrice = (price: number | string) => {
-		return `${price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-	};
-	if (isLoadingSystemStatus) {
+	const defaultPriceType = 'BUSD';
+	if (isLoadingSystemStatus || isLoadingInitialData) {
 		return <Loading />;
 	}
 	return (
 		<>
-			<Col span={12} offset={6} className='system-setting'>
-				<Card
-					size='small'
-					title='System Setting'
-					className='system-setting-form'
-				>
-					<Form
-						form={form}
-						onFieldsChange={handleFieldChange}
-						layout='vertical'
-						name='basic'
-						onFinish={handleSubmit}
-						autoComplete='off'
-						// initialValues={setting}
+			<Button onClick={goBack}>Back</Button>
+			<Row className='system-setting'>
+				<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+					<Card
+						size='small'
+						title='System Setting'
+						className='system-setting-form'
 					>
-						<Form.Item
-							label='Treasury Address'
-							name='treasury_address'
-							rules={[
-								requiredValidate(),
-								{
-									validator: addressValidator,
-								},
-							]}
-						>
-							<Input />
-						</Form.Item>
-						<Form.Item
-							wrapperCol={{ span: 24 }}
-							label='Key Price'
-							name='key_price'
-							rules={[{ required: true, message: MESSAGES.MSC115 }]}
-						>
-							<InputNumber
-								min={price.min}
-								max={price.max}
-								defaultValue={price.min}
-								formatter={(value) => formatPrice(value || 0)}
-								addonAfter={defaultPriceType}
-							/>
-						</Form.Item>
-						<Form.Item
-							label='Rescue Price'
-							name='rescure_price'
-							rules={[{ required: true, message: MESSAGES.MSC115 }]}
-						>
-							<InputNumber
-								min={price.min}
-								max={price.max}
-								defaultValue={price.min}
-								formatter={(value) => formatPrice(value || 0)}
-								addonAfter={defaultPriceType}
-							/>
-						</Form.Item>
-						<Form.Item
-							label='Launch Price'
-							name='launch_price'
-							rules={[{ required: true, message: MESSAGES.MSC115 }]}
-						>
-							<InputNumber
-								min={price.min}
-								max={price.max}
-								defaultValue={price.min}
-								formatter={(value) => formatPrice(value || 0)}
-								addonAfter={defaultPriceType}
-							/>
-						</Form.Item>
-						<Form.Item
-							label='Users may mint key for the first (x) days of the month'
-							name='mint_days'
-							rules={[{ required: true, message: MESSAGES.MSC115 }]}
-						>
-							<InputNumber
-								min={price.mintKeyDefault}
-								defaultValue={price.mintKey}
-							/>
-						</Form.Item>
-						<Form.Item
-							label='User must hold (x) dNFT to mint key'
-							name='key_mint_min_token'
-							rules={[{ required: true, message: MESSAGES.MSC115 }]}
-						>
-							<InputNumber defaultValue={0} min={price.min} max={price.max} />
-						</Form.Item>
-						<Form.Item style={{ textAlign: 'center' }}>
-							<Button disabled={disableUpdateBtn} htmlType='submit'>
+						<TitleComponent title='Treasury Address' />
+						<Input
+							onChange={handleRegexAddress}
+							value={treasuryAddressCommon.treasury_address}
+							status={
+								treasuryAddressCommon.statusAddressAfterRegex ? 'error' : ''
+							}
+						/>
+						{treasuryAddressCommon.statusAddressAfterRegex && (
+							<p className='system-setting-form__titleError'>
+								{MESSAGES.MSC121}
+							</p>
+						)}
+						<InputComponent
+							priceType={defaultPriceType}
+							value={fieldCommon.key_price}
+							title='Key Price'
+							keyValue='key_price'
+							handleRegexField={handleRegexField}
+						/>
+						<InputComponent
+							priceType={defaultPriceType}
+							value={fieldCommon.rescure_price}
+							title='Rescue Price'
+							keyValue='rescure_price'
+							handleRegexField={handleRegexField}
+						/>
+						<InputComponent
+							priceType={defaultPriceType}
+							value={fieldCommon.launch_price}
+							title='Launch Price'
+							keyValue='launch_price'
+							handleRegexField={handleRegexField}
+						/>
+						<InputComponent
+							value={fieldCommon.mint_days}
+							title='Users may mint key for the first (x) days of the month'
+							keyValue='mint_days'
+							handleRegexField={handleRegexField}
+						/>
+						<InputComponent
+							value={fieldCommon.key_mint_min_token}
+							title='User must have minimum (x) token to mint key'
+							keyValue='key_mint_min_token'
+							handleRegexField={handleRegexField}
+						/>
+						<div className='system-setting-form__btn'>
+							<Button onClick={handleSubmit} disabled={disableUpdateBtn}>
 								Update
 							</Button>
-						</Form.Item>
-					</Form>
-				</Card>
-			</Col>
+						</div>
+					</Card>
+				</Col>
+			</Row>
 		</>
 	);
 }
