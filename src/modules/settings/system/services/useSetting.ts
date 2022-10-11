@@ -22,21 +22,43 @@ const useSetting = () => {
 		updateMinimumMintKeyDNFTSC,
 		updateLaunchPriceDNFTSC,
 		updateTreasuryAddressDNFTSC,
+		getRescuePrice,
+		getMinimumToken,
+		getLaunchPrice,
 	} = useUpdateDNFTSC();
 	const {
 		updateLaunchPriceKeyNFTSC,
 		updateTreasuryAddressKeyNFTSC,
 		updatePriceKeyNFTSC,
+		getKeyPrice,
+		getTreasuryAddress,
 	} = useUpdateKeyNFTSC();
 	const { data: initialData, isLoading: isLoadingInitialData } =
 		useGetSystemSetting() as UseQueryResult<InitialProps, unknown>;
 	const reloadTime = 500;
+	const [statusDetectOnchange, setStatusDetectOnchange] =
+		useState<boolean>(false);
 	const [treasuryAddressCommon, setTreasuryAddressCommon] = useState<{
 		statusAddressAfterRegex: boolean;
 		treasury_address: string;
 	}>({
 		statusAddressAfterRegex: false,
 		treasury_address: '0',
+	});
+	const [initialDataState, setInitialDataState] = useState<{
+		mint_days: string;
+		key_mint_min_token: string;
+		launch_price: string;
+		rescure_price: string;
+		key_price: string;
+		treasury_address: string;
+	}>({
+		mint_days: '',
+		key_mint_min_token: '',
+		launch_price: '',
+		rescure_price: '',
+		key_price: '',
+		treasury_address: '',
 	});
 	const [disableUpdateBtn, setDisableUpdateBtn] = useState<boolean>(true);
 	const [fieldCommon, setFieldCommon] = useState<FieldCommon<string>>({
@@ -72,41 +94,60 @@ const useSetting = () => {
 			| 'key_price'
 	) => {
 		const { value } = e.target;
+		// when onchange field will enable btn update except '.'
+		value.charAt(value.length - 1) !== '.' && setStatusDetectOnchange(true);
 		const regexCharacterExceptDot = /^[0-9\s.]+$/;
+		const regexCharacter = /^[0-9\s]+$/;
 		if (value) {
-			const spliceDot = value.split('.');
-			const indexBeforeDot = 0,
-				indexAfterDot = 1,
-				priceTypeInt = 1,
-				priceTypeFloat = 2,
-				maxLength = 10,
-				priceOnlyHaveOneDot = 2;
-			if (regexCharacterExceptDot.test(value)) {
-				switch (spliceDot.length) {
-					case priceTypeInt: {
-						if (value.length <= maxLength) {
-							if (parseFloat(value) <= price.max) {
-								setFieldCommon({ ...fieldCommon, [type]: value });
-							}
-						}
-						break;
+			switch (type) {
+				case 'mint_days': {
+					const minDay = 0,
+						maxDay = 31;
+					if (
+						regexCharacter.test(value) &&
+						parseInt(value) > minDay &&
+						parseInt(value) <= maxDay
+					) {
+						setFieldCommon({ ...fieldCommon, mint_days: value });
 					}
-					case priceTypeFloat: {
-						if (
-							spliceDot[indexAfterDot].length <= priceOnlyHaveOneDot &&
-							spliceDot[indexBeforeDot].length <= maxLength &&
-							value !== '.'
-						) {
-							if (parseFloat(spliceDot[indexBeforeDot]) <= price.max) {
-								// // change any field then enable btn update
-								// spliceDot[indexAfterDot] && setDisableUpdateBtn(false);
-								setFieldCommon({ ...fieldCommon, [type]: value });
+					break;
+				}
+				default: {
+					const spliceDot = value.split('.');
+					const indexBeforeDot = 0,
+						indexAfterDot = 1,
+						priceTypeInt = 1,
+						priceTypeFloat = 2,
+						maxLength = 10,
+						priceOnlyHaveOneDot = 2;
+					if (regexCharacterExceptDot.test(value)) {
+						switch (spliceDot.length) {
+							case priceTypeInt: {
+								if (value.length <= maxLength) {
+									if (parseFloat(value) <= price.max) {
+										setFieldCommon({ ...fieldCommon, [type]: value });
+									}
+								}
+								break;
 							}
+							case priceTypeFloat: {
+								if (
+									spliceDot[indexAfterDot].length <= priceOnlyHaveOneDot &&
+									spliceDot[indexBeforeDot].length <= maxLength &&
+									value !== '.'
+								) {
+									if (parseFloat(spliceDot[indexBeforeDot]) <= price.max) {
+										// // change any field then enable btn update
+										// spliceDot[indexAfterDot] && setDisableUpdateBtn(false);
+										setFieldCommon({ ...fieldCommon, [type]: value });
+									}
+								}
+								break;
+							}
+							default:
+								'';
 						}
-						break;
 					}
-					default:
-						'';
 				}
 			}
 		} else {
@@ -121,7 +162,7 @@ const useSetting = () => {
 			listKeys.forEach((item) => {
 				switch (item) {
 					case 'treasury_address': {
-						if (objectMerge[item] !== initialData?.[item]) {
+						if (objectMerge[item] !== initialDataState?.[item]) {
 							listPromiseFieldChange.push(
 								...listPromiseFieldChange,
 								updateTreasuryAddressKeyNFTSC(objectMerge[item]),
@@ -131,7 +172,7 @@ const useSetting = () => {
 						break;
 					}
 					case 'key_price': {
-						if (parseFloat(fieldCommon[item]) !== initialData?.[item]) {
+						if (fieldCommon[item] !== initialDataState?.[item]) {
 							listPromiseFieldChange.push(
 								updatePriceKeyNFTSC(
 									new BigNumber(fieldCommon[item])
@@ -143,7 +184,7 @@ const useSetting = () => {
 						break;
 					}
 					case 'rescure_price': {
-						if (parseFloat(fieldCommon[item]) !== initialData?.[item]) {
+						if (fieldCommon[item] !== initialDataState?.[item]) {
 							listPromiseFieldChange.push(
 								updateRescurPriceDNFTSC(
 									new BigNumber(fieldCommon[item])
@@ -155,11 +196,7 @@ const useSetting = () => {
 						break;
 					}
 					case 'launch_price': {
-						if (
-							parseFloat(fieldCommon?.[item]) ||
-							'' !== initialData?.[item] ||
-							''
-						) {
+						if (fieldCommon?.[item] !== initialDataState?.[item]) {
 							listPromiseFieldChange.push(
 								...listPromiseFieldChange,
 								updateLaunchPriceDNFTSC(
@@ -177,11 +214,7 @@ const useSetting = () => {
 						break;
 					}
 					case 'key_mint_min_token': {
-						if (
-							parseFloat(fieldCommon?.[item]) ||
-							'' !== initialData?.[item] ||
-							''
-						) {
+						if (fieldCommon?.[item] !== initialDataState?.[item]) {
 							listPromiseFieldChange.push(
 								updateMinimumMintKeyDNFTSC(
 									new BigNumber(parseFloat(fieldCommon[item]))
@@ -196,41 +229,93 @@ const useSetting = () => {
 						break;
 				}
 			});
-		if (parseFloat(fieldCommon.mint_days) !== initialData?.mint_days) {
+		if (fieldCommon.mint_days !== initialDataState?.mint_days) {
 			updateMintDaySystemAdmin({
 				mint_days: parseFloat(fieldCommon.mint_days),
 			});
 		}
-		try {
-			setIsLoadingSystemStatus(true);
-			message.loading('Processing in progress', reloadTime);
-			await Promise.any(listPromiseFieldChange);
-			message.success(MESSAGES.MSC25);
-		} catch (error) {
-			message.error(MESSAGES.MSC26);
-		} finally {
-			setIsLoadingSystemStatus(false);
-			setTimeout(() => {
-				window.location.reload();
-			}, reloadTime);
+		if (listPromiseFieldChange.length > 0) {
+			try {
+				setIsLoadingSystemStatus(true);
+				message.loading('Processing in progress', reloadTime);
+				await Promise.any(listPromiseFieldChange);
+				message.success(MESSAGES.MSC22);
+			} catch (error) {
+				message.error(MESSAGES.MSC26);
+			} finally {
+				setIsLoadingSystemStatus(false);
+				setTimeout(() => {
+					window.location.reload();
+				}, reloadTime);
+			}
 		}
 	};
-	const handleInitialInput = () => {
-		setTreasuryAddressCommon({
-			...treasuryAddressCommon,
-			treasury_address: String(initialData?.treasury_address || 0) || '0',
-		});
-		setFieldCommon({
-			...fieldCommon,
-			key_mint_min_token: String(initialData?.key_mint_min_token || 0) || '0',
-			mint_days: String(initialData?.mint_days || 0) || '0',
-			launch_price: String(initialData?.launch_price || 0) || '0',
-			rescure_price: String(initialData?.rescure_price || 0) || '0',
-			key_price: String(initialData?.key_price || 0) || '0',
-		});
+	const handleConvertHexToDecimal = (price: string) => {
+		return new BigNumber(
+			new BigNumber(price).div(1e18).decimalPlaces(2, BigNumber.ROUND_DOWN)
+		).toFormat();
+	};
+	const handleInitialInput = async () => {
+		const indexRescurPrice = 0,
+			indexMinimumToken = 1,
+			indexLaunchPrice = 2,
+			indexKeyPrice = 3,
+			indexTreasuryAddress = 4;
+		try {
+			setIsLoadingSystemStatus(true);
+			const res = await Promise.all([
+				getRescuePrice(),
+				getMinimumToken(),
+				getLaunchPrice(),
+				getKeyPrice(),
+				getTreasuryAddress(),
+			]);
+			const key_mint_min_token = String(
+				handleConvertHexToDecimal(res[indexMinimumToken]?._hex || '0')
+			);
+			const launch_price = String(
+				handleConvertHexToDecimal(res[indexLaunchPrice]?._hex || '0')
+			);
+			const mint_days = String(initialData?.mint_days || 0) || '0';
+			const rescure_price = String(
+				handleConvertHexToDecimal(res[indexRescurPrice]?._hex || '0')
+			);
+			const key_price = String(
+				handleConvertHexToDecimal(res[indexKeyPrice]?._hex || '0')
+			);
+			const treasury_address = res?.[indexTreasuryAddress] || '';
+			setInitialDataState({
+				...initialDataState,
+				key_mint_min_token,
+				mint_days,
+				launch_price,
+				rescure_price,
+				key_price,
+				treasury_address,
+			});
+			setTreasuryAddressCommon({
+				...treasuryAddressCommon,
+				treasury_address,
+			});
+			setFieldCommon({
+				...fieldCommon,
+				key_mint_min_token,
+				mint_days,
+				launch_price,
+				rescure_price,
+				key_price,
+			});
+			setIsLoadingSystemStatus(false);
+		} catch (error) {
+			message.error(MESSAGES.MSC26);
+			setIsLoadingSystemStatus(false);
+		}
 	};
 	const handleRegexAddress = (e: ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
+		// when onchange field will enable btn update except '.'
+		value.charAt(value.length - 1) !== '.' &&
+			setDisableUpdateBtn(!isAddress(value));
 		setTreasuryAddressCommon({
 			...treasuryAddressCommon,
 			treasury_address: value,
@@ -241,10 +326,15 @@ const useSetting = () => {
 		handleInitialInput();
 	}, [initialData]);
 	useEffect(() => {
-		const listValues = Object.values(fieldCommon);
-		const statusDisableBtn = !listValues.every((item) => parseFloat(item) > 0);
-		statusDisableBtn !== disableUpdateBtn &&
-			setDisableUpdateBtn(statusDisableBtn);
+		if (statusDetectOnchange) {
+			const listValues = Object.values(fieldCommon);
+			const statusDisableBtn = !listValues.every(
+				(item) => parseFloat(item) > 0
+			);
+			statusDisableBtn !== disableUpdateBtn &&
+				isAddress(treasuryAddressCommon.treasury_address) &&
+				setDisableUpdateBtn(statusDisableBtn);
+		}
 	}, [fieldCommon]);
 	return {
 		isLoadingSystemStatus,

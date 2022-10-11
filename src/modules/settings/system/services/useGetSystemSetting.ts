@@ -3,6 +3,7 @@ import { axiosClient } from '@common/services/apiClient';
 import { useMutation } from 'react-query';
 import { message } from '@common/components';
 import { Admin, Pagination } from '@admins/common/types';
+import { MESSAGES } from '@common/constants/messages';
 type Response = {
 	list: Admin[];
 	pagination: Pagination;
@@ -26,6 +27,7 @@ export const useUpdateSystem = () => {
 	const updateMintDaySystemAdmin = async (object: UpdateSystemProps) => {
 		try {
 			await updateMutation.mutateAsync(object);
+			message.success(MESSAGES.MSC22);
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			message.error(error?.response?.data?.message || '');

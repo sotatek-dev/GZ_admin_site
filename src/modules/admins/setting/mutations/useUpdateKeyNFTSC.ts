@@ -2,6 +2,14 @@ import { useMutation } from 'react-query';
 import { useKeyNFTContract } from '@web3/contracts/useKeyNFTContract';
 export const useUpdateKeyNFTSC = () => {
 	const keyNFTContract = useKeyNFTContract();
+	async function getKeyPrice() {
+		if (!keyNFTContract) return;
+		return await keyNFTContract.keyPrice();
+	}
+	async function getTreasuryAddress() {
+		if (!keyNFTContract) return;
+		return await keyNFTContract.treasuryAddress();
+	}
 	async function handleUpdatePriceKeyNFTSC(key_price: string) {
 		if (!keyNFTContract) return;
 		const tx = await keyNFTContract.setKeyPrice(key_price);
@@ -27,8 +35,12 @@ export const useUpdateKeyNFTSC = () => {
 		handleUpdateLaunchPriceKeyNFTSC
 	);
 	return {
+		// set
 		updateLaunchPriceKeyNFTSC,
 		updateTreasuryAddressKeyNFTSC,
 		updatePriceKeyNFTSC,
+		// get
+		getKeyPrice,
+		getTreasuryAddress,
 	};
 };
