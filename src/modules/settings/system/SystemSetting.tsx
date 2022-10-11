@@ -1,5 +1,5 @@
 import './SystemSetting.style.scss';
-import { Button, Card, Col, Input, Loading } from '@common/components';
+import { Button, Card, Col, Input, Loading, Row } from '@common/components';
 import { useRedirectBack } from '@common/hooks';
 import { MESSAGES } from '@common/constants/messages';
 import useSetting from './services/useSetting';
@@ -72,63 +72,67 @@ export default function SystemSetting() {
 	return (
 		<>
 			<Button onClick={goBack}>Back</Button>
-			<Col span={12} offset={6} className='system-setting'>
-				<Card
-					size='small'
-					title='System Setting'
-					className='system-setting-form'
-				>
-					<TitleComponent title='Treasury Address' />
-					<Input
-						onChange={handleRegexAddress}
-						value={treasuryAddressCommon.treasury_address}
-						status={
-							treasuryAddressCommon.statusAddressAfterRegex ? 'error' : ''
-						}
-					/>
-					{treasuryAddressCommon.statusAddressAfterRegex && (
-						<p className='system-setting-form__titleError'>{MESSAGES.MSC121}</p>
-					)}
-					<InputComponent
-						priceType={defaultPriceType}
-						value={fieldCommon.key_price}
-						title='Key Price'
-						keyValue='key_price'
-						handleRegexField={handleRegexField}
-					/>
-					<InputComponent
-						priceType={defaultPriceType}
-						value={fieldCommon.rescure_price}
-						title='Rescue Price'
-						keyValue='rescure_price'
-						handleRegexField={handleRegexField}
-					/>
-					<InputComponent
-						priceType={defaultPriceType}
-						value={fieldCommon.launch_price}
-						title='Launch Price'
-						keyValue='launch_price'
-						handleRegexField={handleRegexField}
-					/>
-					<InputComponent
-						value={fieldCommon.mint_days}
-						title='Users may mint key for the first (x) days of the month'
-						keyValue='mint_days'
-						handleRegexField={handleRegexField}
-					/>
-					<InputComponent
-						value={fieldCommon.key_mint_min_token}
-						title='User must have minimum (x) token to mint key'
-						keyValue='key_mint_min_token'
-						handleRegexField={handleRegexField}
-					/>
-					<div className='system-setting-form__btn'>
-						<Button onClick={handleSubmit} disabled={disableUpdateBtn}>
-							Update
-						</Button>
-					</div>
-				</Card>
-			</Col>
+			<Row className='system-setting'>
+				<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+					<Card
+						size='small'
+						title='System Setting'
+						className='system-setting-form'
+					>
+						<TitleComponent title='Treasury Address' />
+						<Input
+							onChange={handleRegexAddress}
+							value={treasuryAddressCommon.treasury_address}
+							status={
+								treasuryAddressCommon.statusAddressAfterRegex ? 'error' : ''
+							}
+						/>
+						{treasuryAddressCommon.statusAddressAfterRegex && (
+							<p className='system-setting-form__titleError'>
+								{MESSAGES.MSC121}
+							</p>
+						)}
+						<InputComponent
+							priceType={defaultPriceType}
+							value={fieldCommon.key_price}
+							title='Key Price'
+							keyValue='key_price'
+							handleRegexField={handleRegexField}
+						/>
+						<InputComponent
+							priceType={defaultPriceType}
+							value={fieldCommon.rescure_price}
+							title='Rescue Price'
+							keyValue='rescure_price'
+							handleRegexField={handleRegexField}
+						/>
+						<InputComponent
+							priceType={defaultPriceType}
+							value={fieldCommon.launch_price}
+							title='Launch Price'
+							keyValue='launch_price'
+							handleRegexField={handleRegexField}
+						/>
+						<InputComponent
+							value={fieldCommon.mint_days}
+							title='Users may mint key for the first (x) days of the month'
+							keyValue='mint_days'
+							handleRegexField={handleRegexField}
+						/>
+						<InputComponent
+							value={fieldCommon.key_mint_min_token}
+							title='User must have minimum (x) token to mint key'
+							keyValue='key_mint_min_token'
+							handleRegexField={handleRegexField}
+						/>
+						<div className='system-setting-form__btn'>
+							<Button onClick={handleSubmit} disabled={disableUpdateBtn}>
+								Update
+							</Button>
+						</div>
+					</Card>
+				</Col>
+			</Row>
 		</>
 	);
 }
