@@ -1,6 +1,6 @@
 import './scss/AboutSaleRaound.style.scss';
 import { Input } from 'antd';
-import { MessageValidations } from '@common/helpers/message';
+import { MessageValidations } from '@common/constants/messages';
 import type { FormInstance } from 'antd/es/form/Form';
 import { Card, Form } from '@common/components';
 

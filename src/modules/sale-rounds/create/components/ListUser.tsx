@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox, Upload, Popconfirm, Pagination } from 'antd';
 import { message } from '@common/components';
 import { getCookieStorage } from '@common/helpers/storage';
-import { MessageValidations } from '@common/helpers/message';
+import { MessageValidations } from '@common/constants/messages';
 import { copyWalletAddress } from '@common/helpers/converts';
 import { PageingWhiteList, DataTypePropsTable } from './types';
 import {

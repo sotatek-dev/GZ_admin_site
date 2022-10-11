@@ -16,7 +16,7 @@ import { usePresalePoolContract } from '@web3/contracts';
 // import { useGetEndBuyTimePrevious } from '@web3/hooks';message
 import { Loading, Button, Col, Row, Form } from '@common/components';
 import { useDeploySaleRound } from './components/services/useDeploySaleRound.mutation';
-import { MessageValidations } from '@common/helpers/message';
+import { MessageValidations } from '@common/constants/messages';
 import {
 	SaleRoundExchangeRateType,
 	SaleRoundDetailsType,
