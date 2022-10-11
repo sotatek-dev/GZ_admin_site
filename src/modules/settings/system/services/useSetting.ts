@@ -307,6 +307,7 @@ const useSetting = () => {
 			});
 			setIsLoadingSystemStatus(false);
 		} catch (error) {
+			message.error(MESSAGES.MSC26);
 			setIsLoadingSystemStatus(false);
 		}
 	};
