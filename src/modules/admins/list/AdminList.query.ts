@@ -2,7 +2,11 @@ import { useQuery } from 'react-query';
 import { axiosClient } from '@common/services/apiClient';
 import { Admin, Pagination } from '@admins/common/types';
 import { ADMIN_APIS } from '@admins/common/services/apis';
-import { DEFAULT_PAGINATION } from '@common/constants/pagination';
+
+const adminPagination = {
+	page: 1,
+	limit: 10,
+};
 
 type Request = {
 	limit?: number;
@@ -20,7 +24,7 @@ type Response = {
 
 const fetcher = async (rqBody: Request) => {
 	return await axiosClient.get<Request, Response>(ADMIN_APIS.getAll(), {
-		params: { ...DEFAULT_PAGINATION, ...rqBody },
+		params: { ...adminPagination, ...rqBody },
 	});
 };
 
