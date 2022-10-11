@@ -183,7 +183,11 @@ const useSetting = () => {
 							''
 						) {
 							listPromiseFieldChange.push(
-								updateMinimumMintKeyDNFTSC(parseFloat(fieldCommon[item]))
+								updateMinimumMintKeyDNFTSC(
+									new BigNumber(parseFloat(fieldCommon[item]))
+										.times(price.fromBUSDToSC)
+										.toString()
+								)
 							);
 						}
 						break;

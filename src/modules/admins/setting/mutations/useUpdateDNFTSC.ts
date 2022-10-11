@@ -2,7 +2,7 @@ import { useMutation } from 'react-query';
 import { useDNFTContract } from '@web3/contracts/useDNFTContract';
 export const useUpdateDNFTSC = () => {
 	const dNFTContract = useDNFTContract();
-	async function handleUpdateMinimumMintDNFTSC(key_mint_min_token: number) {
+	async function handleUpdateMinimumMintDNFTSC(key_mint_min_token: string) {
 		if (!dNFTContract) return;
 		const tx = await dNFTContract.setMinimumGalactixTokenRequire(
 			key_mint_min_token
