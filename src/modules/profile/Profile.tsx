@@ -8,10 +8,12 @@ import {
 	requiredValidate,
 } from '@common/helpers/validate';
 import { useGetProfile } from '@common/services/queries/useGetProfile';
+import { useUniqueAddress } from './Profile.hooks';
 import { useUpdateProfile } from './Profile.mutation';
 
 export default function Profile() {
 	const { data: profile, isLoading } = useGetProfile();
+	const { form, uniqueAddressValidator } = useUniqueAddress();
 	const { updateProfile, isUpdateProfile } = useUpdateProfile();
 
 	if (isLoading) {
@@ -30,11 +32,16 @@ export default function Profile() {
 			onFinish={handleFinishForm}
 			wrapperCol={{ span: 10 }}
 			initialValues={profile}
+			form={form}
 		>
 			<Form.Item
 				label='Wallet Address'
 				name='wallet_address'
-				rules={[requiredValidate(), { validator: addressValidator }]}
+				rules={[
+					requiredValidate(),
+					{ validator: addressValidator },
+					{ validator: uniqueAddressValidator },
+				]}
 			>
 				<Input />
 			</Form.Item>
