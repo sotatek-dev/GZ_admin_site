@@ -5,7 +5,7 @@ import {
 	FORMAT_DATETIME_SALEROUND,
 	rowsTableClaim,
 } from './types';
-import { MessageValidations } from '@common/helpers/message';
+import { MessageValidations } from '@common/constants/messages';
 import NumericInput from './NumericInput';
 import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
