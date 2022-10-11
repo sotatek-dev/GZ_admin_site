@@ -29,9 +29,9 @@ export default function Profile() {
 			autoComplete='off'
 			onFinish={handleFinishForm}
 			wrapperCol={{ span: 10 }}
+			initialValues={profile}
 		>
 			<Form.Item
-				initialValue={profile?.wallet_address}
 				label='Wallet Address'
 				name='wallet_address'
 				rules={[requiredValidate(), { validator: addressValidator }]}
@@ -39,7 +39,6 @@ export default function Profile() {
 				<Input />
 			</Form.Item>
 			<Form.Item
-				initialValue={profile?.email}
 				label='Email'
 				name='email'
 				rules={[requiredValidate(), { validator: emailValidator }]}
@@ -47,7 +46,6 @@ export default function Profile() {
 				<Input />
 			</Form.Item>
 			<Form.Item
-				initialValue={profile?.firstname}
 				label='First Name'
 				name='firstname'
 				rules={[{ pattern: NAME_REGEX, message: MESSAGES.MC6 }]}
@@ -55,7 +53,6 @@ export default function Profile() {
 				<Input />
 			</Form.Item>
 			<Form.Item
-				initialValue={profile?.lastname}
 				label='Last Name'
 				name='lastname'
 				rules={[{ pattern: NAME_REGEX, message: MESSAGES.MC7 }]}
