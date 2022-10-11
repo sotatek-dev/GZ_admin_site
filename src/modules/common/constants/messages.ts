@@ -7,6 +7,7 @@ export const MESSAGES = {
 	MC5: 'Refresh successfully',
 	MC6: 'Invalid First name',
 	MC7: 'Invalid Last name',
+	MSC14: 'Please enter less than 50 characters',
 	MSC22: 'Updated successfully',
 	MSC26: 'Updated failed!',
 	MSC25: 'Register successfully!',

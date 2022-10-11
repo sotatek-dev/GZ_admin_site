@@ -48,14 +48,20 @@ export default function Profile() {
 			<Form.Item
 				label='First Name'
 				name='firstname'
-				rules={[{ pattern: NAME_REGEX, message: MESSAGES.MC6 }]}
+				rules={[
+					{ pattern: NAME_REGEX, message: MESSAGES.MC6 },
+					{ max: 50, message: MESSAGES.MSC14 },
+				]}
 			>
 				<Input />
 			</Form.Item>
 			<Form.Item
 				label='Last Name'
 				name='lastname'
-				rules={[{ pattern: NAME_REGEX, message: MESSAGES.MC7 }]}
+				rules={[
+					{ pattern: NAME_REGEX, message: MESSAGES.MC7 },
+					{ max: 50, message: MESSAGES.MSC14 },
+				]}
 			>
 				<Input />
 			</Form.Item>
