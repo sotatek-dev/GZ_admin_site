@@ -114,6 +114,7 @@ export default function SystemSetting() {
 							handleRegexField={handleRegexField}
 						/>
 						<InputComponent
+							priceType='DAY'
 							value={fieldCommon.mint_days}
 							title='Users may mint key for the first (x) days of the month'
 							keyValue='mint_days'

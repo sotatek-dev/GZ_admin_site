@@ -2,6 +2,18 @@ import { useMutation } from 'react-query';
 import { useDNFTContract } from '@web3/contracts/useDNFTContract';
 export const useUpdateDNFTSC = () => {
 	const dNFTContract = useDNFTContract();
+	async function getRescuePrice() {
+		if (!dNFTContract) return;
+		return await dNFTContract.rescuePrice();
+	}
+	async function getMinimumToken() {
+		if (!dNFTContract) return;
+		return await dNFTContract.minimumGalactixTokenRequire();
+	}
+	async function getLaunchPrice() {
+		if (!dNFTContract) return;
+		return await dNFTContract.launchPrice();
+	}
 	async function handleUpdateMinimumMintDNFTSC(key_mint_min_token: string) {
 		if (!dNFTContract) return;
 		const tx = await dNFTContract.setMinimumGalactixTokenRequire(
@@ -37,9 +49,14 @@ export const useUpdateDNFTSC = () => {
 		handleUpdateLaunchPriceDNFTSC
 	);
 	return {
+		// set
 		updateRescurPriceDNFTSC,
 		updateMinimumMintKeyDNFTSC,
 		updateLaunchPriceDNFTSC,
 		updateTreasuryAddressDNFTSC,
+		// get
+		getRescuePrice,
+		getLaunchPrice,
+		getMinimumToken,
 	};
 };
