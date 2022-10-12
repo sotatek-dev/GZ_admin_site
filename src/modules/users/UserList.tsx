@@ -5,11 +5,10 @@ import { Table } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useDebounce } from '@common/hooks';
-import { Button, Input, Space, Col } from '@common/components';
+import { Button, Input, Space, Col, Typography } from '@common/components';
 import { ellipsisAddressText } from '@common/helpers/formats';
 import { useGetUsers } from './UserList.query';
 import { User } from './types';
-import { Typography } from '@common/components';
 
 const UserList = () => {
 	const [searchVal, setSearchVal] = useState('');
@@ -17,7 +16,11 @@ const UserList = () => {
 	const debounceSearchVal = useDebounce(searchVal);
 	const { isLoading, data } = useGetUsers(page, debounceSearchVal);
 
-	const resetSearch = () => setSearchVal('');
+	const resetSearch = () => {
+		setPage(1);
+		setSearchVal('');
+	};
+
 	const onPageChange: PaginationProps['onChange'] = (current) => {
 		setPage(current);
 	};
@@ -43,6 +46,7 @@ const UserList = () => {
 				loading={isLoading}
 				pagination={{
 					defaultCurrent: 1,
+					current: page,
 					pageSize: data?.pagination.limit,
 					total: data?.pagination.total,
 					onChange: onPageChange,
@@ -61,7 +65,7 @@ const columns: ColumnsType<User> = [
 		render(data: string) {
 			return (
 				<Typography.Paragraph copyable={{ text: data }}>
-					{ellipsisAddressText(data)}
+					{ellipsisAddressText(data, 5, 5)}
 				</Typography.Paragraph>
 			);
 		},
@@ -77,6 +81,7 @@ const columns: ColumnsType<User> = [
 	{
 		title: 'Key Holding',
 		dataIndex: 'key_holding',
+		align: 'center',
 		width: '20%',
 		render(value) {
 			return renderKeyHolding(value);
@@ -86,6 +91,7 @@ const columns: ColumnsType<User> = [
 		title: 'Number of dNFT Holding',
 		dataIndex: 'nft_holding',
 		width: '20%',
+		align: 'center',
 	},
 ];
 

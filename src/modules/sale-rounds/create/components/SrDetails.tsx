@@ -2,7 +2,7 @@ import './scss/SrDetails.style.scss';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { FormInstance } from 'antd/es/form/Form';
 import { Radio, Checkbox } from 'antd';
-import { MessageValidations } from '@common/helpers/message';
+import { MessageValidations } from '@common/constants/messages';
 import { SrTokenInforForm, SrTokenDetailForm } from './types';
 import { Card, Form, Input } from '@common/components';
 import { useEffect, useState } from 'react';

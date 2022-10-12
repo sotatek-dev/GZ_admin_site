@@ -1,6 +1,6 @@
 import './scss/ExchangeRate.style.scss';
 import arrowLeft from 'src/assets/icons/arrow-left-icon.svg';
-import { MessageValidations } from '@common/helpers/message';
+import { MessageValidations } from '@common/constants/messages';
 import { Card, Form, Input } from '@common/components';
 import { removeComanString } from './services/helper';
 import { useState } from 'react';

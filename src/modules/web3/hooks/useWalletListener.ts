@@ -8,14 +8,16 @@ import { useActiveWeb3React } from './useActiveWeb3React';
  */
 export function useWalletListener() {
 	const { error, activate, connector } = useActiveWeb3React();
-	const { signOut } = useAuth();
+	const { isAuth, signOut } = useAuth();
 
 	useEffect(() => {
 		const { ethereum } = window;
 
 		if (connector && connector.on && !error) {
 			const updateFn = () => {
-				signOut();
+				if (isAuth) {
+					signOut();
+				}
 			};
 
 			connector.on('Web3ReactUpdate', updateFn);
@@ -26,5 +28,5 @@ export function useWalletListener() {
 				}
 			};
 		}
-	}, [error, activate]);
+	}, [error, activate, isAuth]);
 }

@@ -14,6 +14,7 @@ import { useDebounce } from '@common/hooks';
 const AdminList = () => {
 	const navigate = useNavigate();
 	const [searchVal, setSearchVal] = useState('');
+	const [searchFocus, setSearchForcus] = useState<boolean>(true);
 	const [page, setPage] = useState(1);
 	const debounceSearchVal = useDebounce(searchVal);
 	const { isLoading, data } = useGetAdmins(page, debounceSearchVal);
@@ -31,7 +32,13 @@ const AdminList = () => {
 				<Input
 					value={searchVal}
 					onChange={(e) => setSearchVal(e.target.value)}
-					placeholder='Search by Wallet, Email'
+					onFocus={() => {
+						setSearchForcus(false);
+					}}
+					onBlur={() => {
+						setSearchForcus(true);
+					}}
+					placeholder={searchFocus ? 'Search by Wallet, Email' : ''}
 					suffix={<SearchOutlined />}
 				/>
 			</Col>
@@ -39,6 +46,11 @@ const AdminList = () => {
 				bordered
 				columns={columns}
 				dataSource={data?.list}
+				locale={{
+					emptyText: searchVal
+						? `We couldn't find anything matching ${searchVal}`
+						: 'No Data',
+				}}
 				onRow={(admin) => {
 					return {
 						onClick: () => navigate(PATHS.admins.edit(admin._id)),

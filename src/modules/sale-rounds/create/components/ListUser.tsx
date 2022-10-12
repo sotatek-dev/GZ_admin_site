@@ -1,13 +1,11 @@
 import './scss/ListUser.style.scss';
-import copyIcon from 'src/assets/icons/copy-icon.svg';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UploadProps } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Checkbox, Upload, Popconfirm, Pagination } from 'antd';
 import { message } from '@common/components';
 import { getCookieStorage } from '@common/helpers/storage';
-import { MessageValidations } from '@common/helpers/message';
-import { copyWalletAddress } from '@common/helpers/converts';
+import { MessageValidations } from '@common/constants/messages';
 import { PageingWhiteList, DataTypePropsTable } from './types';
 import {
 	useSrWhiteListGet,
@@ -137,24 +135,10 @@ export default function SaleRoundListUser(props: {
 			key: 'Wallet',
 			editable: true,
 			width: 500,
-			render: (text: string) => (
-				<>
-					<div className='w-100'>
-						<div className='table-td-wallet d-flex'>
-							<div className='d-flex justify-content-center align-items-center'>
-								<span>{text}</span>
-							</div>
-							<div className='d-flex justify-content-center align-items-center'>
-								<span
-									onClick={() => copyWalletAddress(text)}
-									className='icon-copy-wallet cursor-pointer'
-								>
-									<img src={copyIcon} alt='' />
-								</span>
-							</div>
-						</div>
-					</div>
-				</>
+			render: (data: string) => (
+				<Typography.Paragraph copyable={{ text: data }}>
+					{data}
+				</Typography.Paragraph>
 			),
 		},
 		{

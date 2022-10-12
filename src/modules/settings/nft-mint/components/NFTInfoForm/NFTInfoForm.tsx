@@ -3,7 +3,7 @@ import type { FormInstance } from 'antd/es/form/Form';
 import { DatePicker, Form, Loading } from '@common/components';
 import { MintPhase, NFTInfoFormValue } from '@settings/nft-mint/types';
 import { useNFTMintPhaseSetting } from '@settings/nft-mint/services/useGetSettingNFTMint';
-import { MessageValidations } from '@common/helpers/message';
+import { MessageValidations } from '@common/constants/messages';
 import NumericInput from '@common/components/NumericInput';
 import { useState } from 'react';
 
