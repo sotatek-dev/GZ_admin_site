@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
-import { FieldCommon, price } from './useSubmitUpdate';
+import { FieldCommon } from './useSubmitUpdate';
 const useRegexField = ({
 	fieldCommon,
 	setFieldCommon,
@@ -49,10 +49,7 @@ const useRegexField = ({
 						switch (spliceDot.length) {
 							// Example int value = 11
 							case priceTypeInt: {
-								if (
-									value.length <= maxLength &&
-									parseFloat(value) <= price.max
-								) {
+								if (value.length <= maxLength) {
 									setFieldCommon({ ...fieldCommon, [type]: value });
 								}
 								break;
@@ -62,8 +59,7 @@ const useRegexField = ({
 								if (
 									spliceDot[indexAfterDot].length <= priceOnlyHaveOneDot &&
 									spliceDot[indexBeforeDot].length <= maxLength &&
-									value !== '.' &&
-									parseFloat(spliceDot[indexBeforeDot]) <= price.max
+									value !== '.'
 								) {
 									setFieldCommon({ ...fieldCommon, [type]: value });
 								}
