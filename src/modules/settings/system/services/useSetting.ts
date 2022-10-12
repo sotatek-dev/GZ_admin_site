@@ -124,9 +124,7 @@ const useSetting = () => {
 						switch (spliceDot.length) {
 							case priceTypeInt: {
 								if (value.length <= maxLength) {
-									if (parseFloat(value) <= price.max) {
-										setFieldCommon({ ...fieldCommon, [type]: value });
-									}
+									setFieldCommon({ ...fieldCommon, [type]: value });
 								}
 								break;
 							}
@@ -136,11 +134,7 @@ const useSetting = () => {
 									spliceDot[indexBeforeDot].length <= maxLength &&
 									value !== '.'
 								) {
-									if (parseFloat(spliceDot[indexBeforeDot]) <= price.max) {
-										// // change any field then enable btn update
-										// spliceDot[indexAfterDot] && setDisableUpdateBtn(false);
-										setFieldCommon({ ...fieldCommon, [type]: value });
-									}
+									setFieldCommon({ ...fieldCommon, [type]: value });
 								}
 								break;
 							}
