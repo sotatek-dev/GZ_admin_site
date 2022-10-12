@@ -28,5 +28,7 @@ const fetcher = async (rqBody: Request) => {
 };
 
 export const useGetUsers = (page: number, query: string) => {
-	return useQuery([API, query, page], () => fetcher({ page, query }));
+	return useQuery([API, query, page], () => fetcher({ page, query }), {
+		keepPreviousData: true,
+	});
 };
