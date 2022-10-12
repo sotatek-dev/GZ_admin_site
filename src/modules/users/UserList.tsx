@@ -77,6 +77,7 @@ const columns: ColumnsType<User> = [
 	{
 		title: 'Key Holding',
 		dataIndex: 'key_holding',
+		align: 'center',
 		width: '20%',
 		render(value) {
 			return renderKeyHolding(value);
@@ -86,6 +87,7 @@ const columns: ColumnsType<User> = [
 		title: 'Number of dNFT Holding',
 		dataIndex: 'nft_holding',
 		width: '20%',
+		align: 'center',
 	},
 ];
 
