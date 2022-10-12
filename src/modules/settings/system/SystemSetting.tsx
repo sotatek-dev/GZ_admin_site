@@ -2,7 +2,7 @@ import './SystemSetting.style.scss';
 import { Button, Card, Col, Input, Loading, Row } from '@common/components';
 import { useRedirectBack } from '@common/hooks';
 import { MESSAGES } from '@common/constants/messages';
-import useSetting from './services/useSetting';
+import useSetting from './services/setting/useSetting';
 const TitleComponent = ({ title }: { title: string }) => {
 	return (
 		<p className='system-setting-form__title'>
@@ -58,7 +58,6 @@ export default function SystemSetting() {
 	const {
 		isLoadingSystemStatus,
 		handleSubmit,
-		isLoadingInitialData,
 		treasuryAddressCommon,
 		fieldCommon,
 		disableUpdateBtn,
@@ -66,7 +65,7 @@ export default function SystemSetting() {
 		handleRegexField,
 	} = useSetting();
 	const defaultPriceType = 'BUSD';
-	if (isLoadingSystemStatus || isLoadingInitialData) {
+	if (isLoadingSystemStatus) {
 		return <Loading />;
 	}
 	return (
