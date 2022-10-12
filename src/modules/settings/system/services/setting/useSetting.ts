@@ -8,7 +8,8 @@ import BigNumber from 'bignumber.js';
 import { InitialProps } from '../../type';
 import { useGetSystemSetting } from '../useGetSystemSetting';
 import { isAddress } from 'ethers/lib/utils';
-import useSubmitUpdate from './useSubmitUpdate';
+import useSubmitUpdate, { price } from './useSubmitUpdate';
+import useRegexField from './useRegexField';
 const useSetting = () => {
 	const get2NumberAfterDot = 2;
 	const { data: initialData } = useGetSystemSetting() as UseQueryResult<
@@ -28,11 +29,12 @@ const useSetting = () => {
 		fieldCommon,
 		reloadTime,
 		isLoadingSystemStatus,
-		price,
 	} = useSubmitUpdate();
+	const { handleRegexField, statusDetectOnchange } = useRegexField({
+		fieldCommon,
+		setFieldCommon,
+	});
 	const [disableUpdateBtn, setDisableUpdateBtn] = useState<boolean>(true);
-	const [statusDetectOnchange, setStatusDetectOnchange] =
-		useState<boolean>(false);
 	const handleConvertHexToDecimal = (priceData: string) => {
 		return new BigNumber(
 			new BigNumber(priceData)
@@ -50,76 +52,6 @@ const useSetting = () => {
 			treasury_address: value,
 			statusAddressAfterRegex: !isAddress(value),
 		});
-	};
-	const handleRegexField = (
-		e: ChangeEvent<HTMLInputElement>,
-		type:
-			| 'mint_days'
-			| 'key_mint_min_token'
-			| 'launch_price'
-			| 'rescure_price'
-			| 'key_price'
-	) => {
-		const { value } = e.target;
-		// when onchange field will enable btn update except '.'
-		value.charAt(value.length - 1) !== '.' && setStatusDetectOnchange(true);
-		const regexCharacterExceptDot = /^[0-9\s.]+$/;
-		const regexCharacter = /^[0-9\s]+$/;
-		if (value) {
-			switch (type) {
-				case 'mint_days': {
-					const minDay = 0,
-						maxDay = 31;
-					if (
-						regexCharacter.test(value) &&
-						parseInt(value) > minDay &&
-						parseInt(value) <= maxDay
-					) {
-						setFieldCommon({ ...fieldCommon, mint_days: value });
-					}
-					break;
-				}
-				default: {
-					const spliceDot = value.split('.');
-					const indexBeforeDot = 0,
-						indexAfterDot = 1,
-						priceTypeInt = 1,
-						priceTypeFloat = 2,
-						maxLength = 10,
-						priceOnlyHaveOneDot = 2;
-					if (regexCharacterExceptDot.test(value)) {
-						switch (spliceDot.length) {
-							// Example value = 11
-							case priceTypeInt: {
-								if (value.length <= maxLength) {
-									if (parseFloat(value) <= price.max) {
-										setFieldCommon({ ...fieldCommon, [type]: value });
-									}
-								}
-								break;
-							}
-							// Example value = 11.1
-							case priceTypeFloat: {
-								if (
-									spliceDot[indexAfterDot].length <= priceOnlyHaveOneDot &&
-									spliceDot[indexBeforeDot].length <= maxLength &&
-									value !== '.'
-								) {
-									if (parseFloat(spliceDot[indexBeforeDot]) <= price.max) {
-										setFieldCommon({ ...fieldCommon, [type]: value });
-									}
-								}
-								break;
-							}
-							default:
-								'';
-						}
-					}
-				}
-			}
-		} else {
-			setFieldCommon({ ...fieldCommon, [type]: '' });
-		}
 	};
 	const handleInitialData = async () => {
 		const indexRescurPrice = 0,

@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js';
 import { ContractReceipt } from 'ethers';
 import { useState } from 'react';
 import { useUpdateSystem } from '../useGetSystemSetting';
-type FieldCommon<T> = {
+export type FieldCommon<T> = {
 	mint_days: T;
 	key_mint_min_token: T;
 	launch_price: T;
@@ -24,15 +24,15 @@ type TreasuryProps = {
 	statusAddressAfterRegex: boolean;
 	treasury_address: string;
 };
+export const price: PriceProps<number> = {
+	min: 0,
+	mintKey: 5,
+	mintKeyDefault: 1,
+	max: 1000000000,
+	fromBUSDToSC: 1e18,
+};
 const useSubmitUpdate = () => {
 	const reloadTime = 500;
-	const price: PriceProps<number> = {
-		min: 0,
-		mintKey: 5,
-		mintKeyDefault: 1,
-		max: 1000000000,
-		fromBUSDToSC: 1e18,
-	};
 	const {
 		updateRescurPriceDNFTSC,
 		updateMinimumMintKeyDNFTSC,
@@ -178,7 +178,6 @@ const useSubmitUpdate = () => {
 		setIsLoadingSystemStatus,
 		treasuryAddressCommon,
 		initialDataState,
-		price,
 		isLoadingSystemStatus,
 		reloadTime,
 		fieldCommon,
