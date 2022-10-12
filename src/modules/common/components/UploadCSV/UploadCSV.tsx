@@ -5,9 +5,10 @@ import { Button } from '@common/components';
 
 interface Props {
 	onUploadSuccess: (result: File) => void;
+	disabled?: boolean;
 }
 
-export default function UploadCSV({ onUploadSuccess }: Props) {
+export default function UploadCSV({ onUploadSuccess, disabled }: Props) {
 	const { CSVReader } = useCSVReader();
 
 	return (
@@ -24,7 +25,7 @@ export default function UploadCSV({ onUploadSuccess }: Props) {
 								<div>{acceptedFile && acceptedFile.name}</div>
 								<ProgressBar />
 							</div>
-							<Button type='primary' {...getRootProps()}>
+							<Button type='primary' {...getRootProps()} disabled={disabled}>
 								Add CSV File
 							</Button>
 						</div>

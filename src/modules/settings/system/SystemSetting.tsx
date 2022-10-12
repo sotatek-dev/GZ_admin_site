@@ -1,8 +1,8 @@
 import './SystemSetting.style.scss';
 import { Button, Card, Col, Input, Loading, Row } from '@common/components';
-import { useRedirectBack } from '@common/hooks';
 import { MESSAGES } from '@common/constants/messages';
 import useSetting from './services/setting/useSetting';
+
 const TitleComponent = ({ title }: { title: string }) => {
 	return (
 		<p className='system-setting-form__title'>
@@ -11,6 +11,7 @@ const TitleComponent = ({ title }: { title: string }) => {
 		</p>
 	);
 };
+
 const ErrorComponent = ({ value }: { value: string }) => {
 	return value === '' ||
 		parseFloat(value) <= 0 ||
@@ -20,6 +21,7 @@ const ErrorComponent = ({ value }: { value: string }) => {
 		<div></div>
 	);
 };
+
 const InputComponent = ({
 	priceType,
 	value,
@@ -53,8 +55,8 @@ const InputComponent = ({
 		</>
 	);
 };
+
 export default function SystemSetting() {
-	const goBack = useRedirectBack();
 	const {
 		isLoadingSystemStatus,
 		handleSubmit,
@@ -70,7 +72,6 @@ export default function SystemSetting() {
 	}
 	return (
 		<>
-			<Button onClick={goBack}>Back</Button>
 			<Row className='system-setting'>
 				<Col xs={24} sm={24} md={24} lg={12} xl={12}>
 					<Card

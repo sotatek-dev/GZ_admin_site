@@ -66,6 +66,8 @@ export default function NFTInfo({
 		});
 	};
 
+	const isEnableDeployRound = currentPhase && currentPhase < activePhaseTab;
+
 	return (
 		<Row className='nft-info'>
 			<Col span={12}>
@@ -80,7 +82,7 @@ export default function NFTInfo({
 							type='primary'
 							onClick={handleSetCurrentRound}
 							loading={isDeploySalePhase}
-							disabled={!currentPhase}
+							disabled={!isEnableDeployRound}
 						>
 							Set Current Round
 						</Button>,
