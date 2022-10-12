@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 import { ContractReceipt } from 'ethers';
 import { useState } from 'react';
 import { useUpdateSystem } from '../useGetSystemSetting';
+import { InitialDataProps } from './useInitialData';
 export type FieldCommon<T> = {
 	mint_days: T;
 	key_mint_min_token: T;
@@ -20,7 +21,7 @@ type PriceProps<T> = {
 	max: T;
 	fromBUSDToSC: T;
 };
-type TreasuryProps = {
+export type TreasuryProps = {
 	statusAddressAfterRegex: boolean;
 	treasury_address: string;
 };
@@ -59,14 +60,9 @@ const useSubmitUpdate = () => {
 			statusAddressAfterRegex: false,
 			treasury_address: '0',
 		});
-	const [initialDataState, setInitialDataState] = useState<{
-		mint_days: string;
-		key_mint_min_token: string;
-		launch_price: string;
-		rescure_price: string;
-		key_price: string;
-		treasury_address: string;
-	}>({
+	const [initialDataState, setInitialDataState] = useState<
+		InitialDataProps<string>
+	>({
 		mint_days: '',
 		key_mint_min_token: '',
 		launch_price: '',
