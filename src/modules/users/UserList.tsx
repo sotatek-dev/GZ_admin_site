@@ -61,7 +61,7 @@ const columns: ColumnsType<User> = [
 		render(data: string) {
 			return (
 				<Typography.Paragraph copyable={{ text: data }}>
-					{ellipsisAddressText(data)}
+					{ellipsisAddressText(data, 5, 5)}
 				</Typography.Paragraph>
 			);
 		},
