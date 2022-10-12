@@ -2,7 +2,7 @@ import './SystemSetting.style.scss';
 import { Button, Card, Col, Input, Loading, Row } from '@common/components';
 import { useRedirectBack } from '@common/hooks';
 import { MESSAGES } from '@common/constants/messages';
-import useSetting from './services/useSetting';
+import useSetting from './services/setting/useSetting';
 const TitleComponent = ({ title }: { title: string }) => {
 	return (
 		<p className='system-setting-form__title'>
