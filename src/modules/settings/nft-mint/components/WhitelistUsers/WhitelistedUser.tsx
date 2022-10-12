@@ -23,6 +23,7 @@ import UploadCSV from '@common/components/UploadCSV';
 import { useUploadWhitelistUsers } from '@settings/nft-mint/services/useUploadWhitelistUsers';
 import { DEFAULT_PAGINATION } from '@common/constants/pagination';
 import { Tooltip } from 'antd';
+import { useGetCurrentPhase } from '@settings/nft-mint/services/useGetCurrentPhase';
 
 interface DataType {
 	_id: string;
@@ -43,6 +44,7 @@ export default function UserList({ activePhaseTab }: Props) {
 	const { updateWhitelistedUser } = useUpdateWhitelistedUser();
 	const { uploadWhitelistUser } = useUploadWhitelistUsers();
 	const { deleteWhiteListedUser } = useDeleteWhiteListedUser();
+	const { currentPhase } = useGetCurrentPhase();
 	const [page, setPage] = useState(1);
 
 	const { data } = useGetNftUsers({
@@ -218,6 +220,8 @@ export default function UserList({ activePhaseTab }: Props) {
 		setPage(current);
 	};
 
+	const isEnableAddWhitelist = currentPhase && currentPhase < activePhaseTab;
+
 	return (
 		<Row className='user-list'>
 			<Col span={24}>
@@ -226,6 +230,7 @@ export default function UserList({ activePhaseTab }: Props) {
 					extra={
 						<UploadCSV
 							key={activePhaseTab}
+							disabled={!isEnableAddWhitelist}
 							onUploadSuccess={(file) =>
 								uploadWhitelistUser({ phase: activePhaseTab, file })
 							}
