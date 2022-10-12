@@ -18,7 +18,7 @@ export default function EditAdmin() {
 	const { id } = useParams<{ id: string }>();
 	const adminId = id as string;
 
-	const { data, isLoading } = useGetAdminById(id);
+	const { data } = useGetAdminById(id);
 	const { updateAdmin, isUpdateAdmin } = useUpdateAdmin();
 	const { deleteAdmin, isDeleting } = useDeleteAdmin();
 
@@ -50,10 +50,6 @@ export default function EditAdmin() {
 
 			<AdminForm
 				title='EDIT ADMIN'
-				initData={{
-					admin: data,
-					isGetAdmin: isLoading,
-				}}
 				finish={{
 					onSubmit: handleUpdate,
 					isSubmitting: isUpdateAdmin,
