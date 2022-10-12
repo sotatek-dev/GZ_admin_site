@@ -225,6 +225,7 @@ export default function UserList({ activePhaseTab }: Props) {
 					title='List Users'
 					extra={
 						<UploadCSV
+							key={activePhaseTab}
 							onUploadSuccess={(file) =>
 								uploadWhitelistUser({ phase: activePhaseTab, file })
 							}
