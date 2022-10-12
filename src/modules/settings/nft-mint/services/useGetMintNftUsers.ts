@@ -28,5 +28,7 @@ const fetcher = async (rqBody: Request) => {
 };
 
 export const useGetNftUsers = (rqBody: Request) => {
-	return useQuery(['getNFTSettingUsers', rqBody], () => fetcher(rqBody));
+	return useQuery(['getNFTSettingUsers', rqBody], () => fetcher(rqBody), {
+		keepPreviousData: true,
+	});
 };
