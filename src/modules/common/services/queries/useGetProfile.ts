@@ -10,8 +10,9 @@ const fetcher = async () => {
 	return await axiosClient.get<undefined, Response>(API_PROFILE);
 };
 
-export const useGetProfile = () => {
+export const useGetProfile = (isAuth?: boolean) => {
 	return useQuery([API_PROFILE], fetcher, {
+		enabled: isAuth,
 		select(data) {
 			return { ...data, full_name: `${data.firstname} ${data.lastname}` };
 		},
