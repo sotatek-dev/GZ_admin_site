@@ -122,7 +122,7 @@ export default function SystemSetting() {
 						/>
 						<InputComponent
 							value={fieldCommon.key_mint_min_token}
-							title='User must have minimum (x) token to mint key'
+							title='User must hold (x) dNFT to mint key'
 							keyValue='key_mint_min_token'
 							handleRegexField={handleRegexField}
 						/>
