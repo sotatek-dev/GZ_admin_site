@@ -10,6 +10,7 @@ import { SaleRound } from './types';
 import { MESSAGES } from '@common/constants/messages';
 import { Pagination } from 'antd';
 import { useState } from 'react';
+import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 
 interface PageingWhiteList {
 	page: number;
@@ -62,6 +63,8 @@ const columns: ColumnsType<SaleRound> = [
 
 const AdminList = () => {
 	const navigate = useNavigate();
+	const isSuperAdmin = useIsSuperAdmin();
+
 	const [payloadPaging, setPayloadPaging] =
 		useState<PageingWhiteList>(pageDefault);
 	const { isLoading, data, refetch, error } = useGetSaleRounds(payloadPaging);
@@ -81,9 +84,11 @@ const AdminList = () => {
 	return (
 		<>
 			<Space>
-				<Button onClick={() => navigate(PATHS.saleRounds.create())}>
-					Create new sale round
-				</Button>
+				{isSuperAdmin && (
+					<Button onClick={() => navigate(PATHS.saleRounds.create())}>
+						Create new sale round
+					</Button>
+				)}
 			</Space>
 			<Row justify='end'>
 				<Button onClick={handleRefreshList} icon={<RedoOutlined />}>

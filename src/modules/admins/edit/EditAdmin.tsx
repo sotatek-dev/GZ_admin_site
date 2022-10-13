@@ -11,10 +11,13 @@ import { AdminForm } from '@admins/common/components';
 import type { Admin } from '@admins/common/types';
 import { DeleteButton } from '@admins/edit/components';
 import { PATHS } from '@common/constants/paths';
+import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 
 export default function EditAdmin() {
 	const navigate = useNavigate();
 	const goBack = useRedirectBack();
+	const isSuperAdmin = useIsSuperAdmin();
+
 	const { id } = useParams<{ id: string }>();
 	const adminId = id as string;
 
@@ -38,12 +41,18 @@ export default function EditAdmin() {
 	return (
 		<>
 			<Button onClick={goBack}>Back</Button>
+
 			<Popconfirm
 				className='pl-10'
 				title='Sure to remove'
 				onConfirm={handleDeleteAdmin}
 			>
-				<DeleteButton danger htmlType='submit' loading={isDeleting}>
+				<DeleteButton
+					danger
+					htmlType='submit'
+					loading={isDeleting}
+					disabled={!isSuperAdmin}
+				>
 					Delete Admin
 				</DeleteButton>
 			</Popconfirm>

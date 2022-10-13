@@ -1,6 +1,9 @@
+import { Admin } from '@admins/common/types';
 import { MESSAGES } from '@common/constants/messages';
+import { AdminRole } from '@common/constants/roles';
 import { setTokenCookie } from '@common/helpers/storage';
 import { message } from 'antd';
+import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { axiosClient } from '../apiClient';
 
@@ -21,7 +24,7 @@ type Response = {
 	firstname: string;
 	lastname: string;
 	email: string;
-	role: string;
+	role: AdminRole;
 	status: string;
 	created_at: string;
 	updated_at: string;
@@ -32,6 +35,8 @@ type Response = {
 };
 
 export const useLogin = () => {
+	const [admin, setAdmin] = useState<Admin>();
+
 	const loginMutation = useMutation((rqBody: Request) => {
 		return axiosClient.post<Request, Response>(APIs.login, rqBody);
 	});
@@ -44,6 +49,7 @@ export const useLogin = () => {
 		try {
 			const {
 				auth: { token },
+				...admin
 			} = await loginMutation.mutateAsync({
 				wallet_address,
 				sign_message,
@@ -51,10 +57,12 @@ export const useLogin = () => {
 			});
 
 			setTokenCookie(token);
+			setAdmin(admin);
+			return admin;
 		} catch {
 			message.error(MESSAGES.MC4);
 		}
 	};
 
-	return { login };
+	return { login, admin };
 };

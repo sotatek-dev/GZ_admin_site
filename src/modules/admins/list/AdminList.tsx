@@ -10,9 +10,11 @@ import { useGetAdmins } from './AdminList.query';
 import { Button, Input, Col, Typography } from '@common/components';
 import { PATHS } from '@common/constants/paths';
 import { useDebounce } from '@common/hooks';
+import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 
 const AdminList = () => {
 	const navigate = useNavigate();
+	const isSuperAdmin = useIsSuperAdmin();
 	const [searchVal, setSearchVal] = useState('');
 	const [searchFocus, setSearchForcus] = useState<boolean>(true);
 	const [page, setPage] = useState(1);
@@ -25,9 +27,12 @@ const AdminList = () => {
 
 	return (
 		<>
-			<Button onClick={() => navigate(PATHS.admins.new())}>
-				CREATE NEW ADMIN
-			</Button>
+			{isSuperAdmin && (
+				<Button onClick={() => navigate(PATHS.admins.new())}>
+					CREATE NEW ADMIN
+				</Button>
+			)}
+
 			<Col span={6} offset={18}>
 				<Input
 					value={searchVal}

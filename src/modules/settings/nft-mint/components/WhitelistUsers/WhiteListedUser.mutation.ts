@@ -1,6 +1,7 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { axiosClient } from '@common/services/apiClient';
 import { MintNFTUser } from '@settings/nft-mint/types';
+import { API_GET_WHITELISTED_USER } from '@settings/nft-mint/services/useGetNFTMintUsers';
 
 const API = (id: string) => `/whitelisted-user/${id}`;
 
@@ -21,6 +22,12 @@ async function deleteFn(_id: MintNFTUser['_id']) {
 }
 
 export const useDeleteWhiteListedUser = () => {
-	const { mutate: deleteWhiteListedUser } = useMutation(deleteFn);
+	const queryClient = useQueryClient();
+
+	const { mutate: deleteWhiteListedUser } = useMutation(deleteFn, {
+		onSuccess() {
+			return queryClient.invalidateQueries([API_GET_WHITELISTED_USER]);
+		},
+	});
 	return { deleteWhiteListedUser };
 };

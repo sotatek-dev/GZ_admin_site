@@ -11,7 +11,7 @@ import {
 	Typography,
 	Space,
 } from '@common/components';
-import { useGetNftUsers } from '@settings/nft-mint/services/useGetMintNftUsers';
+import { useGetNFTMintUsers } from '@settings/nft-mint/services/useGetNFTMintUsers';
 import { MintPhase } from '@settings/nft-mint/types';
 import {
 	useDeleteWhiteListedUser,
@@ -21,6 +21,7 @@ import UploadCSV from '@common/components/UploadCSV';
 import { useUploadWhitelistUsers } from '@settings/nft-mint/services/useUploadWhitelistUsers';
 import { DEFAULT_PAGINATION } from '@common/constants/pagination';
 import { useGetCurrentPhase } from '@settings/nft-mint/services/useGetCurrentPhase';
+import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 
 interface DataType {
 	_id: string;
@@ -36,6 +37,7 @@ type EditableTableProps = Parameters<typeof Table>[0];
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 export default function UserList({ activePhaseTab }: Props) {
+	const isSuperAdmin = useIsSuperAdmin();
 	const [form] = Form.useForm<DataType>();
 	const [editingKey, setEditingKey] = useState<string | number>('');
 	const { updateWhitelistedUser } = useUpdateWhitelistedUser();
@@ -44,7 +46,7 @@ export default function UserList({ activePhaseTab }: Props) {
 	const { currentPhase } = useGetCurrentPhase();
 	const [page, setPage] = useState(1);
 
-	const { data } = useGetNftUsers({
+	const { data } = useGetNFTMintUsers({
 		limit: DEFAULT_PAGINATION.limit,
 		page,
 		phase: activePhaseTab,
@@ -162,7 +164,7 @@ export default function UserList({ activePhaseTab }: Props) {
 							</span>
 						) : (
 							<Typography.Link
-								disabled={editingKey !== ''}
+								disabled={!isSuperAdmin || editingKey !== ''}
 								onClick={() => edit(record)}
 							>
 								Edit
@@ -170,7 +172,7 @@ export default function UserList({ activePhaseTab }: Props) {
 						)}
 						<span>
 							<Typography.Link
-								disabled={editingKey !== ''}
+								disabled={!isSuperAdmin || editingKey !== ''}
 								onClick={() => removeUser(record._id)}
 							>
 								Remove
@@ -211,7 +213,7 @@ export default function UserList({ activePhaseTab }: Props) {
 					extra={
 						<UploadCSV
 							key={activePhaseTab}
-							disabled={!isEnableAddWhitelist}
+							disabled={!isSuperAdmin || !isEnableAddWhitelist}
 							onUploadSuccess={(file) =>
 								uploadWhitelistUser({ phase: activePhaseTab, file })
 							}

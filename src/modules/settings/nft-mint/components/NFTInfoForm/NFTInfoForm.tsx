@@ -3,9 +3,10 @@ import type { FormInstance } from 'antd/es/form/Form';
 import { DatePicker, Form, Loading } from '@common/components';
 import { MintPhase, NFTInfoFormValue } from '@settings/nft-mint/types';
 import { useNFTMintPhaseSetting } from '@settings/nft-mint/services/useGetSettingNFTMint';
-import { MessageValidations } from '@common/constants/messages';
+import { MESSAGES, MessageValidations } from '@common/constants/messages';
 import NumericInput from '@common/components/NumericInput';
 import { useState } from 'react';
+import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 
 interface Props {
 	activePhaseTab: MintPhase;
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
+	const isSuperAdmin = useIsSuperAdmin();
 	const { currentPhaseSetting, isGetPhaseSetting } =
 		useNFTMintPhaseSetting(activePhaseTab);
 	const [price, setPrice] = useState<string>('');
@@ -34,6 +36,7 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 	return (
 		<Form
 			form={form}
+			disabled={!isSuperAdmin}
 			onFinish={onFinish}
 			layout='vertical'
 			name='basic'
@@ -85,7 +88,12 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 			<Form.Item
 				label='Mint Time'
 				name='mint_time'
-				rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
+				rules={[
+					{ required: true, message: MessageValidations.MSC_1_15 },
+					{
+						validator: mintTimeValidator,
+					},
+				]}
 			>
 				<DatePicker.RangePicker
 					showTime
@@ -97,3 +105,19 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 		</Form>
 	);
 }
+
+const mintTimeValidator = (
+	_: unknown,
+	value: [start_mint_time: number, end_mint_time: number]
+) => {
+	const [start_mint_time, end_mint_time] = value;
+
+	if (dayjs(start_mint_time).isAfter(dayjs(end_mint_time))) {
+		return Promise.reject(MESSAGES.MC8);
+	}
+
+	if (dayjs(start_mint_time).isBefore(dayjs())) {
+		return Promise.reject(MESSAGES.MC8);
+	}
+	return Promise.resolve();
+};

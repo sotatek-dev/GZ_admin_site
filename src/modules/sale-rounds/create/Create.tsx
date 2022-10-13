@@ -32,8 +32,10 @@ import {
 	useUpdateSaleRoundDeployed,
 } from './components/services/saleRoundUpdate';
 import dayjs from 'dayjs';
+import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 
 export default function SaleRoundList() {
+	const isSuperAdmin = useIsSuperAdmin();
 	const tokenContract = usePresalePoolContract();
 	// hidden to test
 	// const { data: endBuyTimePrevious, isLoading } = useGetEndBuyTimePrevious();
@@ -433,7 +435,7 @@ export default function SaleRoundList() {
 							<span>Deploy the round</span>
 						</Button>
 					)}
-					{!isDisableBtnAfterCreate && (
+					{isSuperAdmin && !isDisableBtnAfterCreate && (
 						<Button
 							className='btn-update-round d-flex align-items-center justify-content-center'
 							loading={isUpdateSaleRoundApi}

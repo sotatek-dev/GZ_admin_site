@@ -10,7 +10,7 @@ export interface Admin {
 	firstname: string;
 	lastname: string;
 	role: AdminRole;
-	full_name: string; // infer type field = firstname + lastname
+	full_name?: string; // infer type field = firstname + lastname
 }
 
 export interface Pagination {

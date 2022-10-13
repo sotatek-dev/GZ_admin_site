@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate } from 'react-router';
 import { PATHS } from '@common/constants/paths';
 import { useAuth } from '@common/hooks/useAuth';
-import LoadingPage from '../../modules/common/components/Loading';
+import LoadingPage from '@common/components/Loading';
 
 interface Props {
 	children: JSX.Element | null;
