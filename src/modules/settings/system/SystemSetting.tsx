@@ -14,7 +14,7 @@ const TitleComponent = ({ title }: { title: string }) => {
 
 const ErrorComponent = ({ value }: { value: string }) => {
 	return value === '' ||
-		parseFloat(value) <= 0 ||
+		parseFloat(value) < 0 ||
 		value.charAt(value.length - 1) === '.' ? (
 		<p className='system-setting-form__titleError'>{MESSAGES.MSC115}</p>
 	) : (
@@ -45,7 +45,7 @@ const InputComponent = ({
 				value={value}
 				status={
 					value === '' ||
-					parseFloat(value) <= 0 ||
+					parseFloat(value) < 0 ||
 					value.charAt(value.length - 1) === '.'
 						? 'error'
 						: ''
