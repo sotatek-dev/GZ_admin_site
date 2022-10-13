@@ -3,6 +3,10 @@ import { isAddress } from 'ethers/lib/utils';
 import useSubmitUpdate, { price } from './useSubmitUpdate';
 import useRegexField from './useRegexField';
 import useInitialData from './useInitialData';
+
+type MakeOptional<Type, Key extends keyof Type> = Omit<Type, Key> &
+	Partial<Pick<Type, Key>>;
+
 const useSetting = () => {
 	const {
 		handleSubmit,
@@ -44,7 +48,13 @@ const useSetting = () => {
 	};
 	useEffect(() => {
 		if (statusDetectOnchange) {
-			const listValues = Object.values(fieldCommon);
+			const requireGtZeroField: MakeOptional<
+				typeof fieldCommon,
+				'rescure_price'
+			> = { ...fieldCommon };
+			delete requireGtZeroField.rescure_price;
+
+			const listValues = Object.values(requireGtZeroField);
 			const statusDisableBtn = !listValues.every(
 				(item) => parseFloat(item) > 0
 			);
