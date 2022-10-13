@@ -10,10 +10,6 @@ export const useUniqueAdminAddressValidator = (
 	const address = Form.useWatch('wallet_address', form);
 
 	const uniqueAddressValidator = async (_: unknown, value: string) => {
-		if (!currentAddress) {
-			return Promise.resolve();
-		}
-
 		if (currentAddress === address) {
 			return Promise.resolve();
 		}
