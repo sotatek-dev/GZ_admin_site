@@ -11,6 +11,7 @@ import { MESSAGES } from '@common/constants/messages';
 import { NAME_REGEX } from '@admins/common/constants';
 import { useUniqueAdminAddressValidator } from '@admins/common/hooks';
 import { useGetAdminById } from '@admins/common/services/mutations';
+import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 
 interface Props {
 	title: string;
@@ -22,6 +23,8 @@ interface Props {
 
 export default function AdminForm({ title, finish }: Props) {
 	const { id } = useParams<{ id: string }>();
+	const isSuperAdmin = useIsSuperAdmin();
+
 	const { data, isLoading } = useGetAdminById(id);
 	const { onSubmit, isSubmitting } = finish;
 	const { form, uniqueAddressValidator } = useUniqueAdminAddressValidator(
@@ -42,6 +45,7 @@ export default function AdminForm({ title, finish }: Props) {
 					onFinish={onSubmit}
 					form={form}
 					initialValues={data}
+					disabled={!isSuperAdmin}
 				>
 					<Form.Item
 						label='Wallet Address'
@@ -88,6 +92,7 @@ export default function AdminForm({ title, finish }: Props) {
 					>
 						<Input />
 					</Form.Item>
+
 					<Form.Item style={{ textAlign: 'center' }}>
 						<Button loading={isSubmitting} htmlType='submit'>
 							Submit
@@ -98,5 +103,3 @@ export default function AdminForm({ title, finish }: Props) {
 		</Space>
 	);
 }
-
-AdminForm.defaultProps = {};

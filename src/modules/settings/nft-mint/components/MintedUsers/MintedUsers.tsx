@@ -2,7 +2,7 @@ import './MintedUsers.style.scss';
 import copyIcon from 'src/assets/icons/copy-icon.svg';
 import React, { useState } from 'react';
 import { Card, Col, Form, Row, Table } from '@common/components';
-import { useGetNftUsers } from '@settings/nft-mint/services/useGetMintNftUsers';
+import { useGetNFTMintUsers } from '@settings/nft-mint/services/useGetNFTMintUsers';
 import { MintPhase } from '@settings/nft-mint/types';
 import { copyWalletAddress } from '@common/helpers/converts';
 import { DEFAULT_PAGINATION } from '@common/constants/pagination';
@@ -61,7 +61,7 @@ export default function UserList({ activePhaseTab }: Props) {
 	const [form] = Form.useForm<DataType>();
 	const [page, setPage] = useState(1);
 
-	const { data } = useGetNftUsers({
+	const { data } = useGetNFTMintUsers({
 		limit: DEFAULT_PAGINATION.limit,
 		page,
 		phase: activePhaseTab,

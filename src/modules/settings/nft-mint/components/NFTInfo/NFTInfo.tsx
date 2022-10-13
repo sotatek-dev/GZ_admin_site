@@ -11,6 +11,9 @@ import { useGetCurrentPhase } from '@settings/nft-mint/services/useGetCurrentPha
 import NFTInfoForm from '../NFTInfoForm';
 import { toWei } from '@common/helpers/converts';
 import dayjs from 'dayjs';
+import { useGetNFTMintUsers } from '@settings/nft-mint/services/useGetNFTMintUsers';
+import { DEFAULT_PAGINATION } from '@common/constants/pagination';
+import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 
 const TAB_LIST = [
 	{
@@ -45,28 +48,43 @@ export default function NFTInfo({
 	activePhaseTab,
 	setCurrentPhaseTab,
 }: Props) {
+	const isSuperAdmin = useIsSuperAdmin();
 	const { currentPhase } = useGetCurrentPhase();
 	const { deploySalePhase, isDeploySalePhase } = useDeploySalePhase();
+	const { data: whiteListedUsers, isFetched } = useGetNFTMintUsers({
+		limit: DEFAULT_PAGINATION.limit,
+		page: DEFAULT_PAGINATION.page,
+		phase: activePhaseTab,
+	});
 
 	const onTabChange = (key: string) => {
 		setCurrentPhaseTab(key as MintPhase);
 	};
 
-	const handleSetCurrentRound = () => {
-		const { nft_mint_limit, price, price_after_24h, mint_time } =
-			form.instance.getFieldsValue();
+	const handleSetCurrentRound = async () => {
+		try {
+			await form.instance.validateFields();
 
-		deploySalePhase({
-			_id: activePhaseTab,
-			price: toWei(price),
-			price_after_24h: toWei(price_after_24h),
-			nft_mint_limit,
-			start_mint_time: dayjs(mint_time[0]).unix(),
-			end_mint_time: dayjs(mint_time[1]).unix(),
-		});
+			const { nft_mint_limit, price, price_after_24h, mint_time } =
+				form.instance.getFieldsValue();
+
+			deploySalePhase({
+				_id: activePhaseTab,
+				price: toWei(price),
+				price_after_24h: toWei(price_after_24h),
+				nft_mint_limit,
+				start_mint_time: dayjs(mint_time[0]).unix(),
+				end_mint_time: dayjs(mint_time[1]).unix(),
+			});
+		} catch {
+			return;
+		}
 	};
 
-	const isEnableDeployRound = currentPhase && currentPhase < activePhaseTab;
+	const isShowDeployRoundButton = currentPhase && currentPhase < activePhaseTab;
+	const isEnabledDeployButton =
+		activePhaseTab === MintPhase.WhiteList ||
+		(isFetched && !!whiteListedUsers?.pagination.total);
 
 	return (
 		<Row className='nft-info'>
@@ -76,17 +94,21 @@ export default function NFTInfo({
 					tabBarExtraContent='NFT Info'
 					activeTabKey={activePhaseTab}
 					onTabChange={onTabChange}
-					actions={[
-						<Button
-							key='setting-current-round'
-							type='primary'
-							onClick={handleSetCurrentRound}
-							loading={isDeploySalePhase}
-							disabled={!isEnableDeployRound}
-						>
-							Set Current Round
-						</Button>,
-					]}
+					actions={
+						isSuperAdmin && isShowDeployRoundButton
+							? [
+									<Button
+										key='setting-current-round'
+										type='primary'
+										onClick={handleSetCurrentRound}
+										loading={isDeploySalePhase}
+										disabled={!isEnabledDeployButton}
+									>
+										Set Current Round
+									</Button>,
+							  ]
+							: undefined
+					}
 				>
 					<NFTInfoForm
 						activePhaseTab={activePhaseTab}

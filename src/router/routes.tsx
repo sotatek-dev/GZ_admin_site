@@ -13,12 +13,13 @@ import Profile from 'src/modules/profile';
 import SaleRoundCreate from '@sale-rounds/create';
 import NotFoundPage from './components/404';
 import { PrivateRoute } from './components/PrivateRoute';
+import { SAPrivateRoute } from './components/SAPrivateRoute';
 
 export const AppRoutes = () => {
 	return (
 		<Routes>
 			<Route path={PATHS.connectWallet()} element={<ConnectWallet />} />
-			<Route path='/' element={<Navigate to={PATHS.admins.list()} />} />
+			<Route path='/' element={<Navigate to={PATHS.saleRounds.list()} />} />
 			<Route
 				path='/'
 				element={
@@ -29,16 +30,30 @@ export const AppRoutes = () => {
 			>
 				<Route path={PATHS.profile()} element={<Profile />} />
 				<Route path={PATHS.saleRounds.list()} element={<SaleRoundList />} />
-				<Route path={PATHS.saleRounds.create()} element={<SaleRoundCreate />} />
+				<Route
+					path={PATHS.saleRounds.create()}
+					element={
+						<SAPrivateRoute>
+							<SaleRoundCreate />
+						</SAPrivateRoute>
+					}
+				/>
 				<Route path={PATHS.saleRounds.edit()} element={<SaleRoundCreate />} />
 				<Route path={PATHS.admins.list()} element={<AdminList />} />
 				<Route path={PATHS.admins.edit()} element={<EditAdmin />} />
-				<Route path={PATHS.admins.new()} element={<CreateAdmin />} />
+				<Route
+					path={PATHS.admins.new()}
+					element={
+						<SAPrivateRoute>
+							<CreateAdmin />
+						</SAPrivateRoute>
+					}
+				/>
 				<Route path={PATHS.users()} element={<Users />} />
 				<Route path={PATHS.settings.nftMint()} element={<SettingNFTMint />} />
 				<Route path={PATHS.settings.system()} element={<SystemSetting />} />
+				<Route path='*' element={<NotFoundPage />} />
 			</Route>
-			<Route path='*' element={<NotFoundPage />} />
 		</Routes>
 	);
 };

@@ -1,7 +1,16 @@
 import './SystemSetting.style.scss';
-import { Button, Card, Col, Input, Loading, Row } from '@common/components';
+import {
+	Button,
+	Card,
+	Col,
+	Form,
+	Input,
+	Loading,
+	Row,
+} from '@common/components';
 import { MESSAGES } from '@common/constants/messages';
 import useSetting from './services/setting/useSetting';
+import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 
 const TitleComponent = ({ title }: { title: string }) => {
 	return (
@@ -57,6 +66,7 @@ const InputComponent = ({
 };
 
 export default function SystemSetting() {
+	const isSuperAdmin = useIsSuperAdmin();
 	const {
 		isLoadingSystemStatus,
 		handleSubmit,
@@ -67,9 +77,11 @@ export default function SystemSetting() {
 		handleRegexField,
 	} = useSetting();
 	const defaultPriceType = 'BUSD';
+
 	if (isLoadingSystemStatus) {
 		return <Loading />;
 	}
+
 	return (
 		<>
 			<Row className='system-setting'>
@@ -80,57 +92,59 @@ export default function SystemSetting() {
 						className='system-setting-form'
 					>
 						<TitleComponent title='Treasury Address' />
-						<Input
-							onChange={handleRegexAddress}
-							value={treasuryAddressCommon.treasury_address}
-							status={
-								treasuryAddressCommon.statusAddressAfterRegex ? 'error' : ''
-							}
-						/>
-						{treasuryAddressCommon.statusAddressAfterRegex && (
-							<p className='system-setting-form__titleError'>
-								{MESSAGES.MSC121}
-							</p>
-						)}
-						<InputComponent
-							priceType={defaultPriceType}
-							value={fieldCommon.key_price}
-							title='Key Price'
-							keyValue='key_price'
-							handleRegexField={handleRegexField}
-						/>
-						<InputComponent
-							priceType={defaultPriceType}
-							value={fieldCommon.rescure_price}
-							title='Rescue Price'
-							keyValue='rescure_price'
-							handleRegexField={handleRegexField}
-						/>
-						<InputComponent
-							priceType={defaultPriceType}
-							value={fieldCommon.launch_price}
-							title='Launch Price'
-							keyValue='launch_price'
-							handleRegexField={handleRegexField}
-						/>
-						<InputComponent
-							priceType='DAY'
-							value={fieldCommon.mint_days}
-							title='Users may mint key for the first (x) days of the month'
-							keyValue='mint_days'
-							handleRegexField={handleRegexField}
-						/>
-						<InputComponent
-							value={fieldCommon.key_mint_min_token}
-							title='User must hold (x) dNFT to mint key'
-							keyValue='key_mint_min_token'
-							handleRegexField={handleRegexField}
-						/>
-						<div className='system-setting-form__btn'>
-							<Button onClick={handleSubmit} disabled={disableUpdateBtn}>
-								Update
-							</Button>
-						</div>
+						<Form disabled={!isSuperAdmin}>
+							<Input
+								onChange={handleRegexAddress}
+								value={treasuryAddressCommon.treasury_address}
+								status={
+									treasuryAddressCommon.statusAddressAfterRegex ? 'error' : ''
+								}
+							/>
+							{treasuryAddressCommon.statusAddressAfterRegex && (
+								<p className='system-setting-form__titleError'>
+									{MESSAGES.MSC121}
+								</p>
+							)}
+							<InputComponent
+								priceType={defaultPriceType}
+								value={fieldCommon.key_price}
+								title='Key Price'
+								keyValue='key_price'
+								handleRegexField={handleRegexField}
+							/>
+							<InputComponent
+								priceType={defaultPriceType}
+								value={fieldCommon.rescure_price}
+								title='Rescue Price'
+								keyValue='rescure_price'
+								handleRegexField={handleRegexField}
+							/>
+							<InputComponent
+								priceType={defaultPriceType}
+								value={fieldCommon.launch_price}
+								title='Launch Price'
+								keyValue='launch_price'
+								handleRegexField={handleRegexField}
+							/>
+							<InputComponent
+								priceType='DAY'
+								value={fieldCommon.mint_days}
+								title='Users may mint key for the first (x) days of the month'
+								keyValue='mint_days'
+								handleRegexField={handleRegexField}
+							/>
+							<InputComponent
+								value={fieldCommon.key_mint_min_token}
+								title='User must hold (x) dNFT to mint key'
+								keyValue='key_mint_min_token'
+								handleRegexField={handleRegexField}
+							/>
+							<div className='system-setting-form__btn'>
+								<Button onClick={handleSubmit} disabled={disableUpdateBtn}>
+									Update
+								</Button>
+							</div>
+						</Form>
 					</Card>
 				</Col>
 			</Row>

@@ -15,10 +15,10 @@ interface Request {
 	phase: MintPhase;
 }
 
-const API = '/whitelisted-user/mint-nft';
+export const API_GET_WHITELISTED_USER = '/whitelisted-user/mint-nft';
 
 const fetcher = async (rqBody: Request) => {
-	return await axiosClient.get<Request, Response>(API, {
+	return await axiosClient.get<Request, Response>(API_GET_WHITELISTED_USER, {
 		params: {
 			limit: rqBody.limit,
 			page: rqBody.page,
@@ -27,8 +27,8 @@ const fetcher = async (rqBody: Request) => {
 	});
 };
 
-export const useGetNftUsers = (rqBody: Request) => {
-	return useQuery(['getNFTSettingUsers', rqBody], () => fetcher(rqBody), {
+export const useGetNFTMintUsers = (rqBody: Request) => {
+	return useQuery([API_GET_WHITELISTED_USER, rqBody], () => fetcher(rqBody), {
 		keepPreviousData: true,
 	});
 };

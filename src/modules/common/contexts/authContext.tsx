@@ -15,6 +15,7 @@ import {
 	useConnectWallet,
 } from '@web3/hooks';
 import { useLogin } from '@common/services/mutations';
+import { Admin } from '@admins/common/types';
 
 export const authContext = React.createContext<
 	| {
@@ -22,6 +23,7 @@ export const authContext = React.createContext<
 			isAuth: boolean;
 			signIn: (connector: ConnectorKey) => Promise<void>;
 			signOut: VoidFunction;
+			admin: Admin | undefined;
 	  }
 	| undefined
 >(undefined);
@@ -37,7 +39,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const triedEagerConnect = useEagerConnect();
 	const { active } = useActiveWeb3React();
 	const { disconnectWallet } = useConnectWallet();
-	const { login } = useLogin();
+	const { login, admin } = useLogin();
 
 	const isAuth = hasStorageJwtToken() && active;
 	if (triedEagerConnect && !active && hasStorageJwtToken()) {
@@ -82,7 +84,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 	return (
 		<authContext.Provider
-			value={{ isAuthChecking: !triedEagerConnect, isAuth, signIn, signOut }}
+			value={{
+				isAuthChecking: !triedEagerConnect,
+				isAuth,
+				signIn,
+				signOut,
+				admin,
+			}}
 		>
 			{children}
 		</authContext.Provider>

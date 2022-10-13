@@ -7,8 +7,10 @@ import { useUpdateNFTMintSetting } from '@settings/nft-mint/services/useUpdateNF
 import { MintPhase, NFTInfoFormValue } from '@settings/nft-mint/types';
 import { useNFTMintPhaseSetting } from './services/useGetSettingNFTMint';
 import { toWei } from '@common/helpers/converts';
+import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 
 export default function SettingNFTMint() {
+	const isSuperAdmin = useIsSuperAdmin();
 	const [activePhaseTab, setActivePhaseTab] = useState<MintPhase>(
 		MintPhase.WhiteList
 	);
@@ -58,18 +60,20 @@ export default function SettingNFTMint() {
 				}}
 			/>
 			<Users activePhaseTab={activePhaseTab} />
-			<div className='setting-nft-button_group'>
-				<Button danger onClick={() => forms[activePhaseTab].resetFields()}>
-					Cancel
-				</Button>
-				<Button
-					htmlType='submit'
-					onClick={() => forms[activePhaseTab].submit()}
-					loading={isUpdateNftMintSetting}
-				>
-					Save
-				</Button>
-			</div>
+			{isSuperAdmin && (
+				<div className='setting-nft-button_group'>
+					<Button danger onClick={() => forms[activePhaseTab].resetFields()}>
+						Cancel
+					</Button>
+					<Button
+						htmlType='submit'
+						onClick={() => forms[activePhaseTab].submit()}
+						loading={isUpdateNftMintSetting}
+					>
+						Save
+					</Button>
+				</div>
+			)}
 		</Col>
 	);
 }
