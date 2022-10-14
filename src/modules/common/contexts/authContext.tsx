@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const { login } = useLogin();
 
 	const isAuth = hasStorageJwtToken() && active;
-	const { data: admin } = useGetProfile(isAuth);
+	const { data: admin, isLoading: isGetAdminProfile } = useGetProfile(isAuth);
 
 	if (triedEagerConnect && !active && hasStorageJwtToken()) {
 		removeStorageJwtToken();
@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<authContext.Provider
 			value={{
-				isAuthChecking: !triedEagerConnect,
+				isAuthChecking: !triedEagerConnect || isGetAdminProfile,
 				isAuth,
 				signIn,
 				signOut,
