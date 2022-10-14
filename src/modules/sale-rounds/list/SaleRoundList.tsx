@@ -8,7 +8,6 @@ import { useGetSaleRounds } from './SaleRoundList.query';
 import { SaleRoundStatusLabel } from './SaleRoundList.constants';
 import { SaleRound } from './types';
 import { MESSAGES } from '@common/constants/messages';
-import { Pagination } from 'antd';
 import { useState } from 'react';
 import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 
@@ -104,20 +103,17 @@ const AdminList = () => {
 					};
 				}}
 				scroll={{ y: 705 }}
-				pagination={false}
+				pagination={{
+					onChange: handlerPageChange,
+					current: payloadPaging.page,
+					pageSize: payloadPaging.limit,
+					total: data?.pagination.total,
+				}}
 				columns={columns}
 				dataSource={data?.list}
 				loading={isLoading}
 				className='admins-table'
 			/>
-			<div className='d-flex justify-content-end'>
-				<Pagination
-					onChange={handlerPageChange}
-					current={payloadPaging.page}
-					total={data?.pagination.total}
-					pageSize={payloadPaging.limit}
-				/>
-			</div>
 		</>
 	);
 };

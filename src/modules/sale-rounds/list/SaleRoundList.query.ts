@@ -25,5 +25,7 @@ const fetcher = async (rqBody: Request = { limit: 10, page: 1 }) => {
 };
 
 export const useGetSaleRounds = (rqBody: Request) => {
-	return useQuery([API, rqBody], () => fetcher(rqBody));
+	return useQuery([API, rqBody], () => fetcher(rqBody), {
+		keepPreviousData: true,
+	});
 };
