@@ -68,12 +68,10 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	const handleClickEdit = (val: rowsTableClaim) => {
 		if (isUpdate) return;
 		setobjectConfig({
-			id: 0,
+			id: val.id,
 			maxClaim: val.maxClaim,
 			startTime: val.startTime,
 		});
-
-		// setOpen(true);
 	};
 
 	const handlerCreate = (val: DataClaimConfig) => {
@@ -99,6 +97,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 				el.startTime = val.startTime;
 			}
 		});
+
 		onSubmitClaimConfig(rows);
 		setobjectConfig(initDefaultClaim);
 		setOpen(false);
