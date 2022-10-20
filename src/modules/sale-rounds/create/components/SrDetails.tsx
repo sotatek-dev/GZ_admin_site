@@ -4,6 +4,7 @@ import type { FormInstance } from 'antd/es/form/Form';
 import { Radio, Checkbox } from 'antd';
 import { MessageValidations } from '@common/constants/messages';
 import { SrTokenInforForm, SrTokenDetailForm } from './types';
+import { addressValidator } from '@common/helpers/validate';
 import { Card, Form, Input } from '@common/components';
 import { useEffect, useState } from 'react';
 import { removeComanString } from './services/helper';
@@ -131,7 +132,12 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 						className='mb-22'
 						label='Address (Recieve Money)'
 						initialValue={tokenInfo?.address}
-						rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
+						rules={[
+							{ required: true, message: MessageValidations.MSC_1_15 },
+							{
+								validator: addressValidator,
+							},
+						]}
 					>
 						<Input disabled={isUpdate} />
 					</Form.Item>

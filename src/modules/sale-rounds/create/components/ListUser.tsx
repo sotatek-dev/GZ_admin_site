@@ -273,16 +273,15 @@ export default function SaleRoundListUser(props: {
 					>
 						Everyone can join
 					</Checkbox>
-					<div>
-						{!isUpdated && idSaleRound && (
-							<div className='d-flex pr-105'>
-								<Upload {...propsUploadFile}>
-									<Button className='d-flex justify-content-center align-items-center'>
-										<span>Add CSV File</span>
-									</Button>
-								</Upload>
-							</div>
-						)}
+					<div className='d-flex pr-105'>
+						<Upload disabled={!idSaleRound || isUpdated} {...propsUploadFile}>
+							<Button
+								disabled={!idSaleRound || isUpdated}
+								className='d-flex justify-content-center align-items-center'
+							>
+								<span>Add CSV File</span>
+							</Button>
+						</Upload>
 					</div>
 				</div>
 			}
