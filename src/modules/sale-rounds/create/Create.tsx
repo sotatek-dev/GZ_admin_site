@@ -96,10 +96,10 @@ export default function SaleRoundList() {
 			const { statusValidateForm, data } = await handlerFnDebouceCreate();
 			if (!statusValidateForm) return;
 
-			if (idSaleRoundUpdate) {
+			if (idSaleRoundUpdate || _idSaleRoundAfterCreate) {
 				const response = await updateSaleRound({
 					...data,
-					_id: idSaleRoundUpdate,
+					_id: idSaleRoundUpdate || String(_idSaleRoundAfterCreate),
 				});
 
 				if (response) {
@@ -425,27 +425,27 @@ export default function SaleRoundList() {
 							: 'justify-content-space'
 					}`}
 				>
-					{!isUpdateSaleRound && (
-						<Button
-							danger
-							loading={isDeployState}
-							className='btn-deploy-round d-flex align-items-center justify-content-center mr-41'
-							onClick={handlerSubmitDeploy}
-						>
-							<span>Deploy the round</span>
-						</Button>
-					)}
-					{isSuperAdmin && !isDisableBtnAfterCreate && (
-						<Button
-							className='btn-update-round d-flex align-items-center justify-content-center'
-							loading={isUpdateSaleRoundApi}
-							onClick={handlerSubmitUpdate}
-						>
-							<span>
-								{idSaleRoundUpdate ? 'Update the Round' : 'Create the round'}
-							</span>
-						</Button>
-					)}
+					<Button
+						danger
+						loading={isDeployState}
+						disabled={isUpdateSaleRound || !isDisableBtnAfterCreate}
+						className='btn-deploy-round d-flex align-items-center justify-content-center mr-41'
+						onClick={handlerSubmitDeploy}
+					>
+						<span>Deploy the round</span>
+					</Button>
+					<Button
+						className='btn-update-round d-flex align-items-center justify-content-center'
+						loading={isUpdateSaleRoundApi || isDeployState}
+						disabled={!isSuperAdmin}
+						onClick={handlerSubmitUpdate}
+					>
+						<span>
+							{idSaleRoundUpdate || _idSaleRound
+								? 'Update the Round'
+								: 'Create the round'}
+						</span>
+					</Button>
 				</div>
 			</div>
 		</>
