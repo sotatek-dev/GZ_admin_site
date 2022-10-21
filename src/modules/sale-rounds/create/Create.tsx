@@ -96,7 +96,7 @@ export default function SaleRoundList() {
 			const { statusValidateForm, data } = await handlerFnDebouceCreate();
 			if (!statusValidateForm) return;
 
-			if (idSaleRoundUpdate || _idSaleRoundAfterCreate) {
+			if (idSaleRoundUpdate) {
 				const response = await updateSaleRound({
 					...data,
 					_id: idSaleRoundUpdate || String(_idSaleRoundAfterCreate),
@@ -113,6 +113,7 @@ export default function SaleRoundList() {
 			if (response) {
 				setIdSaleRound(response.sale_round);
 				setIdSaleRoundAfterCreate(response._id);
+				navigate(PATHS.saleRounds.list());
 			}
 		}, 500);
 	};
@@ -436,14 +437,12 @@ export default function SaleRoundList() {
 					</Button>
 					<Button
 						className='btn-update-round d-flex align-items-center justify-content-center'
-						loading={isUpdateSaleRoundApi || isDeployState}
-						disabled={!isSuperAdmin}
+						loading={isUpdateSaleRoundApi}
+						disabled={!isSuperAdmin || isDisableBtnAfterCreate}
 						onClick={handlerSubmitUpdate}
 					>
 						<span>
-							{idSaleRoundUpdate || _idSaleRound
-								? 'Update the Round'
-								: 'Create the round'}
+							{idSaleRoundUpdate ? 'Update the Round' : 'Create the round'}
 						</span>
 					</Button>
 				</div>
