@@ -81,7 +81,8 @@ export default function NFTInfo({
 		}
 	};
 
-	const isShowDeployRoundButton = currentPhase && currentPhase < activePhaseTab;
+	const isShowDeployRoundButton =
+		currentPhase != undefined && currentPhase < activePhaseTab;
 	const isEnabledDeployButton =
 		activePhaseTab === MintPhase.WhiteList ||
 		(isFetched && !!whiteListedUsers?.pagination.total);

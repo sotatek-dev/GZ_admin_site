@@ -203,7 +203,8 @@ export default function UserList({ activePhaseTab }: Props) {
 		setPage(current);
 	};
 
-	const isEnableAddWhitelist = currentPhase && currentPhase < activePhaseTab;
+	const isEnableAddWhitelist =
+		currentPhase != undefined && currentPhase < activePhaseTab;
 
 	return (
 		<Row className='user-list'>
