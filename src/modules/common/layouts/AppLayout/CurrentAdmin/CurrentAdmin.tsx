@@ -10,12 +10,14 @@ const { Text } = Typography;
 
 export default function AdminLogo() {
 	return (
-		<div className='sider-admin'>
-			<div className='sider-admin-icon'>
-				<UserOutlined style={{ fontSize: 24 }} />
+		<Link to={PATHS.profile()}>
+			<div className='sider-admin'>
+				<div className='sider-admin-icon'>
+					<UserOutlined style={{ fontSize: 24 }} />
+				</div>
+				<AdminName />
 			</div>
-			<AdminName />
-		</div>
+		</Link>
 	);
 }
 
@@ -31,10 +33,8 @@ const AdminName = () => {
 	}
 
 	return (
-		<Link to={PATHS.profile()}>
-			<Text ellipsis={{ tooltip: true }} style={{ maxWidth: '120px' }}>
-				{profile?.full_name ?? AdminRoleLabel[profile.role]}
-			</Text>
-		</Link>
+		<Text ellipsis={{ tooltip: true }} style={{ maxWidth: '120px' }}>
+			{profile?.full_name ?? AdminRoleLabel[profile.role]}
+		</Text>
 	);
 };
