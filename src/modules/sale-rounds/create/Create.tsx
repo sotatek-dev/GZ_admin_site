@@ -44,10 +44,12 @@ export default function SaleRoundList() {
 
 	const { updateSaleRound, isUpdateSaleRoundApi } = useUpdateSaleRound();
 	const { updateSaleRoundDeployed } = useUpdateSaleRoundDeployed();
-	const [_idSaleRound, setIdSaleRound] = useState<number>();
 	const [isEvryCanJoin, setEveryCanJoin] = useState<boolean>(true);
 	const [_idSaleRoundAfterCreate, setIdSaleRoundAfterCreate] =
 		useState<string>();
+
+	let _idSaleRound = 0;
+	let isValidateBtnDeployClick = false;
 
 	const { id } = useParams<{ id: string }>();
 	const idSaleRoundUpdate = id as string;
@@ -60,9 +62,9 @@ export default function SaleRoundList() {
 	}, [isLoading]);
 
 	const navigate = useNavigate();
-	const [saleroundForm, setSaleroundForm] = useState<ISaleRoundCreateForm>();
+	let saleroundForm: ISaleRoundCreateForm;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	let debounceCreate: any;
+	// let debounceCreate: any;
 
 	const [claimConfig, setClaimConfig] = useState<rowsTableClaim[]>([]);
 	const [messageErrClaimConfig, setMessageErrClaimConfig] =
@@ -86,36 +88,42 @@ export default function SaleRoundList() {
 	);
 
 	const handlerSubmitUpdate = async () => {
-		clearTimeout(debounceCreate);
-		debounceCreate = setTimeout(async () => {
-			if (isUpdateSaleRound) {
-				await handlerUpdateSaleRound();
-				return;
-			}
+		if (isUpdateSaleRound) {
+			await handlerUpdateSaleRound();
+			isValidateBtnDeployClick = true;
+			return;
+		}
 
-			const { statusValidateForm, data } = await handlerFnDebouceCreate();
-			if (!statusValidateForm) return;
+		const { statusValidateForm, data } = await handlerFnDebouceCreate();
+		if (!statusValidateForm) {
+			isValidateBtnDeployClick = false;
+			return;
+		}
 
-			if (idSaleRoundUpdate) {
-				const response = await updateSaleRound({
-					...data,
-					_id: idSaleRoundUpdate || String(_idSaleRoundAfterCreate),
-				});
-
-				if (response) {
-					setIdSaleRound(response.sale_round);
-				}
-				return;
-			}
-
-			const response = await createSaleRound(data);
+		if (idSaleRoundUpdate) {
+			const response = await updateSaleRound({
+				...data,
+				_id: idSaleRoundUpdate || String(_idSaleRoundAfterCreate),
+			});
 
 			if (response) {
-				setIdSaleRound(response.sale_round);
-				setIdSaleRoundAfterCreate(response._id);
-				navigate(PATHS.saleRounds.list());
+				_idSaleRound = response.sale_round;
+				isValidateBtnDeployClick = true;
+				return;
 			}
-		}, 500);
+			isValidateBtnDeployClick = false;
+			return;
+		}
+
+		const response = await createSaleRound(data);
+
+		if (response) {
+			_idSaleRound = response.sale_round;
+			setIdSaleRoundAfterCreate(response._id);
+			isValidateBtnDeployClick = true;
+			navigate(PATHS.saleRounds.list());
+		}
+		isValidateBtnDeployClick = false;
 	};
 
 	const handlerFnDebouceCreate = async (): Promise<{
@@ -280,7 +288,7 @@ export default function SaleRoundList() {
 
 		payload.claim_configs = claim_configs;
 
-		await setSaleroundForm(payload);
+		saleroundForm = payload;
 
 		return {
 			statusValidateForm: true,
@@ -289,7 +297,14 @@ export default function SaleRoundList() {
 	};
 
 	const handlerSubmitDeploy = async () => {
-		if (!tokenContract || !_idSaleRound || !saleroundForm) {
+		await handlerSubmitUpdate();
+
+		if (
+			!tokenContract ||
+			!_idSaleRound ||
+			!saleroundForm ||
+			!isValidateBtnDeployClick
+		) {
 			return;
 		}
 
@@ -428,8 +443,8 @@ export default function SaleRoundList() {
 				>
 					<Button
 						danger
-						loading={isDeployState}
-						disabled={isUpdateSaleRound || !isDisableBtnAfterCreate}
+						loading={isDeployState || isUpdateSaleRoundApi}
+						disabled={isUpdateSaleRound || !idSaleRoundUpdate}
 						className='btn-deploy-round d-flex align-items-center justify-content-center mr-41'
 						onClick={handlerSubmitDeploy}
 					>
