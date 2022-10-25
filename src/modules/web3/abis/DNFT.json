@@ -701,7 +701,8 @@
 	},
 	{
 		"inputs": [
-			{ "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" }
+			{ "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" },
+			{ "internalType": "string", "name": "_sessionId", "type": "string" }
 		],
 		"name": "executeTemporaryMerge",
 		"outputs": [],
@@ -990,6 +991,15 @@
 			{ "internalType": "string", "name": "baseURI_", "type": "string" }
 		],
 		"name": "setBaseURI",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{ "internalType": "uint256", "name": "_claimableTime", "type": "uint256" }
+		],
+		"name": "setClaimableTime",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
