@@ -22,6 +22,7 @@ export const useSaleRoundGetDetail = (id?: string) => {
 		() => fetcher(saleroundId),
 		{
 			enabled: !!id,
+			cacheTime: 100,
 		}
 	);
 
