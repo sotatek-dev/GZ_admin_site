@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import { useGetNFTMintUsers } from '@settings/nft-mint/services/useGetNFTMintUsers';
 import { DEFAULT_PAGINATION } from '@common/constants/pagination';
 import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
+import { removeComanString } from '@common/helpers/formats';
 
 const TAB_LIST = [
 	{
@@ -70,9 +71,9 @@ export default function NFTInfo({
 
 			deploySalePhase({
 				_id: activePhaseTab,
-				price: toWei(price),
-				price_after_24h: toWei(price_after_24h),
-				nft_mint_limit,
+				price: toWei(removeComanString(price)),
+				price_after_24h: toWei(removeComanString(price_after_24h)),
+				nft_mint_limit: removeComanString(nft_mint_limit),
 				start_mint_time: dayjs(mint_time[0]).unix(),
 				end_mint_time: dayjs(mint_time[1]).unix(),
 			});
