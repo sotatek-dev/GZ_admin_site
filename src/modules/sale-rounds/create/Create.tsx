@@ -453,7 +453,7 @@ export default function SaleRoundList() {
 					<Button
 						className='btn-update-round d-flex align-items-center justify-content-center'
 						loading={isUpdateSaleRoundApi}
-						disabled={!isSuperAdmin || isDisableBtnAfterCreate}
+						disabled={!isSuperAdmin}
 						onClick={handlerSubmitUpdate}
 					>
 						<span>
