@@ -2,6 +2,7 @@ import { useQuery } from 'react-query';
 import { axiosClient } from '@common/services/apiClient';
 import { BE_MintPhase } from '@settings/nft-mint/SettingMintNFT.constant';
 import { MintPhase, NftMintPhaseSetting } from '@settings/nft-mint/types';
+import { formatNumberClaim } from '@common/helpers/formats';
 import BigNumber from 'bignumber.js';
 
 export const API_GET_SETTING_MINT = '/setting-mint';
@@ -24,10 +25,14 @@ export const useNFTMintPhaseSetting = (phase: MintPhase) => {
 			select(data) {
 				return {
 					...data,
-					price: new BigNumber(data.price).div(1e18).toString(),
-					price_after_24h: new BigNumber(data.price_after_24h)
-						.div(1e18)
-						.toString(),
+					price: formatNumberClaim(data.price),
+					price_after_24h: formatNumberClaim(data.price_after_24h),
+					nft_mint_limit: new BigNumber(
+						new BigNumber(data.nft_mint_limit).decimalPlaces(
+							2,
+							BigNumber.ROUND_DOWN
+						)
+					).toFormat(),
 				};
 			},
 		}
