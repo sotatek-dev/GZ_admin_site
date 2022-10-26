@@ -7,6 +7,7 @@ import { MESSAGES, MessageValidations } from '@common/constants/messages';
 import NumericInput from '@common/components/NumericInput';
 import { useState } from 'react';
 import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
+import { useGetCurrentPhase } from '@settings/nft-mint/services/useGetCurrentPhase';
 
 interface Props {
 	activePhaseTab: MintPhase;
@@ -18,6 +19,7 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 	const isSuperAdmin = useIsSuperAdmin();
 	const { currentPhaseSetting, isGetPhaseSetting } =
 		useNFTMintPhaseSetting(activePhaseTab);
+	const { currentPhase } = useGetCurrentPhase();
 	const [price, setPrice] = useState<string>('');
 	const [priceAfter24h, setPriceAfter24h] = useState<string>('');
 	const [nftMintLimit, setNftMintLimit] = useState<string>('');
@@ -33,10 +35,14 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 	const { start_mint_time, end_mint_time } = currentPhaseSetting;
 	const mint_time = [dayjs.unix(start_mint_time), dayjs.unix(end_mint_time)];
 
+	const isDisableForm =
+		!isSuperAdmin ||
+		(currentPhase != undefined && currentPhase >= activePhaseTab);
+
 	return (
 		<Form
 			form={form}
-			disabled={!isSuperAdmin}
+			disabled={isDisableForm}
 			onFinish={onFinish}
 			layout='vertical'
 			name='basic'
