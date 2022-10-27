@@ -17,6 +17,11 @@ import {
 	useDeleteWhiteListedUser,
 	useUpdateWhitelistedUser,
 } from './WhiteListedUser.mutation';
+import {
+	addressValidator,
+	emailValidator,
+	requiredValidate,
+} from '@common/helpers/validate';
 import UploadCSV from '@common/components/UploadCSV';
 import { useUploadWhitelistUsers } from '@settings/nft-mint/services/useUploadWhitelistUsers';
 import { DEFAULT_PAGINATION } from '@common/constants/pagination';
@@ -270,12 +275,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 				<Form.Item
 					name={dataIndex}
 					style={{ margin: 0 }}
-					rules={[
-						{
-							required: true,
-							message: `Please Input ${title}!`,
-						},
-					]}
+					rules={findRuleValidation(title)}
 				>
 					{inputNode}
 				</Form.Item>
@@ -284,4 +284,30 @@ const EditableCell: React.FC<EditableCellProps> = ({
 			)}
 		</td>
 	);
+};
+
+const objectRulesEditing = {
+	Wallet: [
+		requiredValidate(),
+		{
+			validator: addressValidator,
+		},
+	],
+	Email: [
+		requiredValidate(),
+		{
+			validator: emailValidator,
+		},
+	],
+};
+
+const findRuleValidation = (val: string) => {
+	if (val === 'Wallet') return objectRulesEditing.Wallet;
+	if (val === 'Email') return objectRulesEditing.Email;
+	return [
+		{
+			required: true,
+			message: `Please Input wallet address!`,
+		},
+	];
 };
