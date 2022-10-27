@@ -1,8 +1,9 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useDNFTContract } from '@web3/contracts/useDNFTContract';
 import { NftMintPhaseSetting } from '@settings/nft-mint/types';
 import { message } from '@common/components';
 import { MessageValidations } from '@common/constants/messages';
+import { GET_CURRENT_MINT_PHASE } from './useGetCurrentPhase';
 
 export const TX_ERROR_CODE = {
 	REJECTED: 'ACTION_REJECTED',
@@ -26,6 +27,7 @@ export const handleTxError = (err: unknown) => {
 };
 
 export const useDeploySalePhase = () => {
+	const queryClient = useQueryClient();
 	const dNFTContract = useDNFTContract();
 
 	const execDeployTx = async (tx: Awaited<ReturnType<typeof makeDeployTx>>) => {
@@ -72,7 +74,11 @@ export const useDeploySalePhase = () => {
 		return await execDeployTx(tx);
 	};
 
-	const updateMutation = useMutation(deployFn);
+	const updateMutation = useMutation(deployFn, {
+		onSuccess() {
+			return queryClient.invalidateQueries([GET_CURRENT_MINT_PHASE]);
+		},
+	});
 
 	return {
 		deploySalePhase: updateMutation.mutate,

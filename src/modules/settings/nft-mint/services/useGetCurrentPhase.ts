@@ -2,6 +2,8 @@ import { useQuery } from 'react-query';
 import { MintPhase } from '../types';
 import { useDNFTContract } from '@web3/contracts/useDNFTContract';
 
+export const GET_CURRENT_MINT_PHASE = 'getCurrentSalePhase';
+
 export const useGetCurrentPhase = () => {
 	const dNFTContract = useDNFTContract();
 
@@ -11,7 +13,7 @@ export const useGetCurrentPhase = () => {
 	};
 
 	const { data: currentPhase } = useQuery(
-		['getCurrentSalePhase'],
+		[GET_CURRENT_MINT_PHASE],
 		() => getCurrentSalePhase(),
 		{
 			select(data) {
