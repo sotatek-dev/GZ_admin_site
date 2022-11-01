@@ -29,7 +29,7 @@ export const useNFTMintPhaseSetting = (phase: MintPhase) => {
 					price_after_24h: formatNumberClaim(data.price_after_24h),
 					nft_mint_limit: new BigNumber(
 						new BigNumber(data.nft_mint_limit).decimalPlaces(
-							2,
+							4,
 							BigNumber.ROUND_DOWN
 						)
 					).toFormat(),
