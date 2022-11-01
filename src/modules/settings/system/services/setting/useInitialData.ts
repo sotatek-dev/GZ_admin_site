@@ -36,7 +36,7 @@ const useInitialData = ({
 	treasuryAddressCommon,
 	initialDataState,
 }: UseInitialDataProps) => {
-	const get2NumberAfterDot = 2;
+	const get2NumberAfterDot = 4;
 	const { getRescuePrice, getMinimumToken, getLaunchPrice } = useUpdateDNFTSC();
 	const { getKeyPrice, getTreasuryAddress } = useUpdateKeyNFTSC();
 	const { data: initialData } = useGetSystemSetting() as UseQueryResult<

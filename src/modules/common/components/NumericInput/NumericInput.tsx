@@ -13,13 +13,13 @@ interface NumericInputProps {
 export default function NumericInput(props: NumericInputProps) {
 	const { value, onChange } = props;
 
-	const regex2 = /(\d)(?=(\d{3})+(?!\d))/g;
+	const regex2 = /(?<!(\.\d*|^.{0}))(?=(\d{3})+(?!\d))/g;
 
 	const formatNumber2 = (value: string) => value.replace(regex2, '$1,');
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value: inputValue } = e.target;
-		const reg = /^\d{0,10}(\.\d{0,2})?$/;
+		const reg = /^\d{0,10}(\.\d{0,4})?$/;
 		let temp = inputValue;
 		temp = temp.replace(/,/g, '');
 

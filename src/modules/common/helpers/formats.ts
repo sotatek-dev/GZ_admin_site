@@ -8,5 +8,5 @@ export const removeComanString = (val: string) =>
 
 export const formatNumberClaim = (val: string | number) =>
 	new BigNumber(
-		new BigNumber(val).div(1e18).decimalPlaces(2, BigNumber.ROUND_DOWN)
+		new BigNumber(val).div(1e18).decimalPlaces(4, BigNumber.ROUND_DOWN)
 	).toFormat();
