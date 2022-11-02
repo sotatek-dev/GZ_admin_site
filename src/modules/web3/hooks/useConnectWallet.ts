@@ -1,4 +1,9 @@
 import { UnsupportedChainIdError } from '@web3-react/core';
+import { UserRejectedRequestError as UserRejectedRequestErrorInjected } from '@web3-react/injected-connector';
+import {
+	UserRejectedRequestError as UserRejectedRequestErrorWalletConnect,
+	WalletConnectConnector,
+} from '@web3-react/walletconnect-connector';
 import { useActiveWeb3React } from '@web3/hooks/useActiveWeb3React';
 import { ConnectorKey, connectors } from '@web3/connectors';
 import { CONNECTOR_KEY } from '@web3/constants/storages';
@@ -23,11 +28,26 @@ export const useConnectWallet = () => {
 			await activate(connector, undefined, true);
 			setStorageWallet(connectorKey);
 		} catch (error) {
+			if (
+				error instanceof UserRejectedRequestErrorInjected ||
+				error instanceof UserRejectedRequestErrorWalletConnect
+			) {
+				if (connector instanceof WalletConnectConnector) {
+					const walletConnector = connector;
+					walletConnector.walletConnectProvider = undefined;
+				}
+			}
+
 			if (error instanceof UnsupportedChainIdError) {
 				message.error({ content: MESSAGES.MC2, key: MESSAGES.MC2 });
-				const provider = await connector.getProvider();
 
-				const hasSetup = await setupNetwork(provider);
+				// https://github.com/MetaMask/metamask-mobile/issues/3090
+				if (connectorKey === ConnectorKey.walletConnect) {
+					return;
+				}
+
+				const provider = await connector.getProvider();
+				const hasSetup = await setupNetwork(provider.provider);
 				if (hasSetup) {
 					await activate(connector);
 					return;
@@ -38,6 +58,7 @@ export const useConnectWallet = () => {
 
 	function disconnectWallet() {
 		removeStorageWallet();
+		removeWalletConnectData();
 		deactivate();
 	}
 
@@ -50,4 +71,13 @@ function setStorageWallet(connector: ConnectorKey) {
 
 function removeStorageWallet() {
 	window.localStorage.removeItem(CONNECTOR_KEY);
+}
+
+function removeWalletConnectData() {
+	if (window.localStorage.getItem('walletconnect')) {
+		connectors.WalletConnect.close();
+		connectors.WalletConnect.walletConnectProvider = undefined;
+
+		window.localStorage.removeItem('walletconnect');
+	}
 }
