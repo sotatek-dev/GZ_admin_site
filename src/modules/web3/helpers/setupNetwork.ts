@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { ExternalProvider } from '@ethersproject/providers';
+import { BSC_CHAIN_ID_HEX } from '@web3/constants/envs';
 import { toast } from 'react-toastify';
 import { SUPPORTED_NETWORKS } from '../constants/networks';
 
@@ -12,8 +13,6 @@ export const setupNetwork = async (
 	externalProvider?: ExternalProvider,
 	chainNetworkId?: string
 ): Promise<boolean> => {
-	// eslint-disable-next-line no-debugger
-	debugger;
 	const provider = externalProvider || window.ethereum;
 	const chainId =
 		(chainNetworkId && parseInt(chainNetworkId, 10)) ||
@@ -28,11 +27,13 @@ export const setupNetwork = async (
 		try {
 			await provider.request({
 				method: 'wallet_switchEthereumChain',
-				params: [{ chainId: SUPPORTED_NETWORKS[chainId].chainIdHex }],
+				params: [{ chainId: BSC_CHAIN_ID_HEX }],
 			});
 
 			return true;
 		} catch (switchError) {
+			console.log({ switchError });
+
 			const error = switchError as { code: number; message: string };
 			if (
 				error?.code === 4902 ||

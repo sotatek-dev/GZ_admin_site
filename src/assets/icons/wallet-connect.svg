@@ -1,0 +1,24 @@
+<svg data-name="Group 483" xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39">
+    <defs>
+        <clipPath id="urg8xt4paa">
+            <circle data-name="Ellipse 80" cx="19.5" cy="19.5" r="19.5" style="fill:none"/>
+        </clipPath>
+        <clipPath id="izny2ksyjc">
+            <path data-name="Rectangle 659" style="fill:none" d="M0 0h39v39H0z"/>
+        </clipPath>
+        <radialGradient id="x8oi6pgaab" cx="0" cy=".5" r="1" gradientTransform="matrix(1 0 0 -1 0 2)" gradientUnits="objectBoundingBox">
+            <stop offset="0" stop-color="#5d9df6"/>
+            <stop offset="1" stop-color="#006fff"/>
+        </radialGradient>
+    </defs>
+    <g data-name="Group 480">
+        <g data-name="Group 479" style="clip-path:url(#urg8xt4paa)">
+            <path data-name="Rectangle 658" style="fill:url(#x8oi6pgaab)" d="M0 0h39v39H0z"/>
+        </g>
+    </g>
+    <g data-name="Group 482">
+        <g data-name="Group 481" style="clip-path:url(#izny2ksyjc)">
+            <path data-name="Path 4747" d="M102.882 162.849a10.225 10.225 0 0 1 14.214 0l.472.465a.479.479 0 0 1 0 .693l-1.615 1.577a.253.253 0 0 1-.358 0l-.647-.632a7.134 7.134 0 0 0-9.918 0l-.693.678a.253.253 0 0 1-.358 0l-1.615-1.577a.479.479 0 0 1 0-.693zm17.558 3.26 1.44 1.4a.479.479 0 0 1 0 .693l-6.482 6.33a.511.511 0 0 1-.708 0l-4.6-4.494a.129.129 0 0 0-.175 0l-4.6 4.494a.511.511 0 0 1-.708 0L98.1 168.2a.479.479 0 0 1 0-.693l1.44-1.4a.511.511 0 0 1 .708 0l4.6 4.494a.129.129 0 0 0 .175 0l4.6-4.494a.511.511 0 0 1 .708 0l4.6 4.494a.129.129 0 0 0 .175 0l4.6-4.494a.539.539 0 0 1 .731 0" transform="translate(-90.489 -147.789)" style="fill:#fff"/>
+        </g>
+    </g>
+</svg>

@@ -24,6 +24,10 @@ export function useEagerConnect() {
 			connectors[ConnectorKey.injected]
 				.isAuthorized()
 				.then((isAuthorized) => {
+					if (wallet === ConnectorKey.walletConnect) {
+						return connectWallet(ConnectorKey.walletConnect);
+					}
+
 					if (
 						isAuthorized &&
 						Object.values(ConnectorKey).includes(wallet as ConnectorKey)

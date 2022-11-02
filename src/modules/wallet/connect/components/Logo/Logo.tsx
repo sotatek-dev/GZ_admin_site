@@ -1,12 +1,13 @@
 import './Logo.style.scss';
 import { Typography } from '@common/components';
+import { AppLogo } from 'src/assets/icons';
 
 const { Title } = Typography;
 
 export default function Logo() {
 	return (
 		<Title level={2} className='app-logo'>
-			Logo
+			<img src={AppLogo} alt='' />
 		</Title>
 	);
 }
