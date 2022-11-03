@@ -1,5 +1,12 @@
 [
 	{ "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+	{ "inputs": [], "name": "CANNOT_BUY", "type": "error" },
+	{ "inputs": [], "name": "INSUFFICIENT_BNB", "type": "error" },
+	{ "inputs": [], "name": "INSUFFICIENT_BUSD", "type": "error" },
+	{ "inputs": [], "name": "INVALID_SIGNATURE", "type": "error" },
+	{ "inputs": [], "name": "KEY_PRICE_NOT_SET", "type": "error" },
+	{ "inputs": [], "name": "TREASURY_ADDRESS_NOT_SET", "type": "error" },
+	{ "inputs": [], "name": "WRONG_CANDIDATE", "type": "error" },
 	{
 		"anonymous": false,
 		"inputs": [
