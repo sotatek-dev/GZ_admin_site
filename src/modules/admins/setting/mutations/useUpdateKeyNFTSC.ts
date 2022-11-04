@@ -20,23 +20,16 @@ export const useUpdateKeyNFTSC = () => {
 		const tx = await keyNFTContract.setTreasuryAddress(treasury_address);
 		return await tx.wait();
 	}
-	async function handleUpdateLaunchPriceKeyNFTSC(launch_price: string) {
-		if (!keyNFTContract) return;
-		const tx = await keyNFTContract.setLaunchPrice(launch_price);
-		return await tx.wait();
-	}
+
 	const { mutateAsync: updatePriceKeyNFTSC } = useMutation(
 		handleUpdatePriceKeyNFTSC
 	);
 	const { mutateAsync: updateTreasuryAddressKeyNFTSC } = useMutation(
 		handleUpdateTreasuryAddressKeyNFTSC
 	);
-	const { mutateAsync: updateLaunchPriceKeyNFTSC } = useMutation(
-		handleUpdateLaunchPriceKeyNFTSC
-	);
+
 	return {
 		// set
-		updateLaunchPriceKeyNFTSC,
 		updateTreasuryAddressKeyNFTSC,
 		updatePriceKeyNFTSC,
 		// get
