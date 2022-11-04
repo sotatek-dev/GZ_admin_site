@@ -5,6 +5,7 @@
 	{ "inputs": [], "name": "INSUFFICIENT_BUSD", "type": "error" },
 	{ "inputs": [], "name": "INVALID_SIGNATURE", "type": "error" },
 	{ "inputs": [], "name": "KEY_PRICE_NOT_SET", "type": "error" },
+	{ "inputs": [], "name": "NOT_YET_OPEN_FOR_SALE", "type": "error" },
 	{ "inputs": [], "name": "TREASURY_ADDRESS_NOT_SET", "type": "error" },
 	{ "inputs": [], "name": "WRONG_CANDIDATE", "type": "error" },
 	{
@@ -68,6 +69,19 @@
 			}
 		],
 		"name": "BaseURIChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_buyTime",
+				"type": "uint256"
+			}
+		],
+		"name": "BuyTimeChanged",
 		"type": "event"
 	},
 	{
@@ -145,19 +159,6 @@
 			}
 		],
 		"name": "KeyPriceChanged",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "_launchPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "LaunchPriceChanged",
 		"type": "event"
 	},
 	{
@@ -364,6 +365,13 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "buyTime",
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{ "internalType": "address", "name": "_buyer", "type": "address" },
 			{ "internalType": "bytes", "name": "_signature", "type": "bytes" }
@@ -458,13 +466,6 @@
 	{
 		"inputs": [],
 		"name": "keyPrice",
-		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "launchPrice",
 		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
 		"stateMutability": "view",
 		"type": "function"
@@ -577,6 +578,15 @@
 	},
 	{
 		"inputs": [
+			{ "internalType": "uint256", "name": "_buyTime", "type": "uint256" }
+		],
+		"name": "setBuyTime",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
 			{
 				"internalType": "contract IERC721",
 				"name": "_DNFTToken",
@@ -593,15 +603,6 @@
 			{ "internalType": "uint256", "name": "_keyPrice", "type": "uint256" }
 		],
 		"name": "setKeyPrice",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{ "internalType": "uint256", "name": "_launchPrice", "type": "uint256" }
-		],
-		"name": "setLaunchPrice",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
