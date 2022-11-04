@@ -2,11 +2,11 @@ import './scss/ExchangeRate.style.scss';
 import arrowLeft from 'src/assets/icons/arrow-left-icon.svg';
 import { MessageValidations } from '@common/constants/messages';
 import { Card, Form, Input } from '@common/components';
-import { removeComanString } from './services/helper';
+// import { removeComanString } from './services/helper';
 import { useState } from 'react';
 import type { FormInstance } from 'antd/es/form/Form';
 import NumericInputGet from './NumericInput';
-import BigNumber from 'bignumber.js';
+// import BigNumber from 'bignumber.js';
 
 interface ExchangeRatePropsForm {
 	form: FormInstance;
@@ -14,15 +14,15 @@ interface ExchangeRatePropsForm {
 	isUpdate: boolean;
 }
 
-const handlerYouGetChange = () => ({
-	validator(_: unknown, value: string) {
-		if (value && new BigNumber(removeComanString(value)).gt(0))
-			return Promise.resolve();
-		if (value && !Number(removeComanString(value)))
-			return Promise.reject(new Error('Must be geater than 0'));
-		return Promise.reject();
-	},
-});
+// const handlerYouGetChange = () => ({
+// 	validator(_: unknown, value: string) {
+// 		if (value && new BigNumber(removeComanString(value)).gt(0))
+// 			return Promise.resolve();
+// 		if (value && !Number(removeComanString(value)))
+// 			return Promise.reject(new Error('Must be geater than 0'));
+// 		return Promise.reject();
+// 	},
+// });
 
 export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
 	const { form, ex_rate_get, isUpdate } = props;
@@ -44,7 +44,7 @@ export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
 						label='You have'
 						rules={[
 							{ required: true, message: MessageValidations.MSC_1_15 },
-							handlerYouGetChange,
+							// handlerYouGetChange,
 						]}
 						initialValue={ex_rate_get || '0.00'}
 					>
