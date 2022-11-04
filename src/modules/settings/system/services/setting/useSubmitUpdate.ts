@@ -40,11 +40,8 @@ const useSubmitUpdate = () => {
 		updateLaunchPriceDNFTSC,
 		updateTreasuryAddressDNFTSC,
 	} = useUpdateDNFTSC();
-	const {
-		updateLaunchPriceKeyNFTSC,
-		updateTreasuryAddressKeyNFTSC,
-		updatePriceKeyNFTSC,
-	} = useUpdateKeyNFTSC();
+	const { updateTreasuryAddressKeyNFTSC, updatePriceKeyNFTSC } =
+		useUpdateKeyNFTSC();
 	const { updateMintDaySystemAdmin, isLoadingSystem } = useUpdateSystem();
 	const [isLoadingSystemStatus, setIsLoadingSystemStatus] =
 		useState<boolean>(isLoadingSystem);
@@ -116,11 +113,6 @@ const useSubmitUpdate = () => {
 							listPromiseFieldChange.push(
 								...listPromiseFieldChange,
 								updateLaunchPriceDNFTSC(
-									new BigNumber(fieldCommon[item])
-										.times(price.fromBUSDToSC)
-										.toString()
-								),
-								updateLaunchPriceKeyNFTSC(
 									new BigNumber(fieldCommon[item])
 										.times(price.fromBUSDToSC)
 										.toString()
