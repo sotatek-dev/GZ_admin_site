@@ -12,7 +12,7 @@ export const MinPhaseLabel = {
 	[MintPhase.WhiteList]: 'WhiteList',
 	[MintPhase.Presale1]: 'Presale1',
 	[MintPhase.Presale2]: 'Presale2',
-	[MintPhase.Public]: 'Public',
+	[MintPhase.Public]: 'Launch',
 };
 
 export interface NftMintPhaseSetting {
