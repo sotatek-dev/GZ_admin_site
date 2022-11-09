@@ -30,8 +30,8 @@ const TAB_LIST = [
 		tab: MinPhaseLabel[MintPhase.Presale2],
 	},
 	{
-		key: MintPhase.Public,
-		tab: MinPhaseLabel[MintPhase.Public],
+		key: MintPhase.Launch,
+		tab: MinPhaseLabel[MintPhase.Launch],
 	},
 ];
 
@@ -64,18 +64,32 @@ export default function NFTInfo({
 
 	const handleSetCurrentRound = async () => {
 		try {
+			const isLaunchPhase = activePhaseTab === MintPhase.Launch;
 			await form.instance.validateFields();
 
-			const { nft_mint_limit, price, price_after_24h, mint_time } =
-				form.instance.getFieldsValue();
+			const {
+				nft_mint_limit,
+				price,
+				price_after_24h,
+				mint_time,
+				start_mint_time,
+			} = form.instance.getFieldsValue();
+
+			const mintTime = {
+				start_mint_time: dayjs(
+					isLaunchPhase ? start_mint_time : mint_time[0]
+				).unix(),
+				end_mint_time: isLaunchPhase
+					? dayjs(start_mint_time).unix() + 1 // Require if Launch phase, but just need end_mint_time > start_mint_time
+					: dayjs(mint_time[1]).unix(),
+			};
 
 			deploySalePhase({
 				_id: activePhaseTab,
 				price: toWei(removeComanString(price)),
 				price_after_24h: toWei(removeComanString(price_after_24h)),
 				nft_mint_limit: removeComanString(nft_mint_limit),
-				start_mint_time: dayjs(mint_time[0]).unix(),
-				end_mint_time: dayjs(mint_time[1]).unix(),
+				...mintTime,
 			});
 		} catch {
 			return;
@@ -86,7 +100,7 @@ export default function NFTInfo({
 		currentPhase != undefined && currentPhase < activePhaseTab;
 
 	const isEnabledDeployButton =
-		activePhaseTab === MintPhase.Public ||
+		activePhaseTab === MintPhase.Launch ||
 		(isFetched && !!whiteListedUsers?.pagination.total);
 
 	return (

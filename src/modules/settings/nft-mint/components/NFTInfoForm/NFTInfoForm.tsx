@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import dayjs from 'dayjs';
 import type { FormInstance } from 'antd/es/form/Form';
 import { DatePicker, Form, Loading } from '@common/components';
@@ -5,7 +6,6 @@ import { MintPhase, NFTInfoFormValue } from '@settings/nft-mint/types';
 import { useNFTMintPhaseSetting } from '@settings/nft-mint/services/useGetSettingNFTMint';
 import { MESSAGES, MessageValidations } from '@common/constants/messages';
 import NumericInput from '@common/components/NumericInput';
-import { useState } from 'react';
 import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 import { useGetCurrentPhase } from '@settings/nft-mint/services/useGetCurrentPhase';
 
@@ -33,11 +33,16 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 	}
 
 	const { start_mint_time, end_mint_time } = currentPhaseSetting;
-	const mint_time = [dayjs.unix(start_mint_time), dayjs.unix(end_mint_time)];
+	const mint_time = [
+		dayjs.unix(start_mint_time),
+		end_mint_time && dayjs.unix(end_mint_time),
+	];
 
 	const isDisableForm =
 		!isSuperAdmin ||
 		(currentPhase != undefined && currentPhase >= activePhaseTab);
+
+	const isLaunchPhase = activePhaseTab === MintPhase.Launch;
 
 	return (
 		<Form
@@ -50,6 +55,7 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 			initialValues={{
 				...currentPhaseSetting,
 				mint_time,
+				start_mint_time: dayjs.unix(start_mint_time),
 			}}
 			key={activePhaseTab}
 		>
@@ -91,23 +97,43 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 					onChange={setNftMintLimit}
 				/>
 			</Form.Item>
-			<Form.Item
-				label='Mint Time'
-				name='mint_time'
-				rules={[
-					{ required: true, message: MessageValidations.MSC_1_15 },
-					{
-						validator: mintTimeValidator,
-					},
-				]}
-			>
-				<DatePicker.RangePicker
-					showTime
-					format='YYYY/MM/DD HH:mm'
-					style={{ width: '100%' }}
-					placeholder={['Start mint time', 'End mint time']}
-				/>
-			</Form.Item>
+			{isLaunchPhase ? (
+				<Form.Item
+					label='Start Mint Time'
+					name='start_mint_time'
+					rules={[
+						{ required: true, message: MessageValidations.MSC_1_15 },
+						{
+							validator: startMintTimeValidator,
+						},
+					]}
+				>
+					<DatePicker
+						showTime
+						format='YYYY/MM/DD HH:mm'
+						style={{ width: '50%' }}
+						placeholder='Start mint time'
+					/>
+				</Form.Item>
+			) : (
+				<Form.Item
+					label='Mint Time'
+					name='mint_time'
+					rules={[
+						{ required: true, message: MessageValidations.MSC_1_15 },
+						{
+							validator: mintTimeValidator,
+						},
+					]}
+				>
+					<DatePicker.RangePicker
+						showTime
+						format='YYYY/MM/DD HH:mm'
+						style={{ width: '100%' }}
+						placeholder={['Start mint time', 'End mint time']}
+					/>
+				</Form.Item>
+			)}
 		</Form>
 	);
 }
@@ -122,6 +148,13 @@ const mintTimeValidator = (
 		return Promise.reject(MESSAGES.MC8);
 	}
 
+	if (dayjs(start_mint_time).isBefore(dayjs())) {
+		return Promise.reject(MESSAGES.MC8);
+	}
+	return Promise.resolve();
+};
+
+const startMintTimeValidator = (_: unknown, start_mint_time: number) => {
 	if (dayjs(start_mint_time).isBefore(dayjs())) {
 		return Promise.reject(MESSAGES.MC8);
 	}
