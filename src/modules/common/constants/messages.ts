@@ -16,6 +16,7 @@ export const MESSAGES = {
 	MSC115: 'This field is required',
 	MSC121: 'Invalid Wallet Address',
 	MSC110: 'Please enter a correct email, example "abc@mail.com"',
+	MSC111: 'Please enter number only',
 };
 
 export const MessageValidations = {
