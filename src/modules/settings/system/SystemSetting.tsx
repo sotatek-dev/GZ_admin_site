@@ -228,7 +228,7 @@ export default function SystemSetting() {
 
 		updateFns();
 		await Promise.all(lstUpdateCall);
-		message.success('1');
+		message.success(MESSAGES.MSC22);
 	};
 
 	return (
