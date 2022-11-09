@@ -24,22 +24,38 @@ export default function SettingNFTMint() {
 		[MintPhase.WhiteList]: Form.useForm<NFTInfoFormValue>()[0],
 		[MintPhase.Presale1]: Form.useForm<NFTInfoFormValue>()[0],
 		[MintPhase.Presale2]: Form.useForm<NFTInfoFormValue>()[0],
-		[MintPhase.Public]: Form.useForm<NFTInfoFormValue>()[0],
+		[MintPhase.Launch]: Form.useForm<NFTInfoFormValue>()[0],
 	};
+
+	const isLaunchPhase = activePhaseTab === MintPhase.Launch;
 
 	function handleSaveSetting(values: NFTInfoFormValue) {
 		if (!currentPhaseSetting) return;
 
 		const { _id } = currentPhaseSetting;
-		const { price, price_after_24h, nft_mint_limit, mint_time } = values;
+		const {
+			price,
+			price_after_24h,
+			nft_mint_limit,
+			mint_time,
+			start_mint_time,
+		} = values;
+
+		const mintTime = {
+			start_mint_time: dayjs(
+				isLaunchPhase ? start_mint_time : mint_time[0]
+			).unix(),
+			end_mint_time: isLaunchPhase
+				? dayjs(start_mint_time).unix() + 1 // Require if Launch phase, but just need end_mint_time > start_mint_time
+				: dayjs(mint_time[1]).unix(),
+		};
 
 		const newSetting = {
 			_id,
 			price: toWei(removeComanString(price)),
 			price_after_24h: toWei(removeComanString(price_after_24h)),
 			nft_mint_limit: removeComanString(nft_mint_limit),
-			start_mint_time: dayjs(mint_time[0]).unix(),
-			end_mint_time: dayjs(mint_time[1]).unix(),
+			...mintTime,
 		};
 
 		updateNftMintSetting(newSetting);

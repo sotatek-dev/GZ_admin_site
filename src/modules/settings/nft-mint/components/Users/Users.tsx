@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function Users({ activePhaseTab }: Props) {
-	if (activePhaseTab === MintPhase.Public) {
+	if (activePhaseTab === MintPhase.Launch) {
 		return <MintedUsers activePhaseTab={activePhaseTab} />;
 	}
 

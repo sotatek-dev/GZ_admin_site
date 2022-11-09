@@ -5,14 +5,14 @@ export enum MintPhase {
 	WhiteList = '1',
 	Presale1 = '2',
 	Presale2 = '3',
-	Public = '4',
+	Launch = '4',
 }
 
 export const MinPhaseLabel = {
 	[MintPhase.WhiteList]: 'WhiteList',
 	[MintPhase.Presale1]: 'Presale1',
 	[MintPhase.Presale2]: 'Presale2',
-	[MintPhase.Public]: 'Launch',
+	[MintPhase.Launch]: 'Launch',
 };
 
 export interface NftMintPhaseSetting {
@@ -28,7 +28,7 @@ export interface NftMintPhaseSetting {
 export interface NFTInfoFormValue
 	extends Pick<
 		NftMintPhaseSetting,
-		'price' | 'price_after_24h' | 'nft_mint_limit'
+		'price' | 'price_after_24h' | 'nft_mint_limit' | 'start_mint_time'
 	> {
 	mint_time: number[];
 }
