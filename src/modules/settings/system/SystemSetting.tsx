@@ -109,13 +109,18 @@ export default function SystemSetting() {
 		const changedValue = changedField[0].value;
 
 		const isFieldChanged = () => {
+			if (previousVal == undefined) return true;
 			if (fieldChangedName === 'mint_key_start_time') {
-				return !!previousVal && !(previousVal as Dayjs).isSame(changedValue);
+				return !(previousVal as Dayjs).isSame(changedValue);
 			}
 
-			return (
-				!!previousVal &&
-				!new BigNumber(changedValue).isEqualTo(previousVal as string | number)
+			// not a number
+			if (!Number.isNaN(Number(changedValue))) {
+				return previousVal !== changedValue;
+			}
+
+			return !new BigNumber(changedValue).isEqualTo(
+				previousVal as string | number
 			);
 		};
 
