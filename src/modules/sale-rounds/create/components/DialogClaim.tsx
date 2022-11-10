@@ -125,6 +125,7 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 									disabled={false}
 									className='ipdl-claim-max'
 									suffix=''
+									regex={/^\d{0,10}(\.\d{0,2})?$/}
 									value={ipMaxclaim}
 									onChange={setIpMaxClaim}
 								/>

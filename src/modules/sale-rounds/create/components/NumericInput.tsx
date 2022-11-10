@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Input } from 'antd';
 import { ReactNode } from 'react';
 
@@ -5,6 +6,7 @@ interface NumericInputProps {
 	className?: string;
 	disabled?: boolean;
 	suffix?: ReactNode | string;
+	regex?: any;
 	value: string;
 	onChange: (value: string) => void;
 }
@@ -22,7 +24,7 @@ export default function NumericInput(props: NumericInputProps) {
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value: inputValue } = e.target;
-		const reg = /^\d{0,10}(\.\d{0,4})?$/;
+		const reg = props?.regex || /^\d{0,10}(\.\d{0,4})?$/;
 		let temp = inputValue;
 		temp = temp.replace(/,/g, '');
 

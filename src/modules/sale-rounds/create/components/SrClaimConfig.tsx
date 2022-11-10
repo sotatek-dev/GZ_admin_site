@@ -9,6 +9,7 @@ import {
 import dayjs from 'dayjs';
 import { Button } from '@common/components';
 import { Card } from '@common/components';
+import BigNumber from 'bignumber.js';
 
 interface SaleRoundClaimConfigProps {
 	isUpdate: boolean;
@@ -82,7 +83,9 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 		};
 		rows.push(createData(row));
 
-		setTotalMaxClaim(Number(totalMaxClaim) + Number(val.max_claim));
+		setTotalMaxClaim(
+			new BigNumber(totalMaxClaim).plus(val.max_claim).toNumber()
+		);
 
 		onSubmitClaimConfig(rows);
 		setobjectConfig(initDefaultClaim);
@@ -91,12 +94,17 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	};
 
 	const handlerUpdate = (val: rowsTableClaim) => {
+		let _totalMaxClaim = 0;
 		rows.forEach((el) => {
 			if (el.id === val.id) {
 				el.maxClaim = val.maxClaim;
 				el.startTime = val.startTime;
 			}
+			_totalMaxClaim = new BigNumber(_totalMaxClaim)
+				.plus(el.maxClaim)
+				.toNumber();
 		});
+		setTotalMaxClaim(_totalMaxClaim);
 
 		onSubmitClaimConfig(rows);
 		setobjectConfig(initDefaultClaim);
@@ -122,7 +130,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	const isDisableBtnCreate = useMemo((): boolean => {
 		if (totalMaxClaim >= 100) return true;
 		return false;
-	}, [totalMaxClaim, rows]);
+	}, [totalMaxClaim, rows, open]);
 
 	const formatDateTime = (val: number) =>
 		dayjs.unix(val).format(FORMAT_DATETIME_SALEROUND);
