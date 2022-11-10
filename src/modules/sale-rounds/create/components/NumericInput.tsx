@@ -12,9 +12,13 @@ interface NumericInputProps {
 export default function NumericInput(props: NumericInputProps) {
 	const { value, onChange } = props;
 
-	const regex2 = /(?<!(\.\d*|^.{0}))(?=(\d{3})+(?!\d))/g;
-
-	const formatNumber2 = (value: string) => value.replace(regex2, '$1,');
+	const formatThousands = (num: string) => {
+		const values = num.split('.');
+		return (
+			values[0].replace(/.(?=(?:.{3})+$)/g, '$&,') +
+			(values.length == 2 ? '.' + values[1] : '')
+		);
+	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value: inputValue } = e.target;
@@ -27,7 +31,7 @@ export default function NumericInput(props: NumericInputProps) {
 				inputValue.charAt(inputValue.length - 1) === '.' ||
 				inputValue.charAt(inputValue.length - 1) === '0'
 			) {
-				onChange(formatNumber2(temp));
+				onChange(formatThousands(temp));
 				return;
 			}
 			if (temp === '') {
@@ -35,12 +39,12 @@ export default function NumericInput(props: NumericInputProps) {
 				return;
 			}
 
-			onChange(formatNumber2(temp));
+			onChange(formatThousands(temp));
 			return;
 		}
 		if (temp.length < 2) {
 			const newValue = String(temp.match(reg) || '');
-			onChange(formatNumber2(newValue));
+			onChange(formatThousands(newValue));
 		}
 	};
 
@@ -52,7 +56,7 @@ export default function NumericInput(props: NumericInputProps) {
 			valueTemp = value.slice(0, -1);
 		}
 		onChange(
-			formatNumber2(valueTemp.replace(/,/g, '').replace(/0*(\d+)/, '$1'))
+			formatThousands(valueTemp.replace(/,/g, '').replace(/0*(\d+)/, '$1'))
 		);
 	};
 
