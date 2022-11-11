@@ -24,6 +24,7 @@ import { useUpdateBESetting } from './services/mutations/useUpdateBESetting';
 import BigNumber from 'bignumber.js';
 import dayjs, { Dayjs } from 'dayjs';
 import { ContractReceipt } from 'ethers';
+import { useGetLaunchPrice } from '@settings/nft-mint/services/useGetLaunchPrice';
 
 const pricingToken = 'BUSD';
 
@@ -35,6 +36,7 @@ interface Fields {
 	mint_key_start_time: Dayjs;
 	rescue_price: string;
 	treasury_address: string;
+	launch_price: string;
 }
 
 export default function SystemSetting() {
@@ -45,8 +47,10 @@ export default function SystemSetting() {
 		updateRescurPriceDNFTSC,
 		updateMinTokenMintKeySC,
 		updateTreasuryAddressDNFTSC,
+		updateDNFTLaunchPrice,
 		isUpdateDNFTSetting,
 	} = useUpdateDNFTSC();
+	const { launchPrice, isFetchLaunchPrice } = useGetLaunchPrice();
 
 	const {
 		updateTreasuryAddressKeyNFTSC,
@@ -68,6 +72,7 @@ export default function SystemSetting() {
 		mint_days: false,
 		min_token: false,
 		min_dnft: false,
+		launch_price: false,
 	});
 
 	const canSubmitUpdate = Object.values(fieldsChanged).some(
@@ -87,7 +92,7 @@ export default function SystemSetting() {
 	} = useGetSCSetting();
 	const { BESetting, isGetBESetting } = useGetBESetting();
 
-	if (isGetSCSetting || isGetBESetting) {
+	if (isGetSCSetting || isGetBESetting || isFetchLaunchPrice) {
 		return <Loading />;
 	}
 
@@ -100,6 +105,7 @@ export default function SystemSetting() {
 		mint_days: BESetting?.mint_days,
 		min_token: minimumToken?.toString(),
 		min_dnft: minimumDnft?.toString(),
+		launch_price: launchPrice?.toString(),
 	};
 
 	const onFieldsChanged = (changedField: FieldData[]) => {
@@ -150,6 +156,7 @@ export default function SystemSetting() {
 		mint_key_start_time,
 		rescue_price,
 		treasury_address,
+		launch_price,
 	}: Fields) => {
 		const changedFields = Object.entries(fieldsChanged).filter(
 			([, hasChanged]) => hasChanged
@@ -227,6 +234,15 @@ export default function SystemSetting() {
 							)
 						);
 						break;
+
+					case 'launch_price':
+						lstUpdateCall.push(
+							updateDNFTLaunchPrice(
+								new BigNumber(launch_price).times(1e18).toString()
+							).then(() =>
+								setFieldsChanged({ ...fieldsChanged, launch_price: false })
+							)
+						);
 				}
 			});
 		};
@@ -271,6 +287,13 @@ export default function SystemSetting() {
 							<Form.Item
 								label='Cosmic Void Rescue Price'
 								name='rescue_price'
+								rules={[requiredValidate()]}
+							>
+								<NumberInput suffix={pricingToken} />
+							</Form.Item>
+							<Form.Item
+								label='Launch Price'
+								name='launch_price'
 								rules={[requiredValidate()]}
 							>
 								<NumberInput suffix={pricingToken} />

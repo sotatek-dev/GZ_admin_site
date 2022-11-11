@@ -59,29 +59,35 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 			}}
 			key={activePhaseTab}
 		>
-			<Form.Item
-				wrapperCol={{ span: 12 }}
-				label='Price'
-				name='price'
-				rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
-			>
-				<NumericInput addonAfter='BUSD' value={price} onChange={setPrice} />
-			</Form.Item>
-			<Form.Item
-				wrapperCol={{ span: 12 }}
-				label='Price after 24h'
-				name='price_after_24h'
-				tooltip={{
-					title: 'Set this value equal to price if you don’t want to change',
-				}}
-				rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
-			>
-				<NumericInput
-					addonAfter='BUSD'
-					value={priceAfter24h}
-					onChange={setPriceAfter24h}
-				/>
-			</Form.Item>
+			{!isLaunchPhase && (
+				<>
+					<Form.Item
+						wrapperCol={{ span: 12 }}
+						label='Price'
+						name='price'
+						rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
+					>
+						<NumericInput addonAfter='BUSD' value={price} onChange={setPrice} />
+					</Form.Item>
+					<Form.Item
+						wrapperCol={{ span: 12 }}
+						label='Price after 24h'
+						name='price_after_24h'
+						tooltip={{
+							title:
+								'Set this value equal to price if you don’t want to change',
+						}}
+						rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
+					>
+						<NumericInput
+							addonAfter='BUSD'
+							value={priceAfter24h}
+							onChange={setPriceAfter24h}
+						/>
+					</Form.Item>
+				</>
+			)}
+
 			<Form.Item
 				wrapperCol={{ span: 12 }}
 				label='NFT Mint Limit'
