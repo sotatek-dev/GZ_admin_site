@@ -9,6 +9,7 @@ import { useNFTMintPhaseSetting } from './services/useGetSettingNFTMint';
 import { toWei } from '@common/helpers/converts';
 import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 import { removeComanString } from '@common/helpers/formats';
+import { useGetLaunchPrice } from './services/useGetLaunchPrice';
 
 export default function SettingNFTMint() {
 	const isSuperAdmin = useIsSuperAdmin();
@@ -19,6 +20,7 @@ export default function SettingNFTMint() {
 		useUpdateNFTMintSetting();
 
 	const { currentPhaseSetting } = useNFTMintPhaseSetting(activePhaseTab);
+	const { launchPrice } = useGetLaunchPrice();
 
 	const forms = {
 		[MintPhase.WhiteList]: Form.useForm<NFTInfoFormValue>()[0],
@@ -30,7 +32,7 @@ export default function SettingNFTMint() {
 	const isLaunchPhase = activePhaseTab === MintPhase.Launch;
 
 	function handleSaveSetting(values: NFTInfoFormValue) {
-		if (!currentPhaseSetting) return;
+		if (!currentPhaseSetting || !launchPrice) return;
 
 		const { _id } = currentPhaseSetting;
 		const {
@@ -40,6 +42,18 @@ export default function SettingNFTMint() {
 			mint_time,
 			start_mint_time,
 		} = values;
+
+		const launchPhasePrice = {
+			price: launchPrice.toString(),
+			price_after_24h: launchPrice.toString(),
+		};
+
+		const phasePricing = isLaunchPhase
+			? launchPhasePrice
+			: {
+					price: toWei(removeComanString(price)),
+					price_after_24h: toWei(removeComanString(price_after_24h)),
+			  };
 
 		const mintTime = {
 			start_mint_time: dayjs(
@@ -52,8 +66,7 @@ export default function SettingNFTMint() {
 
 		const newSetting = {
 			_id,
-			price: toWei(removeComanString(price)),
-			price_after_24h: toWei(removeComanString(price_after_24h)),
+			...phasePricing,
 			nft_mint_limit: removeComanString(nft_mint_limit),
 			...mintTime,
 		};
