@@ -15,6 +15,7 @@ import { useGetNFTMintUsers } from '@settings/nft-mint/services/useGetNFTMintUse
 import { DEFAULT_PAGINATION } from '@common/constants/pagination';
 import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 import { removeComanString } from '@common/helpers/formats';
+import { useGetLaunchPrice } from '@settings/nft-mint/services/useGetLaunchPrice';
 
 const TAB_LIST = [
 	{
@@ -57,12 +58,15 @@ export default function NFTInfo({
 		page: DEFAULT_PAGINATION.page,
 		phase: activePhaseTab,
 	});
+	const { launchPrice } = useGetLaunchPrice();
 
 	const onTabChange = (key: string) => {
 		setCurrentPhaseTab(key as MintPhase);
 	};
 
 	const handleSetCurrentRound = async () => {
+		if (!launchPrice) return;
+
 		try {
 			const isLaunchPhase = activePhaseTab === MintPhase.Launch;
 			await form.instance.validateFields();
@@ -75,6 +79,18 @@ export default function NFTInfo({
 				start_mint_time,
 			} = form.instance.getFieldsValue();
 
+			const launchPhasePrice = {
+				price: toWei(launchPrice),
+				price_after_24h: toWei(launchPrice),
+			};
+
+			const phasePricing = isLaunchPhase
+				? launchPhasePrice
+				: {
+						price: toWei(removeComanString(price)),
+						price_after_24h: toWei(removeComanString(price_after_24h)),
+				  };
+
 			const mintTime = {
 				start_mint_time: dayjs(
 					isLaunchPhase ? start_mint_time : mint_time[0]
@@ -86,8 +102,7 @@ export default function NFTInfo({
 
 			deploySalePhase({
 				_id: activePhaseTab,
-				price: toWei(removeComanString(price)),
-				price_after_24h: toWei(removeComanString(price_after_24h)),
+				...phasePricing,
 				nft_mint_limit: removeComanString(nft_mint_limit),
 				...mintTime,
 			});

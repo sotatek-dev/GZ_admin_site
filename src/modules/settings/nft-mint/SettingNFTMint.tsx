@@ -44,8 +44,8 @@ export default function SettingNFTMint() {
 		} = values;
 
 		const launchPhasePrice = {
-			price: launchPrice.toString(),
-			price_after_24h: launchPrice.toString(),
+			price: toWei(launchPrice),
+			price_after_24h: toWei(launchPrice),
 		};
 
 		const phasePricing = isLaunchPhase
