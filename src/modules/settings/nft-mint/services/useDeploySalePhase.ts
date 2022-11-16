@@ -4,27 +4,7 @@ import { NftMintPhaseSetting } from '@settings/nft-mint/types';
 import { message } from '@common/components';
 import { MessageValidations } from '@common/constants/messages';
 import { GET_CURRENT_MINT_PHASE } from './useGetCurrentPhase';
-
-export const TX_ERROR_CODE = {
-	REJECTED: 'ACTION_REJECTED',
-};
-
-/**
- * Handle Smart Contract interaction error
- * @param err error object from try-catch or promise block
- * @param callback callback handler with tx error state, (updating Tx state usually)
- * @returns void
- */
-export const handleTxError = (err: unknown) => {
-	const { code } = err as { code: string };
-
-	if (code === TX_ERROR_CODE.REJECTED) {
-		message.error(MessageValidations.MSC_2_10);
-		return;
-	}
-
-	throw err;
-};
+import { handleTxError } from '@common/helpers/error-handle';
 
 export const useDeploySalePhase = () => {
 	const queryClient = useQueryClient();

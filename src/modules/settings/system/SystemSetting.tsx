@@ -25,6 +25,7 @@ import BigNumber from 'bignumber.js';
 import dayjs, { Dayjs } from 'dayjs';
 import { ContractReceipt } from 'ethers';
 import { useGetLaunchPrice } from '@settings/nft-mint/services/useGetLaunchPrice';
+import { handleTxError } from '@common/helpers/error-handle';
 
 const pricingToken = 'BUSD';
 
@@ -247,9 +248,13 @@ export default function SystemSetting() {
 			});
 		};
 
-		updateFns();
-		await Promise.all(lstUpdateCall);
-		message.success(MESSAGES.MSC22);
+		try {
+			updateFns();
+			await Promise.all(lstUpdateCall);
+			message.success(MESSAGES.MSC22);
+		} catch (error) {
+			handleTxError(error);
+		}
 	};
 
 	return (
