@@ -11,7 +11,9 @@ type Props = {
 };
 
 function getLibrary(provider: ExternalProvider | JsonRpcFetchFunc) {
-	return new Web3Provider(provider);
+	const library = new Web3Provider(provider);
+	library.pollingInterval = 3000;
+	return library;
 }
 
 export const Web3ActiveReactProvider: React.FC<Props> = ({ children }) => {
