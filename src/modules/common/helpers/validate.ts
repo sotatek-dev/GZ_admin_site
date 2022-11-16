@@ -2,7 +2,8 @@ import type { Rule } from 'antd/es/form';
 import { MESSAGES } from '@common/constants/messages';
 import { isAddress } from 'ethers/lib.esm/utils';
 
-const EMAIL_REGEX = /^[\w]{1,64}@([\w]{1,253}\.)+(com|org|net)$/;
+const EMAIL_REGEX =
+	/^.{1,64}@([A-Za-z0-9]+([+.-]*[A-Za-z0-9])*){1,253}\.(com|org|net)$/;
 
 export const addressValidator = (_: unknown, value: string) => {
 	if (value && !isAddress(value)) {
