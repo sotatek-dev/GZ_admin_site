@@ -26,6 +26,8 @@ import dayjs, { Dayjs } from 'dayjs';
 import { ContractReceipt } from 'ethers';
 import { useGetLaunchPrice } from '@settings/nft-mint/services/useGetLaunchPrice';
 import { handleTxError } from '@common/helpers/error-handle';
+import { useAuth } from '@common/hooks';
+import { ConnectorKey } from '@web3/connectors';
 
 const pricingToken = 'BUSD';
 
@@ -41,6 +43,7 @@ interface Fields {
 }
 
 export default function SystemSetting() {
+	const { connectorKey } = useAuth();
 	const isSuperAdmin = useIsSuperAdmin();
 	const form = Form.useForm()[0];
 
@@ -163,85 +166,112 @@ export default function SystemSetting() {
 			([, hasChanged]) => hasChanged
 		);
 
-		const lstUpdateCall: Promise<ContractReceipt | null | undefined | void>[] =
-			[];
+		const lstUpdateCall: Array<
+			() => Promise<ContractReceipt | null | undefined | void>
+		> = [];
 		const updateFns = () => {
 			changedFields.forEach(([field]) => {
 				switch (field as keyof Fields) {
 					case 'treasury_address':
 						lstUpdateCall.push(
-							updateTreasuryAddressKeyNFTSC(treasury_address).then(() =>
-								setFieldsChanged({ ...fieldsChanged, treasury_address: false })
-							),
-							updateTreasuryAddressDNFTSC(treasury_address).then(() =>
-								setFieldsChanged({ ...fieldsChanged, treasury_address: false })
-							)
+							() =>
+								updateTreasuryAddressKeyNFTSC(treasury_address).then(() =>
+									setFieldsChanged((prev) => ({
+										...prev,
+										treasury_address: false,
+									}))
+								),
+							() =>
+								updateTreasuryAddressDNFTSC(treasury_address).then(() =>
+									setFieldsChanged((prev) => ({
+										...prev,
+										treasury_address: false,
+									}))
+								)
 						);
 						break;
 
 					case 'key_price':
-						lstUpdateCall.push(
+						lstUpdateCall.push(() =>
 							updatePriceKeyNFTSC(
 								new BigNumber(key_price).times(1e18).toString()
 							).then(() =>
-								setFieldsChanged({ ...fieldsChanged, key_price: false })
+								setFieldsChanged((prev) => ({
+									...prev,
+									key_price: false,
+								}))
 							)
 						);
 						break;
 
 					case 'rescue_price':
-						lstUpdateCall.push(
+						lstUpdateCall.push(() =>
 							updateRescurPriceDNFTSC(
 								new BigNumber(rescue_price).times(1e18).toString()
 							).then(() =>
-								setFieldsChanged({ ...fieldsChanged, rescue_price: false })
+								setFieldsChanged((prev) => ({
+									...prev,
+									rescue_price: false,
+								}))
 							)
 						);
 						break;
 
 					case 'mint_days':
-						lstUpdateCall.push(
+						lstUpdateCall.push(() =>
 							updateMintDaySystemAdmin({ mint_days }).then(() =>
-								setFieldsChanged({ ...fieldsChanged, mint_days: false })
+								setFieldsChanged((prev) => ({
+									...prev,
+									mint_days: false,
+								}))
 							)
 						);
 						break;
 
 					case 'mint_key_start_time':
-						lstUpdateCall.push(
+						lstUpdateCall.push(() =>
 							updateStartBuyKeyTime(mint_key_start_time.unix()).then(() =>
-								setFieldsChanged({
-									...fieldsChanged,
+								setFieldsChanged((prev) => ({
+									...prev,
 									mint_key_start_time: false,
-								})
+								}))
 							)
 						);
 						break;
 
 					case 'min_dnft':
-						lstUpdateCall.push(
+						lstUpdateCall.push(() =>
 							updateMinDNFTRequired(min_dnft).then(() =>
-								setFieldsChanged({ ...fieldsChanged, min_dnft: false })
+								setFieldsChanged((prev) => ({
+									...prev,
+									min_dnft: false,
+								}))
 							)
 						);
 						break;
 
 					case 'min_token':
-						lstUpdateCall.push(
+						lstUpdateCall.push(() =>
 							updateMinTokenMintKeySC(
 								new BigNumber(min_token).times(1e18).toString()
 							).then(() =>
-								setFieldsChanged({ ...fieldsChanged, min_token: false })
+								setFieldsChanged((prev) => ({
+									...prev,
+									min_token: false,
+								}))
 							)
 						);
 						break;
 
 					case 'launch_price':
-						lstUpdateCall.push(
+						lstUpdateCall.push(() =>
 							updateDNFTLaunchPrice(
 								new BigNumber(launch_price).times(1e18).toString()
 							).then(() =>
-								setFieldsChanged({ ...fieldsChanged, launch_price: false })
+								setFieldsChanged((prev) => ({
+									...prev,
+									launch_price: false,
+								}))
 							)
 						);
 				}
@@ -250,7 +280,16 @@ export default function SystemSetting() {
 
 		try {
 			updateFns();
-			await Promise.all(lstUpdateCall);
+
+			// Notes: Metamask mobile - WalletConnect can call update function one by one
+			if (connectorKey === ConnectorKey.walletConnect) {
+				for (const updFn of lstUpdateCall) {
+					await updFn();
+				}
+			} else {
+				await Promise.all(lstUpdateCall);
+			}
+
 			message.success(MESSAGES.MSC22);
 		} catch (error) {
 			handleTxError(error);

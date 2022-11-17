@@ -14,9 +14,9 @@ export function useWalletListener() {
 		const { ethereum } = window;
 
 		if (connector && connector.on && !error) {
-			const updateFn = () => {
+			const updateFn = (...arg: unknown[]) => {
 				// eslint-disable-next-line no-console
-				console.warn('Logout because of web3 react updating');
+				console.warn('Logout because of web3 react updating', arg);
 
 				if (isAuth) {
 					signOut();
