@@ -287,7 +287,7 @@ export default function SystemSetting() {
 					await updFn();
 				}
 			} else {
-				await Promise.all(lstUpdateCall);
+				await Promise.all(lstUpdateCall.map((updFn) => updFn()));
 			}
 
 			message.success(MESSAGES.MSC22);
