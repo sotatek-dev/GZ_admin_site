@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers';
 import { useLocation, useNavigate } from 'react-router';
@@ -17,6 +17,7 @@ import {
 import { useLogin } from '@common/services/mutations';
 import { Admin } from '@admins/common/types';
 import { useGetProfile } from '@common/services/queries/useGetProfile';
+import { CONNECTOR_KEY } from '@web3/constants/storages';
 
 export const authContext = React.createContext<
 	| {
@@ -25,6 +26,7 @@ export const authContext = React.createContext<
 			signIn: (connector: ConnectorKey) => Promise<void>;
 			signOut: VoidFunction;
 			admin: Admin | undefined;
+			connectorKey: ConnectorKey | undefined;
 	  }
 	| undefined
 >(undefined);
@@ -49,6 +51,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		removeStorageJwtToken();
 	}
 
+	const storedWallet =
+		(window.localStorage.getItem(CONNECTOR_KEY) as ConnectorKey) ?? undefined;
+	const [connectorKey, setConnectorKey] = useState<ConnectorKey>(storedWallet);
+
 	async function signIn(connectorKey: ConnectorKey) {
 		try {
 			const connector = connectors[connectorKey];
@@ -63,6 +69,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 				const signature = await trySignMessage(signer, signMessage);
 
 				await login(account, signMessage, signature);
+				setConnectorKey(connectorKey);
 			}
 
 			if (location.state) {
@@ -93,6 +100,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 				signIn,
 				signOut,
 				admin,
+				connectorKey,
 			}}
 		>
 			{children}
