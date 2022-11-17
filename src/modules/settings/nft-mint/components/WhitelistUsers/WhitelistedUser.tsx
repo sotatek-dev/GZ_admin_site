@@ -56,6 +56,8 @@ export default function UserList({ activePhaseTab }: Props) {
 		page,
 		phase: activePhaseTab,
 	});
+	const isEnableUpdateWhitelist =
+		currentPhase != undefined && currentPhase < activePhaseTab;
 
 	const [tempData, setTempData] = useState(data?.list);
 	useEffect(() => {
@@ -130,7 +132,10 @@ export default function UserList({ activePhaseTab }: Props) {
 		}
 	};
 
-	const columns = [
+	const columns: (ColumnTypes[number] & {
+		editable?: boolean;
+		dataIndex: string;
+	})[] = [
 		{
 			title: 'Wallet',
 			dataIndex: 'wallet_address',
@@ -146,11 +151,14 @@ export default function UserList({ activePhaseTab }: Props) {
 			editable: true,
 			width: '40%',
 		},
-		{
+	];
+
+	if (isEnableUpdateWhitelist) {
+		columns.push({
 			title: 'Actions',
 			dataIndex: 'actions',
 			width: '20%',
-			render: (_: unknown, record: DataType) => {
+			render: (_, record: DataType) => {
 				const editable = isEditing(record);
 
 				return (
@@ -186,8 +194,11 @@ export default function UserList({ activePhaseTab }: Props) {
 					</Space>
 				);
 			},
-		},
-	];
+		} as ColumnTypes[number] & {
+			editable?: boolean;
+			dataIndex: string;
+		});
+	}
 
 	const mergedColumns = columns.map((col) => {
 		if (!col.editable) {
@@ -208,9 +219,6 @@ export default function UserList({ activePhaseTab }: Props) {
 		setPage(current);
 	};
 
-	const isEnableAddWhitelist =
-		currentPhase != undefined && currentPhase < activePhaseTab;
-
 	return (
 		<Row className='user-list'>
 			<Col span={24}>
@@ -219,7 +227,7 @@ export default function UserList({ activePhaseTab }: Props) {
 					extra={
 						<UploadCSV
 							key={activePhaseTab}
-							disabled={!isSuperAdmin || !isEnableAddWhitelist}
+							disabled={!isSuperAdmin || !isEnableUpdateWhitelist}
 							onUploadSuccess={(file) =>
 								uploadWhitelistUser({ phase: activePhaseTab, file })
 							}

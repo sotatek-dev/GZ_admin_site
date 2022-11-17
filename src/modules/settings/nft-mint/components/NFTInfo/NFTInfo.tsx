@@ -59,6 +59,7 @@ export default function NFTInfo({
 		phase: activePhaseTab,
 	});
 	const { launchPrice } = useGetLaunchPrice();
+	const isLaunchPhase = activePhaseTab === MintPhase.Launch;
 
 	const onTabChange = (key: string) => {
 		setCurrentPhaseTab(key as MintPhase);
@@ -68,7 +69,6 @@ export default function NFTInfo({
 		if (!launchPrice) return;
 
 		try {
-			const isLaunchPhase = activePhaseTab === MintPhase.Launch;
 			await form.instance.validateFields();
 
 			const {

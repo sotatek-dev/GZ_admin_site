@@ -40,8 +40,8 @@ export default function NFTInfoForm({ form, onFinish, activePhaseTab }: Props) {
 
 	const isDisableForm =
 		!isSuperAdmin ||
-		(currentPhase != undefined && currentPhase >= activePhaseTab);
-
+		currentPhase == undefined ||
+		currentPhase >= activePhaseTab;
 	const isLaunchPhase = activePhaseTab === MintPhase.Launch;
 
 	return (
