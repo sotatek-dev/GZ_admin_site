@@ -10,6 +10,7 @@ import NumericInput from './NumericInput';
 import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { Button } from '@common/components';
+import BigNumber from 'bignumber.js';
 
 interface DialogClaimConfigProps {
 	open: boolean;
@@ -42,7 +43,11 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 
 	const handlerMaxClaimChangeRules = () => ({
 		validator(_: unknown, value: string) {
-			if (value && (Number(value) <= 0 || Number(value) > 100))
+			if (
+				value &&
+				(new BigNumber(value.replace(/,/g, '')).lte(0) ||
+					new BigNumber(value.replace(/,/g, '')).gt(100))
+			)
 				return Promise.reject(
 					new Error('Please enter a valid number between 1 and 100')
 				);
@@ -125,7 +130,7 @@ export default function DialogClaim(props: DialogClaimConfigProps) {
 									disabled={false}
 									className='ipdl-claim-max'
 									suffix=''
-									regex={/^\d{0,10}(\.\d{0,2})?$/}
+									regex={/^\d{0,3}(\.\d{0,2})?$/}
 									value={ipMaxclaim}
 									onChange={setIpMaxClaim}
 								/>
