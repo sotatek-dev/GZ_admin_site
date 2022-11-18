@@ -55,6 +55,25 @@
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "_candidate",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_TokenAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "BuyTokenWithoutFee",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"indexed": false,
 				"internalType": "uint8",
 				"name": "version",
@@ -357,6 +376,22 @@
 	},
 	{
 		"inputs": [
+			{ "internalType": "uint8", "name": "_salePhase", "type": "uint8" },
+			{ "internalType": "address", "name": "_candidate", "type": "address" },
+			{
+				"internalType": "uint256",
+				"name": "_numberOfCandidate",
+				"type": "uint256"
+			},
+			{ "internalType": "bytes", "name": "_signature", "type": "bytes" }
+		],
+		"name": "buyTokenWithoutFee",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
 			{ "internalType": "address", "name": "_newSuperAdmin", "type": "address" }
 		],
 		"name": "changeSuperAdmin",
@@ -531,11 +566,28 @@
 	},
 	{
 		"inputs": [
-			{ "internalType": "address", "name": "_signer", "type": "address" }
+			{ "internalType": "address", "name": "_signer", "type": "address" },
+			{
+				"internalType": "contract IERC20",
+				"name": "_BUSDToken",
+				"type": "address"
+			},
+			{
+				"internalType": "contract IERC20",
+				"name": "_GXZToken",
+				"type": "address"
+			}
 		],
 		"name": "initialize",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+		"name": "nonces",
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
