@@ -3,11 +3,16 @@
 	{ "inputs": [], "name": "CANNOT_BUY", "type": "error" },
 	{ "inputs": [], "name": "INSUFFICIENT_BNB", "type": "error" },
 	{ "inputs": [], "name": "INSUFFICIENT_BUSD", "type": "error" },
+	{ "inputs": [], "name": "INVALID_BUY_TIME", "type": "error" },
+	{ "inputs": [], "name": "INVALID_KEY_PRICE", "type": "error" },
+	{ "inputs": [], "name": "INVALID_PRICE_FROM_PRICE_FEED", "type": "error" },
+	{ "inputs": [], "name": "INVALID_ROYALTY_FEE_RATE", "type": "error" },
 	{ "inputs": [], "name": "INVALID_SIGNATURE", "type": "error" },
 	{ "inputs": [], "name": "KEY_PRICE_NOT_SET", "type": "error" },
 	{ "inputs": [], "name": "NOT_YET_OPEN_FOR_SALE", "type": "error" },
 	{ "inputs": [], "name": "TREASURY_ADDRESS_NOT_SET", "type": "error" },
 	{ "inputs": [], "name": "WRONG_CANDIDATE", "type": "error" },
+	{ "inputs": [], "name": "ZERO_ADDRESS", "type": "error" },
 	{
 		"anonymous": false,
 		"inputs": [
@@ -393,24 +398,6 @@
 	},
 	{
 		"inputs": [
-			{ "internalType": "uint256", "name": "_BNBAmount", "type": "uint256" }
-		],
-		"name": "convertBNBToBUSD",
-		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{ "internalType": "uint256", "name": "_BUSDAmount", "type": "uint256" }
-		],
-		"name": "convertBUSDToBNB",
-		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
 			{ "internalType": "address", "name": "_address", "type": "address" }
 		],
 		"name": "getAllTokenIdsOfAddress",
@@ -485,6 +472,13 @@
 		"type": "function"
 	},
 	{
+		"inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+		"name": "nonces",
+		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "owner",
 		"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
@@ -511,6 +505,13 @@
 		"inputs": [],
 		"name": "paused",
 		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "priceFeed",
+		"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
 		"stateMutability": "view",
 		"type": "function"
 	},
