@@ -8,6 +8,7 @@ export const MESSAGES = {
 	MC6: 'Invalid First name',
 	MC7: 'Invalid Last name',
 	MC8: 'Please select a valid time, Start/End Mint Time must after current time',
+	MC9: 'Start Mint Key Time must after current time',
 	MSC122: 'Wallet address existed',
 	MSC14: 'Please enter less than 50 characters',
 	MSC22: 'Updated successfully',
