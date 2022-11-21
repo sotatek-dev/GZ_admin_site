@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Input } from '@common/components';
 
 interface NumberInputProps {
@@ -48,7 +48,7 @@ const NumberInput = ({
 	);
 };
 
-export default NumberInput;
+export default React.memo(NumberInput);
 
 const DECIMAL_PLACES_REGEX = /^$|^\d{1,10}(\.\d{0,4})?$/;
 

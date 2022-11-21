@@ -347,7 +347,10 @@ export default function SystemSetting() {
 									<Form.Item
 										label='Start Mint Key Time'
 										name='mint_key_start_time'
-										rules={[requiredValidate()]}
+										rules={[
+											requiredValidate(),
+											{ validator: timeFromNowValidator },
+										]}
 									>
 										<DatePicker
 											placeholder='Select time'
@@ -414,6 +417,13 @@ const numberOnlyValidator = (_: unknown, value: string) => {
 	const NUMBER_ONLY_REGEX = /^[0-9]*$/;
 	if (value && !NUMBER_ONLY_REGEX.test(value)) {
 		return Promise.reject(new Error(MESSAGES.MSC111));
+	}
+	return Promise.resolve();
+};
+
+const timeFromNowValidator = (_: unknown, timeValidate: number) => {
+	if (dayjs(timeValidate).isBefore(dayjs())) {
+		return Promise.reject(MESSAGES.MC9);
 	}
 	return Promise.resolve();
 };
