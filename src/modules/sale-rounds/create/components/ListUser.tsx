@@ -81,7 +81,7 @@ export default function SaleRoundListUser(props: {
 			setCheckboxEvryCanJoin(false);
 			return true;
 		}
-		if (new BigNumber(exchangeRate).eq(0)) {
+		if (!exchangeRate || new BigNumber(exchangeRate).eq(0)) {
 			isEveryCanJoin(false);
 			setCheckboxEvryCanJoin(false);
 			return true;
