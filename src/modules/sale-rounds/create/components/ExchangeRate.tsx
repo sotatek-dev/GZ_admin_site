@@ -3,7 +3,7 @@ import arrowLeft from 'src/assets/icons/arrow-left-icon.svg';
 import { MessageValidations } from '@common/constants/messages';
 import { Card, Form, Input } from '@common/components';
 // import { removeComanString } from './services/helper';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd/es/form/Form';
 import NumericInputGet from './NumericInput';
 // import BigNumber from 'bignumber.js';
@@ -12,6 +12,7 @@ interface ExchangeRatePropsForm {
 	form: FormInstance;
 	ex_rate_get: string | undefined;
 	isUpdate: boolean;
+	setExchangeRate: (val: string) => void;
 }
 
 // const handlerYouGetChange = () => ({
@@ -25,9 +26,13 @@ interface ExchangeRatePropsForm {
 // });
 
 export default function SaleRoundExchangeRate(props: ExchangeRatePropsForm) {
-	const { form, ex_rate_get, isUpdate } = props;
+	const { form, ex_rate_get, isUpdate, setExchangeRate } = props;
 
 	const [getRates, setGetRates] = useState<string>('');
+
+	useEffect(() => {
+		setExchangeRate(getRates);
+	}, [getRates]);
 
 	return (
 		<Card title='Exchange Rates'>

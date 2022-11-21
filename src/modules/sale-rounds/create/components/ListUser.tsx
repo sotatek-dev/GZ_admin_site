@@ -1,7 +1,7 @@
 import './scss/ListUser.style.scss';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UploadProps } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Checkbox, Upload, Popconfirm, Pagination } from 'antd';
 import { message } from '@common/components';
 import { getCookieStorage } from '@common/helpers/storage';
@@ -29,6 +29,7 @@ import {
 	requiredValidate,
 } from '@common/helpers/validate';
 import { useQueryClient } from 'react-query';
+import BigNumber from 'bignumber.js';
 
 interface DataType {
 	key: string;
@@ -48,9 +49,16 @@ export default function SaleRoundListUser(props: {
 	isUpdated: boolean | undefined;
 	idSaleRound: string | undefined;
 	isStateCanJoin: boolean;
+	exchangeRate: string;
 }) {
 	const [form] = Form.useForm<DataType>();
-	const { isEveryCanJoin, isUpdated, idSaleRound, isStateCanJoin } = props;
+	const {
+		isEveryCanJoin,
+		isUpdated,
+		idSaleRound,
+		isStateCanJoin,
+		exchangeRate,
+	} = props;
 	const [editingKey, setEditingKey] = useState<string | number>('');
 	const [checkboxEveryCanJoin, setCheckboxEvryCanJoin] = useState<boolean>(
 		!isStateCanJoin
@@ -66,6 +74,20 @@ export default function SaleRoundListUser(props: {
 	const isEditing = (record: DataType) => record.key === editingKey;
 
 	const { data, isLoading } = useSrWhiteListGet(payloadPaging, idSaleRound);
+
+	const isDisableCheckboxEvJoin = useMemo(() => {
+		if (_rowsTable.length > 0) {
+			isEveryCanJoin(false);
+			setCheckboxEvryCanJoin(false);
+			return true;
+		}
+		if (new BigNumber(exchangeRate).eq(0)) {
+			isEveryCanJoin(false);
+			setCheckboxEvryCanJoin(false);
+			return true;
+		}
+		return false;
+	}, [_rowsTable, exchangeRate]);
 
 	useEffect(() => {
 		if (!data) return;
@@ -265,8 +287,8 @@ export default function SaleRoundListUser(props: {
 			extra={
 				<div className='d-flex justify-content-center align-items-center'>
 					<Checkbox
-						key={`isStateCanJoin-${checkboxEveryCanJoin}`}
-						disabled={isUpdated}
+						key={`isStateCanJoin-${checkboxEveryCanJoin}-${exchangeRate}`}
+						disabled={isUpdated || isDisableCheckboxEvJoin}
 						checked={checkboxEveryCanJoin}
 						onChange={handlerCheckboxChange}
 						className='sr-checkbox-user'
