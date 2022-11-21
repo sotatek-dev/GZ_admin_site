@@ -8,7 +8,6 @@ import localeData from 'dayjs/plugin/localeData';
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 
-
 module.exports = function override(config) {
 	const fallback = config.resolve.fallback || {};
 	Object.assign(fallback, {
