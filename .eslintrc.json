@@ -4,11 +4,7 @@
 		"node": true,
 		"es2021": true
 	},
-	"extends": [
-		"eslint:recommended",
-		"plugin:@typescript-eslint/recommended",
-		"plugin:react/recommended"
-	],
+	"extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
 	"overrides": [
 		{
 			"files": "*.{css, scss}"
@@ -19,13 +15,7 @@
 		"ecmaVersion": "latest",
 		"sourceType": "module"
 	},
-	"plugins": [
-		"react",
-		"react-hooks",
-		"jsx-a11y",
-		"@typescript-eslint",
-		"prettier"
-	],
+	"plugins": ["react-hooks", "jsx-a11y", "@typescript-eslint", "prettier"],
 	"rules": {
 		"no-console": "warn",
 		"no-use-before-define": "off",

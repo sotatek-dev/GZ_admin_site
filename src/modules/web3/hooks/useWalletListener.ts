@@ -1,5 +1,5 @@
+import { useEffect, useRef } from 'react';
 import { useAuth } from '@common/hooks';
-import { useEffect } from 'react';
 import { useActiveWeb3React } from './useActiveWeb3React';
 
 /**
@@ -8,17 +8,21 @@ import { useActiveWeb3React } from './useActiveWeb3React';
  */
 export function useWalletListener() {
 	const { error, activate, connector } = useActiveWeb3React();
-	const { isAuth, signOut } = useAuth();
+	const { isAuth, signOut, admin } = useAuth();
+
+	const prevAccount = useRef<string | undefined>();
 
 	useEffect(() => {
-		const { ethereum } = window;
+		// Wallet connect emit account changed event at the first time user open Metamask mobile app
+		// Compare account address before and after event was emitted
+		if (connector && connector.on && !error && isAuth) {
+			prevAccount.current = admin?.wallet_address;
 
-		if (connector && connector.on && !error) {
-			const updateFn = (...arg: unknown[]) => {
-				// eslint-disable-next-line no-console
-				console.warn('Logout because of web3 react updating', arg);
-
-				if (isAuth) {
+			const updateFn = (...arg: [{ chainId?: string; account?: string }]) => {
+				if (
+					arg[0].account == undefined ||
+					prevAccount.current !== arg[0].account
+				) {
 					signOut();
 				}
 			};
@@ -26,7 +30,7 @@ export function useWalletListener() {
 			connector.on('Web3ReactUpdate', updateFn);
 
 			return () => {
-				if (ethereum.removeListener) {
+				if (connector.removeListener) {
 					connector.removeListener('Web3ReactUpdate', updateFn);
 				}
 			};
