@@ -37,6 +37,7 @@ import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 export default function SaleRoundList() {
 	const isSuperAdmin = useIsSuperAdmin();
 	const tokenContract = usePresalePoolContract();
+	const [exchangeRate, setExchangeRate] = useState<string>('0');
 	// hidden to test
 	// const { data: endBuyTimePrevious, isLoading } = useGetEndBuyTimePrevious();
 	const { createSaleRound } = useCreateSaleRound();
@@ -400,6 +401,7 @@ export default function SaleRoundList() {
 									<ExchangeRate
 										isUpdate={isUpdateSaleRound}
 										ex_rate_get={data?.exchange_rate}
+										setExchangeRate={setExchangeRate}
 										form={formsSaleRound[SaleRoundCreateForm.SR_EXCHANGE_RATE]}
 									/>
 								</div>
@@ -428,6 +430,7 @@ export default function SaleRoundList() {
 									idSaleRound={idSaleRoundUpdate || _idSaleRoundAfterCreate}
 									isStateCanJoin={data?.have_list_user}
 									isUpdated={isUpdateSaleRound}
+									exchangeRate={exchangeRate}
 									isEveryCanJoin={setEveryCanJoin}
 								/>
 							</Col>
