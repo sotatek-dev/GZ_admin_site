@@ -21,8 +21,8 @@ phases:
         on-failure: ABORT
         commands:
             - echo "Get env from SSM ..."
-            - aws ssm get-parameter --with-decryption --name ${ENV_SSM_KEY} --region ${AWS_REGION}| jq '.Parameter.Value'| sed 's/^"\(.*\)/\1/' |sed 's/.$//' | sed 's/\\n/\n/g' > .env.production
-            - cat .env.production
+            - aws ssm get-parameter --with-decryption --name ${ENV_SSM_KEY} --region ${AWS_REGION}| jq '.Parameter.Value'| sed 's/^"\(.*\)/\1/' |sed 's/.$//' | sed 's/\\n/\n/g' > .env
+            - cat .env
             - echo 'Start build phase'
             - yarn && yarn build
     post_build:
