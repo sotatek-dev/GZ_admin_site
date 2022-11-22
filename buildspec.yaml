@@ -1,0 +1,38 @@
+version: 0.2
+
+
+env:
+  shell: bash
+  
+phases:
+    install:
+        runtime-versions:
+            nodejs: 16
+    pre_build:
+        on-failure: ABORT
+        commands:
+            - echo 'Start pre build phase'
+            - echo "you need to specific ENV_SSM_KEY, FE_BUCKET, CLOUDFRONT_DISTRIBUTION_ID"
+            - export GIT_COMMIT_ID=${CODEBUILD_RESOLVED_SOURCE_VERSION}
+            - echo $GIT_COMMIT_ID
+            - echo ${ENV_SSM_KEY}
+            - echo ${FE_BUCKET}
+    build:
+        on-failure: ABORT
+        commands:
+            - echo "Get env from SSM ..."
+            - aws ssm get-parameter --with-decryption --name ${ENV_SSM_KEY} --region ${AWS_REGION}| jq '.Parameter.Value'| sed 's/^"\(.*\)/\1/' |sed 's/.$//' | sed 's/\\n/\n/g' > .env.production
+            - cat .env.production
+            - echo 'Start build phase'
+            - yarn && yarn build
+    post_build:
+        on-failure: ABORT
+        commands:
+            - echo 'Syncing file to S3 ..'
+            - aws s3 sync ./build s3://${FE_BUCKET} --delete --exact-timestamps
+            - wait $!
+            - echo 'Invalidate the CloudFront cache'
+            - aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
+cache:
+    paths:
+        - node_modules/**/*
