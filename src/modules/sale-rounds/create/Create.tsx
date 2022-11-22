@@ -37,7 +37,6 @@ import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
 export default function SaleRoundList() {
 	const isSuperAdmin = useIsSuperAdmin();
 	const tokenContract = usePresalePoolContract();
-	const [exchangeRate, setExchangeRate] = useState<string>('0');
 	// hidden to test
 	// const { data: endBuyTimePrevious, isLoading } = useGetEndBuyTimePrevious();
 	const { createSaleRound } = useCreateSaleRound();
@@ -56,6 +55,7 @@ export default function SaleRoundList() {
 	const idSaleRoundUpdate = id as string;
 
 	const { data, isLoading } = useSaleRoundGetDetail(id);
+	const [exchangeRate, setExchangeRate] = useState<string | undefined>();
 
 	const isUpdateSaleRound = useMemo(() => {
 		if (data && data.status === 'deployed') return true;
@@ -430,7 +430,13 @@ export default function SaleRoundList() {
 									idSaleRound={idSaleRoundUpdate || _idSaleRoundAfterCreate}
 									isStateCanJoin={data?.have_list_user}
 									isUpdated={isUpdateSaleRound}
-									exchangeRate={exchangeRate}
+									exchangeRate={
+										idSaleRoundUpdate && exchangeRate != ''
+											? exchangeRate
+											: !idSaleRoundUpdate && exchangeRate
+											? exchangeRate
+											: data?.exchange_rate
+									}
 									isEveryCanJoin={setEveryCanJoin}
 								/>
 							</Col>

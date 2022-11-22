@@ -76,7 +76,7 @@ export default function SaleRoundListUser(props: {
 	const { data, isLoading } = useSrWhiteListGet(payloadPaging, idSaleRound);
 
 	const isDisableCheckboxEvJoin = useMemo(() => {
-		if (_rowsTable.length > 0) {
+		if (_rowsTable.length > 0 && idSaleRound) {
 			isEveryCanJoin(false);
 			setCheckboxEvryCanJoin(false);
 			return true;
@@ -86,6 +86,8 @@ export default function SaleRoundListUser(props: {
 			setCheckboxEvryCanJoin(false);
 			return true;
 		}
+		isEveryCanJoin(true);
+		setCheckboxEvryCanJoin(true);
 		return false;
 	}, [_rowsTable, exchangeRate]);
 
