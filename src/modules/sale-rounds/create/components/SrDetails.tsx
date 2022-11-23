@@ -6,7 +6,7 @@ import { MessageValidations } from '@common/constants/messages';
 import { SrTokenInforForm, SrTokenDetailForm } from './types';
 import { addressValidator } from '@common/helpers/validate';
 import { Card, Form, Input } from '@common/components';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { removeComanString } from './services/helper';
 import NumericInput from './NumericInput';
 import BigNumber from 'bignumber.js';
@@ -20,10 +20,12 @@ interface SrDetailProps {
 
 export default function SaleRoundBoxDetails(props: SrDetailProps) {
 	const { tokenInfo, form, details, isUpdate } = props;
-	const [buyLimit, setBuyLimit] = useState<string>('');
+	const buyLimit = useRef<string>('');
 	const [totalSoldCoin, setTotalSoldCoin] = useState<string>('');
 	const [checkedBuyLimit, setCheckedBuyLimit] = useState(false);
 	const [disabledBuyLimit, setDisabledBuyLimit] = useState(false);
+
+	const setBuyLimit = (val: string) => (buyLimit.current = val);
 
 	const handlerCheckboxChange = (e: CheckboxChangeEvent) => {
 		setCheckedBuyLimit(e.target.checked);
@@ -73,6 +75,8 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 			form.setFieldValue('buyLimit', '');
 		} else {
 			setCheckedBuyLimit(false);
+			setDisabledBuyLimit(false);
+			form.setFieldValue('buyLimit', details.buy_limit);
 			if (isUpdate) setDisabledBuyLimit(true);
 		}
 	}, [tokenInfo, details]);
@@ -119,11 +123,11 @@ export default function SaleRoundBoxDetails(props: SrDetailProps) {
 						]}
 					>
 						<NumericInput
-							key='buyLimit'
+							key={`buyLimit`}
 							disabled={disabledBuyLimit || isUpdate}
 							className=''
 							suffix=''
-							value={buyLimit}
+							value={buyLimit.current}
 							onChange={setBuyLimit}
 						/>
 					</Form.Item>
