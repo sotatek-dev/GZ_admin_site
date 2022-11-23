@@ -54,7 +54,7 @@ export default function SaleRoundList() {
 	const { id } = useParams<{ id: string }>();
 	const idSaleRoundUpdate = id as string;
 
-	const { data, isLoading } = useSaleRoundGetDetail(id);
+	const { data, isLoading, refetch } = useSaleRoundGetDetail(id);
 	const [exchangeRate, setExchangeRate] = useState<string | undefined>();
 
 	const isUpdateSaleRound = useMemo(() => {
@@ -110,6 +110,7 @@ export default function SaleRoundList() {
 			if (response) {
 				_idSaleRound = response.sale_round;
 				isValidateBtnDeployClick = true;
+				await refetch();
 				return;
 			}
 			isValidateBtnDeployClick = false;
