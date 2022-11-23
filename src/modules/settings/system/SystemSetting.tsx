@@ -349,7 +349,11 @@ export default function SystemSetting() {
 										name='mint_key_start_time'
 										rules={[
 											requiredValidate(),
-											{ validator: timeFromNowValidator },
+											{
+												validator: fieldsChanged.mint_key_start_time
+													? timeFromNowValidator
+													: () => Promise.resolve(true),
+											},
 										]}
 									>
 										<DatePicker
