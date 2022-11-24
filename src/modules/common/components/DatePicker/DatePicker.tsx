@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import dayjsGenerateConfig from 'rc-picker/lib/generate/dayjs';
 import generatePicker from 'antd/es/date-picker/generatePicker';
 
