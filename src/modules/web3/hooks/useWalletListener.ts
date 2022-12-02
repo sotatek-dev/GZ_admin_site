@@ -7,17 +7,19 @@ import { useActiveWeb3React } from './useActiveWeb3React';
  * and out after checking what network they're on
  */
 export function useWalletListener() {
-	const { error, activate, connector } = useActiveWeb3React();
-	const { isAuth, signOut, admin } = useAuth();
+	const { error, activate, connector, account } = useActiveWeb3React();
+	const { isAuth, signOut } = useAuth();
 
-	const prevAccount = useRef<string | undefined>();
+	const prevAccount = useRef<string | null | undefined>();
+
+	useEffect(() => {
+		prevAccount.current = account;
+	}, [account]);
 
 	useEffect(() => {
 		// Wallet connect emit account changed event at the first time user open Metamask mobile app
 		// Compare account address before and after event was emitted
 		if (connector && connector.on && !error && isAuth) {
-			prevAccount.current = admin?.wallet_address;
-
 			const updateFn = (...arg: [{ chainId?: string; account?: string }]) => {
 				if (
 					arg[0].account == undefined ||
