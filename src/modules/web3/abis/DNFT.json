@@ -14,6 +14,7 @@
 		"name": "INVALID_MINIMUM_GALACTIX_TOKEN_REQUIRE",
 		"type": "error"
 	},
+	{ "inputs": [], "name": "INVALID_NUMBER_OF_NFTS", "type": "error" },
 	{ "inputs": [], "name": "INVALID_PRICE", "type": "error" },
 	{ "inputs": [], "name": "INVALID_PRICE_AFTER_24_HOURS", "type": "error" },
 	{ "inputs": [], "name": "INVALID_PRICE_FROM_PRICE_FEED", "type": "error" },
@@ -36,6 +37,25 @@
 	{ "inputs": [], "name": "TREASURY_ADDRESS_NOT_SET", "type": "error" },
 	{ "inputs": [], "name": "WRONG_CANDIDATE", "type": "error" },
 	{ "inputs": [], "name": "ZERO_ADDRESS", "type": "error" },
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "_admin",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256[]",
+				"name": "_tokenIds",
+				"type": "uint256[]"
+			}
+		],
+		"name": "AdminRescued",
+		"type": "event"
+	},
 	{
 		"anonymous": false,
 		"inputs": [
@@ -157,31 +177,6 @@
 			{
 				"indexed": false,
 				"internalType": "address",
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256[]",
-				"name": "_tokenIds",
-				"type": "uint256[]"
-			},
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "_newTokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "CrossSpeciesMerged",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
 				"name": "_DKEYNFTToken",
 				"type": "address"
 			}
@@ -293,6 +288,12 @@
 				"internalType": "uint256",
 				"name": "_newTokenId",
 				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "_sessionId",
+				"type": "string"
 			}
 		],
 		"name": "PermanentMerged",
@@ -447,7 +448,7 @@
 				"type": "uint256[]"
 			},
 			{
-				"indexed": true,
+				"indexed": false,
 				"internalType": "string",
 				"name": "_sessionId",
 				"type": "string"
@@ -476,6 +477,12 @@
 				"internalType": "uint256",
 				"name": "_newTokenId",
 				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "_sessionId",
+				"type": "string"
 			}
 		],
 		"name": "TemporaryMergeExecuted",
@@ -497,7 +504,7 @@
 				"type": "uint256[]"
 			},
 			{
-				"indexed": true,
+				"indexed": false,
 				"internalType": "string",
 				"name": "_sessionId",
 				"type": "string"
@@ -701,7 +708,8 @@
 	},
 	{
 		"inputs": [
-			{ "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" }
+			{ "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" },
+			{ "internalType": "string", "name": "_sessionId", "type": "string" }
 		],
 		"name": "executeTemporaryMerge",
 		"outputs": [],
@@ -910,7 +918,9 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
+		"inputs": [
+			{ "internalType": "uint256", "name": "_numberOfNfts", "type": "uint256" }
+		],
 		"name": "restrictedRescue",
 		"outputs": [],
 		"stateMutability": "nonpayable",
@@ -990,6 +1000,15 @@
 			{ "internalType": "string", "name": "baseURI_", "type": "string" }
 		],
 		"name": "setBaseURI",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{ "internalType": "uint256", "name": "_claimableTime", "type": "uint256" }
+		],
+		"name": "setClaimableTime",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
