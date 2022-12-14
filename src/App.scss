@@ -7,15 +7,11 @@ body {
 }
 
 .ant-form-item-label
-	> label.ant-form-item-required:not(
-		.ant-form-item-required-mark-optional
-	)::before {
+	> label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
 	display: none;
 }
 .ant-form-item-label
-	> label.ant-form-item-required:not(
-		.ant-form-item-required-mark-optional
-	)::after {
+	> label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::after {
 	display: inline-block;
 	margin-right: 0.25rem;
 	color: #ff4d4f;
