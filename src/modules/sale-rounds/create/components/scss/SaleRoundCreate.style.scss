@@ -77,7 +77,9 @@
 		padding-right: 1.25rem;
 
 		.claim-table-body {
-			padding-top: 0.25rem;
+			margin-top: 0.25rem;
+			height: 16.625rem;
+			overflow: auto;
 		}
 
 		.claim-table-row-style {
