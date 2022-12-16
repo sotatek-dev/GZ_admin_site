@@ -36,11 +36,12 @@ export default function ConnectWallet() {
 		try {
 			setIsSignIn(true);
 
-			if (!isMetamaskInstalled) {
+			if (wallet2Connect === ConnectorKey.injected && !isMetamaskInstalled) {
 				setIsSignIn(false);
 				message.error({ content: MESSAGES.MC3, key: MESSAGES.MC3 });
 				return;
 			}
+
 			if (!active) {
 				await connectWallet(wallet2Connect);
 				return;
