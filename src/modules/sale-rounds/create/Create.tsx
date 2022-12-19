@@ -90,9 +90,9 @@ export default function SaleRoundList() {
 
 	const handlerSubmitUpdate = async () => {
 		if (isUpdateSaleRound) {
+			return; // if you use, move it down.
 			await handlerUpdateSaleRound();
 			isValidateBtnDeployClick = true;
-			return;
 		}
 
 		const { statusValidateForm, data } = await handlerFnDebouceCreate();
@@ -463,7 +463,7 @@ export default function SaleRoundList() {
 					<Button
 						className='btn-update-round d-flex align-items-center justify-content-center'
 						loading={isUpdateSaleRoundApi}
-						disabled={!isSuperAdmin}
+						disabled={!isSuperAdmin || isUpdateSaleRound}
 						onClick={handlerSubmitUpdate}
 					>
 						<span>
