@@ -208,14 +208,15 @@ export default function SaleRoundListUser(props: {
 						>
 							Edit
 						</Typography.Link>
-						<Popconfirm
-							className='pl-10'
-							disabled={isUpdated}
-							title='Are you sure to remove this address?'
-							onConfirm={() => handlerRemoveRows(record)}
-						>
-							<a>Remove</a>
-						</Popconfirm>
+						<Typography.Link disabled={isUpdated}>
+							<Popconfirm
+								className={`pl-10`}
+								title='Are you sure to remove this address?'
+								onConfirm={() => handlerRemoveRows(record)}
+							>
+								Remove
+							</Popconfirm>
+						</Typography.Link>
 					</div>
 				);
 			},
