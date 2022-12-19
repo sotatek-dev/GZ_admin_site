@@ -203,13 +203,14 @@ export default function SaleRoundListUser(props: {
 				) : (
 					<div>
 						<Typography.Link
-							disabled={editingKey !== ''}
+							disabled={editingKey !== '' || isUpdated}
 							onClick={() => edit(record)}
 						>
 							Edit
 						</Typography.Link>
 						<Popconfirm
 							className='pl-10'
+							disabled={isUpdated}
 							title='Are you sure to remove this address?'
 							onConfirm={() => handlerRemoveRows(record)}
 						>

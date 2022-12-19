@@ -90,9 +90,9 @@ export default function SaleRoundList() {
 
 	const handlerSubmitUpdate = async () => {
 		if (isUpdateSaleRound) {
+			return; // if you use, move it down.
 			await handlerUpdateSaleRound();
 			isValidateBtnDeployClick = true;
-			return;
 		}
 
 		const { statusValidateForm, data } = await handlerFnDebouceCreate();
