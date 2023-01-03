@@ -116,6 +116,8 @@ export default function NFTInfo({
 
 	const isEnabledDeployButton =
 		activePhaseTab === MintPhase.Launch ||
+		activePhaseTab === MintPhase.Presale1 ||
+		activePhaseTab === MintPhase.Presale2 ||
 		(isFetched && !!whiteListedUsers?.pagination.total);
 
 	return (
