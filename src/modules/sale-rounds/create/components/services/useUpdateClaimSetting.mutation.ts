@@ -5,7 +5,7 @@ import { MessageValidations } from '@common/constants/messages';
 import { DataClaimConfig } from '../types';
 
 export const useUpdateClaimSetting = () => {
-	const presalePoolContract = usePresalePoolContract();
+	const presalePoolContract: any = usePresalePoolContract();
 
 	async function deployFn(payload: {
 		claim_configs: DataClaimConfig[];
