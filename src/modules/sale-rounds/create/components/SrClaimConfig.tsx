@@ -73,7 +73,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	};
 
 	const handleClickEdit = (val: rowsTableClaim) => {
-		if (totalClaimedAmount) return;
+		if (!totalClaimedAmount) return;
 		setobjectConfig({
 			id: val.id,
 			maxClaim: val.maxClaim,
@@ -125,7 +125,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 		setobjectConfig(initDefaultClaim);
 	};
 	const handlerRemove = (val: rowsTableClaim) => {
-		if (totalClaimedAmount) return;
+		if (!totalClaimedAmount) return;
 		setTotalMaxClaim(Number(totalMaxClaim) - Number(val.maxClaim));
 		let newArr = [];
 		newArr = removeItem(rows, val.id);
