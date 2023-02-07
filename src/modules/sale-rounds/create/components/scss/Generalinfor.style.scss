@@ -7,9 +7,16 @@
 }
 
 .sr-checkbox-user-round {
-	padding-left: 36px;
+	padding-left: 20px;
 }
 
 .sr-checkbox-user-date {
 	padding-left: 22px;
+}
+
+.sr-user-date {
+	position: relative;
+	z-index: 2;
+	top: 273px;
+	left: 110px;
 }

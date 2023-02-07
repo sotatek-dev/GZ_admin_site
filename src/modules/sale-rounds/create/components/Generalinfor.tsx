@@ -14,9 +14,11 @@ interface GeneralInforProps {
 
 export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
 	const { srName, form, isUpdate, isShowClaimDate, isSaleRound } = props;
-	const [checkedSaleRound, setCheckedSaleRound] = useState(isSaleRound ?? true);
+	const [checkedSaleRound, setCheckedSaleRound] = useState(
+		isSaleRound ?? false
+	);
 	const [checkedShowClaimDate, setCheckedShowClaimDate] = useState(
-		isShowClaimDate ?? true
+		isShowClaimDate ?? false
 	);
 
 	return (
@@ -37,7 +39,7 @@ export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
 						valuePropName='checked'
 					>
 						<div className='d-flex'>
-							<span className='pr-4'>Show Sale Round</span>
+							<span className='pr-4'>Hide Sale Round</span>
 							<div className='d-flex align-items-center'>
 								<Checkbox
 									checked={checkedSaleRound}
@@ -54,8 +56,7 @@ export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
 						className='sr-checkbox-show'
 						valuePropName='checked'
 					>
-						<div className='d-flex'>
-							<span className='pr-4'>Show Claim Configs</span>
+						<div className='d-flex sr-user-date'>
 							<div className='d-flex align-items-center'>
 								<Checkbox
 									checked={checkedShowClaimDate}
@@ -63,6 +64,7 @@ export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
 									className='sr-checkbox-user-date'
 								/>
 							</div>
+							<span className='pl-10'>Hide Claim Time</span>
 						</div>
 					</Form.Item>
 				</Form>

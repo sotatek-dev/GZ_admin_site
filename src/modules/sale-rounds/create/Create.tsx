@@ -247,8 +247,8 @@ export default function SaleRoundList() {
 				payload = {
 					...payload,
 					name: data.name || '',
-					is_shown: data.is_shown ?? true,
-					is_claim_configs_shown: data.is_claim_configs_shown ?? true,
+					is_shown: data.is_shown ?? false,
+					is_claim_configs_shown: data.is_claim_configs_shown ?? false,
 				};
 			})
 			.catch(() => {
