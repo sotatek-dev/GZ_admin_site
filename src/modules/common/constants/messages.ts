@@ -34,4 +34,5 @@ export const MessageValidations = {
 	MSC_2_12: 'Transaction completed',
 	MSC_3_5:
 		'The system will store the latest Round information. Are you sure you want to deploy?',
+	MSC_3_6: 'Do not have any change',
 };

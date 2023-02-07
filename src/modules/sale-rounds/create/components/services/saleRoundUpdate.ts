@@ -8,6 +8,8 @@ interface SaleRoundFormDeployed {
 	description: string;
 	name: string;
 	_id: string;
+	is_shown: boolean;
+	is_claim_configs_shown: boolean;
 }
 
 const APIs = {
