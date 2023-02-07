@@ -14,6 +14,7 @@ import { convertHexToNumber } from '@common/helpers/converts';
 import { useSalePhaseStatistics } from '../hooks/useGetSalePhase';
 
 interface SaleRoundClaimConfigProps {
+	isUpdate: boolean;
 	data: {
 		max_claim: number;
 		start_time: number;
@@ -37,7 +38,7 @@ const removeItem = (arr: Array<rowsTableClaim>, item: number) =>
 	arr.filter((e) => e.id !== item);
 
 export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
-	const { onSubmitClaimConfig, message, data, saleRound } = props;
+	const { onSubmitClaimConfig, message, data, isUpdate, saleRound } = props;
 	const { data: endBuyTimePrevious } = useSalePhaseStatistics(saleRound);
 	const totalClaimedAmount =
 		endBuyTimePrevious?.totalClaimedAmount &&
@@ -73,7 +74,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	};
 
 	const handleClickEdit = (val: rowsTableClaim) => {
-		if (!totalClaimedAmount) return;
+		if (!totalClaimedAmount && isUpdate) return;
 		setobjectConfig({
 			id: val.id,
 			maxClaim: val.maxClaim,
@@ -125,7 +126,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 		setobjectConfig(initDefaultClaim);
 	};
 	const handlerRemove = (val: rowsTableClaim) => {
-		if (!totalClaimedAmount) return;
+		if (!totalClaimedAmount && isUpdate) return;
 		setTotalMaxClaim(Number(totalMaxClaim) - Number(val.maxClaim));
 		let newArr = [];
 		newArr = removeItem(rows, val.id);
