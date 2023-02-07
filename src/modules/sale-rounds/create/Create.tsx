@@ -8,7 +8,7 @@ import ExchangeRate from './components/ExchangeRate';
 import BoxTime from './components/BoxTime';
 import AboutSaleRaound from './components/AboutSaleRaound';
 import ListUser from './components/ListUser';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { PATHS } from '@common/constants/paths';
 import { useSaleRoundGetDetail } from './components/services/saleRoundGetDetail';
@@ -33,6 +33,8 @@ import {
 } from './components/services/saleRoundUpdate';
 import dayjs from 'dayjs';
 import { useIsSuperAdmin } from '@common/hooks/useIsSuperAdmin';
+import { useUpdateClaimSetting } from './components/services/useUpdateClaimSetting.mutation';
+import { message } from '@common/components';
 
 export default function SaleRoundList() {
 	const isSuperAdmin = useIsSuperAdmin();
@@ -41,9 +43,12 @@ export default function SaleRoundList() {
 	// const { data: endBuyTimePrevious, isLoading } = useGetEndBuyTimePrevious();
 	const { createSaleRound } = useCreateSaleRound();
 	const { deploySaleRound, isDeployState } = useDeploySaleRound();
+	const { updateClaimSetting, isUpdateClaimSetting, statusUpdateClaimSetting } =
+		useUpdateClaimSetting();
 
 	const { updateSaleRound, isUpdateSaleRoundApi } = useUpdateSaleRound();
-	const { updateSaleRoundDeployed } = useUpdateSaleRoundDeployed();
+	const { updateSaleRoundDeployed, isCreateSaleRoundDeployed } =
+		useUpdateSaleRoundDeployed();
 	const [isEvryCanJoin, setEveryCanJoin] = useState<boolean>(true);
 	const [_idSaleRoundAfterCreate, setIdSaleRoundAfterCreate] =
 		useState<string>();
@@ -88,10 +93,74 @@ export default function SaleRoundList() {
 		[_idSaleRound]
 	);
 
-	const handlerSubmitUpdate = async () => {
+	const handlerSubmitUpdate = async (dataSaleRound?: any) => {
 		if (isUpdateSaleRound) {
-			return; // if you use, move it down.
-			await handlerUpdateSaleRound();
+			// handle update case status deloyed
+			// return; // if you use, move it down.
+			let isChangeCheckBoxShow = false;
+			let isChangeClaim = false;
+
+			const claim_configs: DataClaimConfig[] = [];
+			let totalMaxClaim = 0;
+			// if claimConfig is null then auto create default start time after end buy time and max claim is 10000
+			if (claimConfig.length === 0 && dataSaleRound) {
+				claim_configs.push({
+					start_time: Number(dataSaleRound.buy_time.end_time) + 10,
+					max_claim: '10000',
+				});
+				totalMaxClaim = 100;
+			} else {
+				let checkClaimTime = true;
+
+				claimConfig.forEach((item) => {
+					if (item.startTime < Number(dataSaleRound.buy_time.end_time)) {
+						checkClaimTime = false;
+					}
+					claim_configs.push({
+						start_time: item.startTime,
+						max_claim: String(Number(item.maxClaim) * MAXCLAIM_TO_SC),
+					});
+					totalMaxClaim += Number(item.maxClaim);
+				});
+
+				if (!checkClaimTime) {
+					setMessageErrClaimConfig(MessageValidations.MSC_1_27);
+					location.href = '#btn-create-config-claim';
+					return;
+				} else setMessageErrClaimConfig('');
+			}
+
+			if (totalMaxClaim < 100 || totalMaxClaim > 100) {
+				setMessageErrClaimConfig(MessageValidations.MSC_1_16);
+				location.href = '#btn-create-config-claim';
+				return;
+			} else setMessageErrClaimConfig('');
+			if (
+				claimConfig.length === 0 ||
+				(dataSaleRound.claim_configs &&
+					(claimConfig[0].maxClaim ==
+						dataSaleRound.claim_configs[0].max_claim ||
+						claimConfig[0].startTime !=
+							dataSaleRound.claim_configs[0].start_time))
+			) {
+				updateClaimSetting({
+					claim_configs,
+					salePhase: dataSaleRound?.sale_round,
+				});
+			}
+			isChangeClaim = true;
+			isChangeCheckBoxShow = await handlerUpdateSaleRound();
+
+			if (!isChangeCheckBoxShow && !isChangeClaim) {
+				message.warn(MessageValidations.MSC_3_6);
+				return;
+			}
+
+			if (!isChangeClaim) {
+				navigate(PATHS.saleRounds.list());
+				return;
+			}
+			return;
 			isValidateBtnDeployClick = true;
 		}
 
@@ -128,6 +197,12 @@ export default function SaleRoundList() {
 		isValidateBtnDeployClick = false;
 	};
 
+	useEffect(() => {
+		if (statusUpdateClaimSetting === 'success') {
+			navigate(PATHS.saleRounds.list());
+		}
+	}, [statusUpdateClaimSetting]);
+
 	const handlerFnDebouceCreate = async (): Promise<{
 		statusValidateForm: boolean;
 		data: ISaleRoundCreateForm;
@@ -141,6 +216,8 @@ export default function SaleRoundList() {
 		let satusValidate = true;
 		let payload = {
 			name: '',
+			is_shown: false,
+			is_claim_configs_shown: false,
 			details: {
 				network: '',
 				buy_limit: '0',
@@ -170,6 +247,8 @@ export default function SaleRoundList() {
 				payload = {
 					...payload,
 					name: data.name || '',
+					is_shown: data.is_shown ?? true,
+					is_claim_configs_shown: data.is_claim_configs_shown ?? true,
 				};
 			})
 			.catch(() => {
@@ -324,11 +403,22 @@ export default function SaleRoundList() {
 		let description = '';
 		let satusValidate = true;
 		let name = '';
+		let is_shown = true;
+		let is_claim_configs_shown = true;
 		await formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]
 			.validateFields()
-			.then((data: { name: string }) => {
-				name = data.name;
-			})
+			.then(
+				(dataRound: {
+					name: string;
+					is_shown: boolean;
+					is_claim_configs_shown: boolean;
+				}) => {
+					name = dataRound.name;
+					is_shown = dataRound.is_shown ?? data.is_shown;
+					is_claim_configs_shown =
+						dataRound.is_claim_configs_shown ?? data.is_claim_configs_shown;
+				}
+			)
 			.catch(() => {
 				satusValidate = false;
 			});
@@ -341,15 +431,25 @@ export default function SaleRoundList() {
 				satusValidate = false;
 			});
 
-		if (!satusValidate) return;
+		if (!satusValidate) return true;
+		// handle not update case data sale round info not change
+		if (
+			data.description === description &&
+			data.name === name &&
+			data.is_shown === is_shown &&
+			data.is_claim_configs_shown === is_claim_configs_shown
+		) {
+			return false;
+		}
 
 		await updateSaleRoundDeployed({
 			description,
 			name,
+			is_shown,
+			is_claim_configs_shown,
 			_id: idSaleRoundUpdate,
 		});
-
-		navigate(PATHS.saleRounds.list());
+		return true;
 	};
 
 	if (isLoading) {
@@ -377,13 +477,15 @@ export default function SaleRoundList() {
 										isUpdate={isUpdateSaleRound}
 										form={formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]}
 										srName={data?.name}
+										isShowClaimDate={data?.is_claim_configs_shown}
+										isSaleRound={data?.is_shown}
 									/>
 								</div>
 								<div className='w-100 pt-42'>
 									<SrClaimConfig
 										key='SrClaimConfig'
-										isUpdate={isUpdateSaleRound}
 										data={data?.claim_configs || []}
+										saleRound={data?.sale_round || 0}
 										message={messageErrClaimConfig}
 										onSubmitClaimConfig={handlerSubClaimConfig}
 									/>
@@ -462,9 +564,13 @@ export default function SaleRoundList() {
 					</Button>
 					<Button
 						className='btn-update-round d-flex align-items-center justify-content-center'
-						loading={isUpdateSaleRoundApi}
-						disabled={!isSuperAdmin || isUpdateSaleRound}
-						onClick={handlerSubmitUpdate}
+						loading={
+							isUpdateSaleRoundApi ||
+							isCreateSaleRoundDeployed ||
+							isUpdateClaimSetting
+						}
+						disabled={!isSuperAdmin}
+						onClick={() => handlerSubmitUpdate(data)}
 					>
 						<span>
 							{idSaleRoundUpdate ? 'Update the Round' : 'Create the round'}

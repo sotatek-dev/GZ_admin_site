@@ -76,6 +76,31 @@
 			{
 				"indexed": false,
 				"internalType": "uint8",
+				"name": "_salePhase",
+				"type": "uint8"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256[]",
+				"name": "_claimTime",
+				"type": "uint256[]"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256[]",
+				"name": "_claimRate",
+				"type": "uint256[]"
+			}
+		],
+		"name": "ClaimSettingChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint8",
 				"name": "version",
 				"type": "uint8"
 			}
@@ -708,6 +733,19 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_taxReceiverAddress",
+				"type": "address"
+			}
+		],
+		"name": "setTaxReceiverAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "signer",
 		"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
@@ -730,6 +768,13 @@
 	},
 	{
 		"inputs": [],
+		"name": "taxReceiver",
+		"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "totalSalePhase",
 		"outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
 		"stateMutability": "view",
@@ -738,6 +783,21 @@
 	{
 		"inputs": [],
 		"name": "unpause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{ "internalType": "uint8", "name": "_salePhase", "type": "uint8" },
+			{
+				"internalType": "uint256[]",
+				"name": "_claimTime",
+				"type": "uint256[]"
+			},
+			{ "internalType": "uint256[]", "name": "_claimRate", "type": "uint256[]" }
+		],
+		"name": "updateClaimSetting",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
