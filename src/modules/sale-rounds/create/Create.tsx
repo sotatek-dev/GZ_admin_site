@@ -143,12 +143,12 @@ export default function SaleRoundList() {
 						claimConfig[0].startTime !=
 							dataSaleRound.claim_configs[0].start_time))
 			) {
+				isChangeClaim = true;
 				updateClaimSetting({
 					claim_configs,
 					salePhase: dataSaleRound?.sale_round,
 				});
 			}
-			isChangeClaim = true;
 			isChangeCheckBoxShow = await handlerUpdateSaleRound();
 
 			if (!isChangeCheckBoxShow && !isChangeClaim) {
