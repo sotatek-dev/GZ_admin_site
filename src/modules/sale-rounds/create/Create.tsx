@@ -484,6 +484,7 @@ export default function SaleRoundList() {
 								<div className='w-100 pt-42'>
 									<SrClaimConfig
 										key='SrClaimConfig'
+										isUpdate={isUpdateSaleRound}
 										data={data?.claim_configs || []}
 										saleRound={data?.sale_round || 0}
 										message={messageErrClaimConfig}
