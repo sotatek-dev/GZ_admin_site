@@ -25,37 +25,39 @@ export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
 		<Card title='Sale Round general info'>
 			<div className='px-20 pt-31 sr-generalinfor-showip--h'>
 				<Form form={form} layout='vertical' name='generalInforForm'>
-					<Form.Item
-						name='name'
-						label='Sale Round name'
-						initialValue={srName}
-						rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
-					>
-						<Input className='sr-input-name' disabled={isUpdate} name='name' />
-					</Form.Item>
-					<Form.Item
-						name='is_shown'
-						className='sr-checkbox-show'
-						valuePropName='checked'
-					>
-						<div className='d-flex'>
-							<span className='pr-4'>Hide Sale Round</span>
-							<div className='d-flex align-items-center'>
-								<Checkbox
-									checked={checkedSaleRound}
-									value={checkedSaleRound}
-									onChange={(e) => setCheckedSaleRound(e.target.checked)}
-									className='sr-checkbox-user-round'
-								/>
+					<div className='sr-name-sale-round'>
+						<Form.Item
+							name='name'
+							label='Sale Round name'
+							initialValue={srName}
+							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
+						>
+							<Input
+								className='sr-input-name'
+								disabled={isUpdate}
+								name='name'
+							/>
+						</Form.Item>
+						<Form.Item
+							name='is_hidden'
+							className='sr-checkbox-show'
+							valuePropName='checked'
+						>
+							<div className='d-flex'>
+								<div className='d-flex align-items-center'>
+									<Checkbox
+										checked={checkedSaleRound}
+										value={checkedSaleRound}
+										onChange={(e) => setCheckedSaleRound(e.target.checked)}
+										className='sr-checkbox-user-round'
+									/>
+								</div>
+								<span className='pl-10'>Hidden</span>
 							</div>
-						</div>
-					</Form.Item>
+						</Form.Item>
+					</div>
 
-					<Form.Item
-						name='is_claim_configs_shown'
-						className='sr-checkbox-show'
-						valuePropName='checked'
-					>
+					<Form.Item name='is_claim_configs_hidden' valuePropName='checked'>
 						<div className='d-flex sr-user-date'>
 							<div className='d-flex align-items-center'>
 								<Checkbox
