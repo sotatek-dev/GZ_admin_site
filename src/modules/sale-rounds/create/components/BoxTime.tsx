@@ -23,7 +23,7 @@ export default function SaleRoundBoxTime(props: SaleRoundBoxTimeProps) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const handlerStartDateChange = ({ getFieldValue }: any) => ({
 		validator(_: unknown, value: dayjs.Dayjs) {
-			if (value && dayjs() > value)
+			if (value && dayjs() > value && !isUpdate)
 				return Promise.reject(
 					new Error('Start buy time must be after current')
 				);
@@ -46,7 +46,7 @@ export default function SaleRoundBoxTime(props: SaleRoundBoxTimeProps) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const handlerEndDateChange = ({ getFieldValue }: any) => ({
 		validator(_: unknown, value: dayjs.Dayjs) {
-			if (value && dayjs() > value)
+			if (value && dayjs() > value && !isUpdate)
 				return Promise.reject(new Error('End buy time must be after current'));
 			if (
 				!value ||
