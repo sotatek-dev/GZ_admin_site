@@ -104,8 +104,12 @@ export default function SaleRoundList() {
 			let totalMaxClaim = 0;
 			// if claimConfig is null then auto create default start time after end buy time and max claim is 10000
 			if (claimConfig.length === 0 && dataSaleRound) {
+				const timeAuto = new Date();
+				timeAuto.setDate(timeAuto.getDate() + 30);
 				claim_configs.push({
-					start_time: Number(dataSaleRound.buy_time.end_time) + 10,
+					start_time: dataSaleRound.buy_time.end_time
+						? Number(dataSaleRound.buy_time.end_time) + 10
+						: timeAuto.getTime() / 1000,
 					max_claim: '10000',
 				});
 				totalMaxClaim = 100;
@@ -216,8 +220,9 @@ export default function SaleRoundList() {
 		let satusValidate = true;
 		let payload = {
 			name: '',
-			is_shown: false,
-			is_claim_configs_shown: false,
+			is_hidden: false,
+			is_claim_configs_hidden: false,
+			is_buy_time_hidden: false,
 			details: {
 				network: '',
 				buy_limit: '0',
@@ -243,12 +248,15 @@ export default function SaleRoundList() {
 
 		await formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]
 			.validateFields()
-			.then((data: SaleRoundDetailsType) => {
+			.then((dataSaleRound: SaleRoundDetailsType) => {
 				payload = {
 					...payload,
-					name: data.name || '',
-					is_shown: data.is_shown ?? false,
-					is_claim_configs_shown: data.is_claim_configs_shown ?? false,
+					name: dataSaleRound.name || '',
+					is_hidden: dataSaleRound.is_hidden ?? data?.is_hidden ?? false,
+					is_claim_configs_hidden:
+						dataSaleRound.is_claim_configs_hidden ??
+						data?.is_claim_configs_hidden ??
+						false,
 				};
 			})
 			.catch(() => {
@@ -272,15 +280,27 @@ export default function SaleRoundList() {
 
 		await formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
 			.validateFields()
-			.then((data: { end_time: dayjs.Dayjs; start_time: dayjs.Dayjs }) => {
-				payload = {
-					...payload,
-					buy_time: {
-						start_time: data.start_time.unix(),
-						end_time: data.end_time.unix(),
-					},
-				};
-			})
+			.then(
+				(dataBuyTime: {
+					end_time: dayjs.Dayjs;
+					start_time: dayjs.Dayjs;
+					is_buy_time_hidden: boolean;
+				}) => {
+					payload = {
+						...payload,
+						is_buy_time_hidden:
+							dataBuyTime.is_buy_time_hidden ??
+							data?.is_buy_time_hidden ??
+							false,
+						buy_time: {
+							start_time: dataBuyTime?.start_time
+								? dataBuyTime.start_time.unix()
+								: 0,
+							end_time: dataBuyTime?.end_time ? dataBuyTime.end_time.unix() : 0,
+						},
+					};
+				}
+			)
 			.catch(() => {
 				satusValidate = false;
 				formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
@@ -351,8 +371,12 @@ export default function SaleRoundList() {
 
 		// if claimConfig is null then auto create default start time after end buy time and max claim is 10000
 		if (claimConfig.length === 0) {
+			const timeAuto = new Date();
+			timeAuto.setDate(timeAuto.getDate() + 30);
 			claim_configs.push({
-				start_time: payload.buy_time.end_time + 10,
+				start_time: payload.buy_time.end_time
+					? payload.buy_time.end_time + 10
+					: timeAuto.getTime() / 1000,
 				max_claim: '10000',
 			});
 			totalMaxClaim = 100;
@@ -403,25 +427,36 @@ export default function SaleRoundList() {
 		let description = '';
 		let satusValidate = true;
 		let name = '';
-		let is_shown = true;
-		let is_claim_configs_shown = true;
+		let is_hidden = false;
+		let is_claim_configs_hidden = false;
+		let is_buy_time_hidden = false;
 		await formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]
 			.validateFields()
 			.then(
 				(dataRound: {
 					name: string;
-					is_shown: boolean;
-					is_claim_configs_shown: boolean;
+					is_hidden: boolean;
+					is_claim_configs_hidden: boolean;
 				}) => {
 					name = dataRound.name;
-					is_shown = dataRound.is_shown ?? data.is_shown;
-					is_claim_configs_shown =
-						dataRound.is_claim_configs_shown ?? data.is_claim_configs_shown;
+					is_hidden = dataRound.is_hidden ?? data.is_hidden;
+					is_claim_configs_hidden =
+						dataRound.is_claim_configs_hidden ?? data.is_claim_configs_hidden;
 				}
 			)
 			.catch(() => {
 				satusValidate = false;
 			});
+		await formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
+			.validateFields()
+			.then((dataBuyTime: { is_buy_time_hidden: boolean }) => {
+				is_buy_time_hidden =
+					dataBuyTime.is_buy_time_hidden ?? data.is_buy_time_hidden;
+			})
+			.catch(() => {
+				satusValidate = false;
+			});
+
 		await formsSaleRound[SaleRoundCreateForm.SR_ABOUNT]
 			.validateFields()
 			.then((data: { description: string }) => {
@@ -436,8 +471,9 @@ export default function SaleRoundList() {
 		if (
 			data.description === description &&
 			data.name === name &&
-			data.is_shown === is_shown &&
-			data.is_claim_configs_shown === is_claim_configs_shown
+			data.is_hidden === is_hidden &&
+			data.is_claim_configs_hidden === is_claim_configs_hidden &&
+			data.is_buy_time_hidden === is_buy_time_hidden
 		) {
 			return false;
 		}
@@ -445,8 +481,9 @@ export default function SaleRoundList() {
 		await updateSaleRoundDeployed({
 			description,
 			name,
-			is_shown,
-			is_claim_configs_shown,
+			is_hidden,
+			is_claim_configs_hidden,
+			is_buy_time_hidden,
 			_id: idSaleRoundUpdate,
 		});
 		return true;
@@ -477,8 +514,8 @@ export default function SaleRoundList() {
 										isUpdate={isUpdateSaleRound}
 										form={formsSaleRound[SaleRoundCreateForm.GENERAL_INFOR]}
 										srName={data?.name}
-										isShowClaimDate={data?.is_claim_configs_shown}
-										isSaleRound={data?.is_shown}
+										isShowClaimDate={data?.is_claim_configs_hidden}
+										isSaleRound={data?.is_hidden}
 									/>
 								</div>
 								<div className='w-100 pt-42'>
@@ -512,6 +549,7 @@ export default function SaleRoundList() {
 								<div className='pt-19'>
 									<BoxTime
 										isUpdate={isUpdateSaleRound}
+										isBuyTime={data?.is_buy_time_hidden}
 										startTime={data?.buy_time?.start_time}
 										endTime={data?.buy_time?.end_time}
 										form={formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]}

@@ -6,8 +6,9 @@
 	margin-bottom: 10px;
 }
 
-.sr-checkbox-user-round {
-	padding-left: 20px;
+.sr-name-sale-round {
+	display: flex;
+	align-items: center;
 }
 
 .sr-checkbox-user-date {
@@ -17,6 +18,11 @@
 .sr-user-date {
 	position: relative;
 	z-index: 2;
-	top: 273px;
+	top: 329px;
 	left: 110px;
+}
+
+.sr-checkbox-show {
+	margin-left: 30px;
+	margin-top: 16px;
 }

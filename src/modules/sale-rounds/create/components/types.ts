@@ -48,8 +48,8 @@ export interface SaleRoundDetailsType {
 	name?: string;
 	network?: string;
 	total_sold_coin?: string;
-	is_shown?: boolean;
-	is_claim_configs_shown?: boolean;
+	is_hidden?: boolean;
+	is_claim_configs_hidden?: boolean;
 }
 
 export interface SaleRoundExchangeRateType {
