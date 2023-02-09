@@ -29,6 +29,7 @@ export default function SaleRoundGeneralInfor(props: GeneralInforProps) {
 						<Form.Item
 							name='name'
 							label='Sale Round name'
+							className='sr-input-name-sale-round'
 							initialValue={srName}
 							rules={[{ required: true, message: MessageValidations.MSC_1_15 }]}
 						>

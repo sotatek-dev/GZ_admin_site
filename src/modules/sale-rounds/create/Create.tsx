@@ -139,15 +139,21 @@ export default function SaleRoundList() {
 				location.href = '#btn-create-config-claim';
 				return;
 			} else setMessageErrClaimConfig('');
-			if (
-				claimConfig.length === 0 ||
-				(dataSaleRound.claim_configs &&
-					(claimConfig[0].maxClaim ==
-						dataSaleRound.claim_configs[0].max_claim ||
-						claimConfig[0].startTime !=
-							dataSaleRound.claim_configs[0].start_time))
-			) {
+
+			//handle logic check change claim config
+			if (claimConfig.length === 0) {
 				isChangeClaim = true;
+			} else if (dataSaleRound.claim_configs) {
+				for (const element of dataSaleRound.claim_configs) {
+					isChangeClaim = !!claimConfig.find(
+						(item) =>
+							Number(item.maxClaim) * 100 !== element.max_claim &&
+							item.startTime !== element.start_time
+					);
+					if (isChangeClaim) break;
+				}
+			}
+			if (isChangeClaim) {
 				updateClaimSetting({
 					claim_configs,
 					salePhase: dataSaleRound?.sale_round,
@@ -167,8 +173,10 @@ export default function SaleRoundList() {
 			return;
 			isValidateBtnDeployClick = true;
 		}
-
-		const { statusValidateForm, data } = await handlerFnDebouceCreate();
+		// case deploy don't send dataSaleRound
+		const { statusValidateForm, data } = await handlerFnDebouceCreate(
+			dataSaleRound ? false : true
+		);
 		if (!statusValidateForm) {
 			isValidateBtnDeployClick = false;
 			return;
@@ -207,7 +215,9 @@ export default function SaleRoundList() {
 		}
 	}, [statusUpdateClaimSetting]);
 
-	const handlerFnDebouceCreate = async (): Promise<{
+	const handlerFnDebouceCreate = async (
+		isDeploy: boolean
+	): Promise<{
 		statusValidateForm: boolean;
 		data: ISaleRoundCreateForm;
 	}> => {
@@ -286,6 +296,35 @@ export default function SaleRoundList() {
 					start_time: dayjs.Dayjs;
 					is_buy_time_hidden: boolean;
 				}) => {
+					if (isDeploy && !(dataBuyTime?.start_time && dataBuyTime?.end_time)) {
+						if (!dataBuyTime?.start_time) {
+							formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME].setFields([
+								{
+									name: 'start_time',
+									errors: [MessageValidations.MSC_1_15],
+								},
+							]);
+						}
+						if (!dataBuyTime?.end_time) {
+							formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME].setFields([
+								{
+									name: 'end_time',
+									errors: [MessageValidations.MSC_1_15],
+								},
+							]);
+						}
+						satusValidate = false;
+						if (!dataBuyTime?.start_time) {
+							formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
+								.getFieldInstance('start_time')
+								?.focus();
+						} else if (!dataBuyTime?.end_time) {
+							formsSaleRound[SaleRoundCreateForm.SR_BOX_TIME]
+								.getFieldInstance('end_time')
+								?.focus();
+						}
+						return;
+					}
 					payload = {
 						...payload,
 						is_buy_time_hidden:
