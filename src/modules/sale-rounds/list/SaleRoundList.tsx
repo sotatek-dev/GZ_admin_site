@@ -34,14 +34,14 @@ const columns: ColumnsType<SaleRound> = [
 		title: 'Start',
 		dataIndex: ['buy_time', 'start_time'],
 		render(value: SaleRound['buy_time']['start_time']) {
-			return dayjs.unix(value).format('HH:mm YYYY/MM/DD');
+			return value ? dayjs.unix(value).format('HH:mm YYYY/MM/DD') : 'TBA';
 		},
 	},
 	{
 		title: 'Finish',
 		dataIndex: ['buy_time', 'end_time'],
 		render(value: SaleRound['buy_time']['end_time']) {
-			return dayjs.unix(value).format('HH:mm YYYY/MM/DD');
+			return value ? dayjs.unix(value).format('HH:mm YYYY/MM/DD') : 'TBA';
 		},
 	},
 	{
