@@ -145,10 +145,10 @@ export default function SaleRoundList() {
 				isChangeClaim = true;
 			} else if (dataSaleRound.claim_configs) {
 				for (const element of dataSaleRound.claim_configs) {
-					isChangeClaim = !!claimConfig.find(
+					isChangeClaim = !claimConfig.find(
 						(item) =>
-							Number(item.maxClaim) * 100 !== element.max_claim &&
-							item.startTime !== element.start_time
+							Number(item.maxClaim) * 100 === element.max_claim &&
+							item.startTime === element.start_time
 					);
 					if (isChangeClaim) break;
 				}
