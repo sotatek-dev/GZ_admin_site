@@ -147,7 +147,7 @@ export default function SaleRoundList() {
 				for (const element of dataSaleRound.claim_configs) {
 					isChangeClaim = !claimConfig.find(
 						(item) =>
-							Number(item.maxClaim) * 100 === element.max_claim &&
+							Number(item.maxClaim) * 100 === Number(element.max_claim) &&
 							item.startTime === element.start_time
 					);
 					if (isChangeClaim) break;
