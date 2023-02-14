@@ -4,6 +4,10 @@ import { message } from '@common/components';
 export const toWei = (value: BigNumber.Value) =>
 	new BigNumber(value).times(1e18).toString();
 
+export const convertHexToNumber = (data: any) => {
+	return new BigNumber(data?._hex).toNumber();
+};
+
 export const copyWalletAddress = async (text: string) => {
 	try {
 		await navigator.clipboard.writeText(text);

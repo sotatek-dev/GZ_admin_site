@@ -10,6 +10,8 @@ import dayjs from 'dayjs';
 import { Button } from '@common/components';
 import { Card } from '@common/components';
 import BigNumber from 'bignumber.js';
+import { convertHexToNumber } from '@common/helpers/converts';
+import { useSalePhaseStatistics } from '../hooks/useGetSalePhase';
 
 interface SaleRoundClaimConfigProps {
 	isUpdate: boolean;
@@ -18,6 +20,7 @@ interface SaleRoundClaimConfigProps {
 		start_time: number;
 	}[];
 	message: string;
+	saleRound: number;
 	onSubmitClaimConfig: (val: rowsTableClaim[]) => void;
 }
 
@@ -35,7 +38,11 @@ const removeItem = (arr: Array<rowsTableClaim>, item: number) =>
 	arr.filter((e) => e.id !== item);
 
 export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
-	const { onSubmitClaimConfig, message, data, isUpdate } = props;
+	const { onSubmitClaimConfig, message, data, isUpdate, saleRound } = props;
+	const { data: endBuyTimePrevious } = useSalePhaseStatistics(saleRound);
+	const totalClaimedAmount =
+		endBuyTimePrevious?.totalClaimedAmount &&
+		convertHexToNumber(endBuyTimePrevious?.totalClaimedAmount);
 
 	const [open, setOpen] = useState<boolean>(() => false);
 	const [totalMaxClaim, setTotalMaxClaim] = useState<number>(() => 0);
@@ -67,7 +74,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 	};
 
 	const handleClickEdit = (val: rowsTableClaim) => {
-		if (isUpdate) return;
+		if (totalClaimedAmount && isUpdate) return;
 		setobjectConfig({
 			id: val.id,
 			maxClaim: val.maxClaim,
@@ -119,7 +126,7 @@ export default function SaleRoundClaimConfig(props: SaleRoundClaimConfigProps) {
 		setobjectConfig(initDefaultClaim);
 	};
 	const handlerRemove = (val: rowsTableClaim) => {
-		if (isUpdate) return;
+		if (totalClaimedAmount && isUpdate) return;
 		setTotalMaxClaim(Number(totalMaxClaim) - Number(val.maxClaim));
 		let newArr = [];
 		newArr = removeItem(rows, val.id);
