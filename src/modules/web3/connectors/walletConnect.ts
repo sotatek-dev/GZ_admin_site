@@ -1,15 +1,22 @@
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
+import { initializeConnector } from '@web3-react/core';
+import { WalletConnect } from '@web3-react/walletconnect-v2';
 
-const bscChainId = Number(process.env.REACT_APP_BSC_CHAIN_ID);
+import { CHAINS } from '../chains';
+import { BSC_RPC_URL, PROJECT_ID } from '../constants/envs';
 
-const bscRpcUrl = process.env.REACT_APP_BSC_RPC_URL || '';
-const RPC_MAPS: { [chainId: number]: string } = {
-	[bscChainId]: bscRpcUrl,
-};
+const [mainnet] = Object.keys(CHAINS).map(Number);
 
-export const WalletConnect = new WalletConnectConnector({
-	rpc: RPC_MAPS,
-	bridge: 'https://bridge.walletconnect.org',
-	chainId: bscChainId,
-	qrcode: true,
-});
+export const [walletConnect, hooks] = initializeConnector<WalletConnect>(
+	(actions) =>
+		new WalletConnect({
+			actions,
+			options: {
+				projectId: PROJECT_ID,
+				chains: [mainnet],
+				showQrModal: true,
+				rpcMap: {
+					97: BSC_RPC_URL,
+				},
+			},
+		})
+);

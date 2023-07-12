@@ -17,7 +17,7 @@ const { Title } = Typography;
 export default function ConnectWallet() {
 	useConnectedRedirect();
 
-	const { active } = useActiveWeb3React();
+	const { isActive } = useActiveWeb3React();
 	const { connectWallet, disconnectWallet } = useConnectWallet();
 	const { signIn } = useAuth();
 
@@ -36,13 +36,13 @@ export default function ConnectWallet() {
 		try {
 			setIsSignIn(true);
 
-			if (wallet2Connect === ConnectorKey.injected && !isMetamaskInstalled) {
+			if (wallet2Connect === ConnectorKey.metaMask && !isMetamaskInstalled) {
 				setIsSignIn(false);
 				message.error({ content: MESSAGES.MC3, key: MESSAGES.MC3 });
 				return;
 			}
 
-			if (!active) {
+			if (!isActive) {
 				await connectWallet(wallet2Connect);
 				return;
 			}
@@ -53,7 +53,7 @@ export default function ConnectWallet() {
 		}
 	}
 
-	const buttonLabel = active ? 'Sign In' : 'Connect';
+	const buttonLabel = isActive ? 'Sign In' : 'Connect';
 
 	return (
 		<div className='wallet'>
@@ -70,7 +70,7 @@ export default function ConnectWallet() {
 								setWallet2Connect(e.target.value);
 							}}
 						>
-							<WalletOption value={ConnectorKey.injected}>
+							<WalletOption value={ConnectorKey.metaMask}>
 								<img src={MetaMaskIcon} alt='' width={36} height={36} />
 								<div style={{ lineHeight: '1rem' }}>Metamask</div>
 							</WalletOption>
