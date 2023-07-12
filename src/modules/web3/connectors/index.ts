@@ -1,12 +1,17 @@
-import { Injected } from './injected';
-import { WalletConnect } from './walletConnect';
+import { metaMask, hooks as metaMaskHooks } from './metaMask';
+import { walletConnect, hooks as walletConnectHooks } from './walletConnect';
 
 export enum ConnectorKey {
-	injected = 'MetaMask',
+	metaMask = 'MetaMask',
 	walletConnect = 'WalletConnect',
 }
 
 export const connectors = {
-	[ConnectorKey.injected]: Injected,
-	[ConnectorKey.walletConnect]: WalletConnect,
+	[ConnectorKey.metaMask]: metaMask,
+	[ConnectorKey.walletConnect]: walletConnect,
+};
+
+export const hooks = {
+	[ConnectorKey.metaMask]: metaMaskHooks,
+	[ConnectorKey.walletConnect]: walletConnectHooks,
 };

@@ -7,13 +7,13 @@ export const useContract = <T extends BaseContract>(
 	abi: ContractInterface,
 	address: string
 ): T | null => {
-	const { library } = useActiveWeb3React();
+	const { provider } = useActiveWeb3React();
 
 	return useMemo(() => {
 		if (!ethers.utils.isAddress(address)) {
 			return null;
 		}
 
-		return getContract<T>(abi, address, library?.getSigner());
-	}, [abi, address, library]);
+		return getContract<T>(abi, address, provider?.getSigner());
+	}, [abi, address, provider]);
 };
