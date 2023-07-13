@@ -18,7 +18,9 @@ import { useLogin } from '@common/services/mutations';
 import { Admin } from '@admins/common/types';
 import { useGetProfile } from '@common/services/queries/useGetProfile';
 import { CONNECTOR_KEY } from '@web3/constants/storages';
-import { BSC_CHAIN_ID_HEX } from '@web3/constants/envs';
+import { BSC_CHAIN_ID_HEX, BSC_NAME } from '@web3/constants/envs';
+import { WalletConnect } from '@web3-react/walletconnect-v2';
+import { message } from 'antd';
 
 export const authContext = React.createContext<
 	| {
@@ -44,7 +46,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const { isActive, connector, account } = useActiveWeb3React();
 	const { disconnectWallet } = useConnectWallet();
 	const { login } = useLogin();
-
 	const isAuth = hasStorageJwtToken() && isActive;
 	console.log({ isActive }, hasStorageJwtToken());
 
@@ -107,7 +108,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		};
 
 		const onChangeNetwork = (chainId: string | number) => {
-			if (chainId !== BSC_CHAIN_ID_HEX) return signOut();
+			if (chainId !== BSC_CHAIN_ID_HEX) {
+				if (connector instanceof WalletConnect) {
+					message.error({
+						content: `Wrong network! Please switch network to ${BSC_NAME}`,
+						key: chainId,
+					});
+				}
+				signOut();
+			}
 		};
 
 		if (connector?.provider && connector.provider?.on) {
