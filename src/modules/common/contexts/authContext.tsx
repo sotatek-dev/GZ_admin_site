@@ -46,6 +46,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const { login } = useLogin();
 
 	const isAuth = hasStorageJwtToken() && isActive;
+	console.log({ isActive }, hasStorageJwtToken());
+
 	const { data: admin, isLoading: isGetAdminProfile } = useGetProfile(isAuth);
 
 	if (triedEagerConnect && !isActive && hasStorageJwtToken()) {

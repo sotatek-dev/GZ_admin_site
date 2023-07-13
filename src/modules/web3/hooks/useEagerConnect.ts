@@ -17,20 +17,25 @@ export function useEagerConnect() {
 	useEffect(() => {
 		if (!isActive) {
 			if (wallet === ConnectorKey.walletConnect) {
-				walletConnect.connectEagerly().catch((error) => {
-					console.error('Failed to connect eagerly to walletconnect', error);
-				});
+				walletConnect
+					.connectEagerly()
+					.catch((error) => {
+						console.error('Failed to connect eagerly to walletconnect', error);
+					})
+					.finally(() => setTried(true));
 			} else if (wallet === ConnectorKey.metaMask) {
 				metaMask.connectEagerly().catch((error) => {
-					console.error('Failed to connect eagerly to walletconnect', error);
+					console.error('Failed to connect eagerly to metamask', error);
 				});
-			}
+			} else setTried(true);
 			return;
 		}
 
 		// Update `tried` only when isActive was `true`
 		setTried(true);
 	}, [isActive]);
+
+	console.log({ tried, isActive });
 
 	return tried;
 }
