@@ -14,9 +14,9 @@
 		"deploy": "yarn run build-stg && serve -s build -l 10002"
 	},
 	"dependencies": {
-		"@web3-react/core": "6.1.9",
-		"@web3-react/injected-connector": "6.0.7",
-		"@web3-react/walletconnect-connector": "6.2.13",
+		"@web3-react/core": "^8.2.0",
+		"@web3-react/metamask": "^8.2.1",
+		"@web3-react/walletconnect-v2": "^8.3.7",
 		"antd": "4.23.0",
 		"axios": "0.27.2",
 		"bignumber.js": "9.1.0",
@@ -53,7 +53,7 @@
 		"@types/react-dom": "18.0.9",
 		"@typescript-eslint/eslint-plugin": "5.44.0",
 		"@typescript-eslint/parser": "5.44.0",
-		"@web3-react/types": "8.0.20-beta.0",
+		"@web3-react/types": "^8.2.0",
 		"buffer": "6.0.3",
 		"commitlint": "17.3.0",
 		"crypto-browserify": "3.12.0",

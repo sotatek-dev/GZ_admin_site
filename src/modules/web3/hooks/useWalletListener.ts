@@ -7,7 +7,7 @@ import { useActiveWeb3React } from './useActiveWeb3React';
  * and out after checking what network they're on
  */
 export function useWalletListener() {
-	const { error, activate, connector, account } = useActiveWeb3React();
+	const { provider, account } = useActiveWeb3React();
 	const { isAuth, signOut } = useAuth();
 
 	const prevAccount = useRef<string | null | undefined>();
@@ -19,7 +19,7 @@ export function useWalletListener() {
 	useEffect(() => {
 		// Wallet connect emit account changed event at the first time user open Metamask mobile app
 		// Compare account address before and after event was emitted
-		if (connector && connector.on && !error && isAuth) {
+		if (provider && provider.on && isAuth) {
 			const updateFn = (...arg: [{ chainId?: string; account?: string }]) => {
 				if (
 					arg[0].account == undefined ||
@@ -29,13 +29,13 @@ export function useWalletListener() {
 				}
 			};
 
-			connector.on('Web3ReactUpdate', updateFn);
+			provider.on('Web3ReactUpdate', updateFn);
 
 			return () => {
-				if (connector.removeListener) {
-					connector.removeListener('Web3ReactUpdate', updateFn);
+				if (provider.removeListener) {
+					provider.removeListener('Web3ReactUpdate', updateFn);
 				}
 			};
 		}
-	}, [error, activate, isAuth]);
+	}, [provider, isAuth]);
 }
