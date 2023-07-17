@@ -1,21 +1,51 @@
-# Galatix Zone Admin Frontend (Updated)
+# Galatix Zone Admin Frontend
 
-## Available Scripts
+## Development
 
-In the project directory, you can run:
+### Setup environment variables
+```bash
+cp .env.example .env
+```
+Now `.env` file contains env for development environment.
 
-### `yarn start`
+### Install dependencies
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+yarn
+# or
+yarn install
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Run the development server:
 
-### `yarn build`
+```bash
+yarn start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Deployment
+
+### Production optimization build
+ - Update `.env` file for production build
+
+- Run command to build project
+
+```bash
+yarn build
+```
+
+### Deploy into Nodejs environment
+#### PM2
+
+Install `pm2`
+```bash
+yarn add global pm2
+```
+
+Run optimization build (`./build` folder) on `pm2` by running command
+```bash
+pm2 serve ./build 3000 --name "galactixzone-fe-admin" --spa
+pm2 show galactixzone-fe-admin
+```
+Production admin app now is ready on port `3000`
