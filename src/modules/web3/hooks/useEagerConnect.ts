@@ -1,50 +1,41 @@
 import { useEffect, useState } from 'react';
 import { useActiveWeb3React } from './useActiveWeb3React';
-import { ConnectorKey, connectors } from '../connectors';
+import { ConnectorKey } from '../connectors';
 import { CONNECTOR_KEY } from '../constants/storages';
-import { useConnectWallet } from './useConnectWallet';
-import { activateInjectedProvider } from '../helpers/activateInjectedProvider';
+import { metaMask } from '@web3/connectors/metaMask';
+import { walletConnect } from '@web3/connectors/walletConnect';
 
 /**
  * Trying eager connect to connectors at first time.
  * @returns `tried` tried eager connect done or not
  */
 export function useEagerConnect() {
-	const { active } = useActiveWeb3React();
-	const { connectWallet } = useConnectWallet();
+	const { isActive } = useActiveWeb3React();
 	const [tried, setTried] = useState(false);
 	const wallet = window.localStorage.getItem(CONNECTOR_KEY);
 
 	useEffect(() => {
-		if (!active) {
-			// Ensure that `isAuthorize` function below return true if wallet is injected
-			// https://github.com/NoahZinsmeister/web3-react/blob/17882f0e4279a8fa425f79b96a1536bbf292e1db/packages/injected-connector/src/index.ts#L196
-			activateInjectedProvider(wallet as ConnectorKey);
-
-			connectors[ConnectorKey.injected]
-				.isAuthorized()
-				.then((isAuthorized) => {
-					if (wallet === ConnectorKey.walletConnect) {
-						return connectWallet(ConnectorKey.walletConnect);
-					}
-
-					if (
-						isAuthorized &&
-						Object.values(ConnectorKey).includes(wallet as ConnectorKey)
-					) {
-						return connectWallet(wallet as ConnectorKey);
-					}
-				})
-				.finally(() => {
-					setTried(true);
+		if (!isActive) {
+			if (wallet === ConnectorKey.walletConnect) {
+				walletConnect
+					.connectEagerly()
+					.catch((error) => {
+						console.error('Failed to connect eagerly to walletconnect', error);
+					})
+					.finally(() => setTried(true));
+			} else if (wallet === ConnectorKey.metaMask) {
+				metaMask.connectEagerly().catch((error) => {
+					console.error('Failed to connect eagerly to metamask', error);
 				});
-
+			} else setTried(true);
 			return;
 		}
 
-		// Update `tried` only when active was `true`
+		// Update `tried` only when isActive was `true`
 		setTried(true);
-	}, [active]);
+	}, [isActive]);
+
+	console.log({ tried, isActive });
 
 	return tried;
 }

@@ -1,23 +1,23 @@
 import React from 'react';
-import { Web3ReactProvider } from '@web3-react/core';
+import { Web3ReactHooks, Web3ReactProvider } from '@web3-react/core';
+import { MetaMask } from '@web3-react/metamask';
+import { WalletConnect } from '@web3-react/walletconnect-v2';
+import { hooks as metaMaskHooks, metaMask } from '../connectors/metaMask';
 import {
-	ExternalProvider,
-	JsonRpcFetchFunc,
-	Web3Provider,
-} from '@ethersproject/providers';
-
+	hooks as walletConnectHooks,
+	walletConnect,
+} from '../connectors/walletConnect';
 type Props = {
 	children: React.ReactNode;
 };
 
-function getLibrary(provider: ExternalProvider | JsonRpcFetchFunc) {
-	const library = new Web3Provider(provider);
-	library.pollingInterval = 3000;
-	return library;
-}
+const connectors: [MetaMask | WalletConnect, Web3ReactHooks][] = [
+	[metaMask, metaMaskHooks],
+	[walletConnect, walletConnectHooks],
+];
 
 export const Web3ActiveReactProvider: React.FC<Props> = ({ children }) => {
 	return (
-		<Web3ReactProvider getLibrary={getLibrary}>{children}</Web3ReactProvider>
+		<Web3ReactProvider connectors={connectors}>{children}</Web3ReactProvider>
 	);
 };

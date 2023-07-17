@@ -10,6 +10,7 @@ interface Props {
 
 export const PrivateRoute = ({ children }: Props) => {
 	const { isAuthChecking, isAuth } = useAuth();
+	console.log({ isAuthChecking });
 
 	if (isAuthChecking) {
 		return <LoadingPage />;

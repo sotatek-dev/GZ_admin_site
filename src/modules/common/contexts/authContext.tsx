@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers';
 import { useLocation, useNavigate } from 'react-router';
@@ -18,6 +18,9 @@ import { useLogin } from '@common/services/mutations';
 import { Admin } from '@admins/common/types';
 import { useGetProfile } from '@common/services/queries/useGetProfile';
 import { CONNECTOR_KEY } from '@web3/constants/storages';
+import { BSC_CHAIN_ID_HEX, BSC_NAME } from '@web3/constants/envs';
+import { WalletConnect } from '@web3-react/walletconnect-v2';
+import { message } from 'antd';
 
 export const authContext = React.createContext<
 	| {
@@ -40,14 +43,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const triedEagerConnect = useEagerConnect();
-	const { active } = useActiveWeb3React();
+	const { isActive, connector, account } = useActiveWeb3React();
 	const { disconnectWallet } = useConnectWallet();
 	const { login } = useLogin();
+	const isAuth = hasStorageJwtToken() && isActive;
+	console.log({ isActive }, hasStorageJwtToken());
 
-	const isAuth = hasStorageJwtToken() && active;
 	const { data: admin, isLoading: isGetAdminProfile } = useGetProfile(isAuth);
 
-	if (triedEagerConnect && !active && hasStorageJwtToken()) {
+	if (triedEagerConnect && !isActive && hasStorageJwtToken()) {
 		removeStorageJwtToken();
 	}
 
@@ -61,9 +65,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 			// Ignore signing message
 			const isNotSignedIn = !hasStorageJwtToken() || isJwtTokenExpired();
-			if (isNotSignedIn) {
-				const provider = await connector.getProvider();
-				const signer = new Web3Provider(provider).getSigner();
+			if (isNotSignedIn && connector.provider) {
+				const signer = new Web3Provider(connector.provider).getSigner();
 				const account = await signer.getAddress();
 				const signMessage = getSignMessage(account);
 				const signature = await trySignMessage(signer, signMessage);
@@ -91,6 +94,42 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		queryClient.clear();
 		navigate(PATHS.connectWallet());
 	}
+
+	useEffect(() => {
+		if (!connector?.provider && !account) return;
+
+		const onChangeAccount = ([accountConnected]: Array<string>) => {
+			if (
+				!accountConnected ||
+				accountConnected?.toLowerCase() !== account?.toLowerCase()
+			) {
+				disconnectWallet();
+			}
+		};
+
+		const onChangeNetwork = (chainId: string | number) => {
+			if (chainId !== BSC_CHAIN_ID_HEX) {
+				if (connector instanceof WalletConnect) {
+					message.error({
+						content: `Wrong network! Please switch network to ${BSC_NAME}`,
+						key: chainId,
+					});
+				}
+				signOut();
+			}
+		};
+
+		if (connector?.provider && connector.provider?.on) {
+			connector.provider &&
+				connector.provider?.on('accountsChanged', onChangeAccount);
+			connector.provider &&
+				connector.provider?.on('chainChanged', onChangeNetwork);
+		}
+		return () => {
+			connector?.provider?.removeListener('accountsChanged', onChangeAccount); // need func reference to remove correctly
+			connector?.provider?.removeListener('chainChanged', onChangeNetwork); // need func reference to remove correctly
+		};
+	}, [account, connector]);
 
 	return (
 		<authContext.Provider

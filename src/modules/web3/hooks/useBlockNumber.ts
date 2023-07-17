@@ -9,7 +9,7 @@ type Params = {
 
 export const useBlockNumber = ({ onBlock }: Params) => {
 	const queryClient = useQueryClient();
-	const { library: provider, chainId } = useActiveWeb3React();
+	const { provider, chainId } = useActiveWeb3React();
 
 	React.useEffect(() => {
 		if (!provider) {
