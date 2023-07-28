@@ -1,9 +1,109 @@
 [
 	{
-		"inputs": [],
-		"payable": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_admin",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_totalSupply",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_lpTaxRate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_supporterTaxRate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_operationsTaxRate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_lpTaxRecipient",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_supporterTaxRecipient",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_operationsTaxRecipient",
+				"type": "address"
+			},
+			{
+				"internalType": "address[]",
+				"name": "_pauseExemptions",
+				"type": "address[]"
+			},
+			{
+				"internalType": "address[]",
+				"name": "_taxExemptions",
+				"type": "address[]"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "airdropSender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "totalAirdropped",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "totalAirdropRecipients",
+				"type": "uint256"
+			}
+		],
+		"name": "AirDrop",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newAntiSniperContractAddress",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousAntiSniperContractAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "isAntiSniperDisabled",
+				"type": "bool"
+			}
+		],
+		"name": "AntiSniperSettingsUpdated",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -36,6 +136,113 @@
 			{
 				"indexed": true,
 				"internalType": "address",
+				"name": "givenAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "isConsideredLiquidityPool",
+				"type": "bool"
+			}
+		],
+		"name": "LPAddressUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "newTaxRate",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "previousTaxRate",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "referenceDenominator",
+				"type": "uint256"
+			}
+		],
+		"name": "LPTaxRateUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newLPTaxRecipient",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousLPTaxRecipient",
+				"type": "address"
+			}
+		],
+		"name": "LPTaxRecipientUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "newTaxRate",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "previousTaxRate",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "referenceDenominator",
+				"type": "uint256"
+			}
+		],
+		"name": "OperationsTaxRateUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOperationsTaxRecipient",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOperationsTaxRecipient",
+				"type": "address"
+			}
+		],
+		"name": "OperationsTaxRecipientUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
 				"name": "previousOwner",
 				"type": "address"
 			},
@@ -47,6 +254,101 @@
 			}
 		],
 		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "isExempt",
+				"type": "bool"
+			}
+		],
+		"name": "PauseExemptionUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "Paused",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "newTaxRate",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "previousTaxRate",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "referenceDenominator",
+				"type": "uint256"
+			}
+		],
+		"name": "SupporterTaxRateUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newSupporterTaxRecipient",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousSupporterTaxRecipient",
+				"type": "address"
+			}
+		],
+		"name": "SupporterTaxRecipientUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "isExempt",
+				"type": "bool"
+			}
+		],
+		"name": "TaxExemptionUpdated",
 		"type": "event"
 	},
 	{
@@ -75,91 +377,149 @@
 		"type": "event"
 	},
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "_decimals",
-		"outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "_name",
-		"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "_symbol",
-		"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
+		"anonymous": false,
 		"inputs": [
-			{ "internalType": "address", "name": "owner", "type": "address" },
-			{ "internalType": "address", "name": "spender", "type": "address" }
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "Unpaused",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			}
 		],
 		"name": "allowance",
-		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"inputs": [],
+		"name": "antisnipe",
+		"outputs": [
+			{
+				"internalType": "contract IAntisnipe",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "antisnipeDisable",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
-			{ "internalType": "address", "name": "spender", "type": "address" },
-			{ "internalType": "uint256", "name": "amount", "type": "uint256" }
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
 		],
 		"name": "approve",
-		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
-			{ "internalType": "address", "name": "account", "type": "address" }
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
 		],
 		"name": "balanceOf",
-		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
-			{ "internalType": "uint256", "name": "amount", "type": "uint256" }
+			{
+				"internalType": "address[]",
+				"name": "_airdropAddresses",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_airdropAmounts",
+				"type": "uint256[]"
+			}
 		],
-		"name": "burn",
-		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-		"payable": false,
+		"name": "batchAirdrop",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "decimals",
-		"outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
-			{ "internalType": "address", "name": "spender", "type": "address" },
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
 			{
 				"internalType": "uint256",
 				"name": "subtractedValue",
@@ -167,121 +527,577 @@
 			}
 		],
 		"name": "decreaseAllowance",
-		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "getOwner",
-		"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-		"payable": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "getLiquidityAddressAtIndex",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "liquidityAddress",
+				"type": "address"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"inputs": [],
+		"name": "getLiquidityAddresses",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "liquidityAddresses",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getLiquidityAddressesCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "liquidityAddressesCount",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
-			{ "internalType": "address", "name": "spender", "type": "address" },
-			{ "internalType": "uint256", "name": "addedValue", "type": "uint256" }
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "getPauseExemptAddressAtIndex",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "pauseExemptAddress",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getPauseExemptAddresses",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "pauseExemptAddresses",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getPauseExemptAddressesCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "pauseExemptAddressesCount",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_taxRate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "getTaxAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "getTaxExemptAddressAtIndex",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "taxExemptAddress",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getTaxExemptAddresses",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "taxExemptAddresses",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getTaxExemptAddressesCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "taxExemptAddressesCount",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "addedValue",
+				"type": "uint256"
+			}
 		],
 		"name": "increaseAllowance",
-		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{ "internalType": "uint256", "name": "amount", "type": "uint256" }
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
 		],
-		"name": "mint",
-		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"inputs": [],
+		"name": "lpTaxRate",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "lpTaxRecipient",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "name",
-		"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"inputs": [],
+		"name": "operationsTaxRate",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "operationsTaxRecipient",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "owner",
-		"outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"inputs": [],
+		"name": "paused",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "renounceOwnership",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "addr",
+				"type": "address"
+			}
+		],
+		"name": "setAntisnipeAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setAntisnipeDisable",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_newTaxRate",
+				"type": "uint256"
+			}
+		],
+		"name": "setLPTaxRate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newRecipient",
+				"type": "address"
+			}
+		],
+		"name": "setLPTaxRecipient",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_newTaxRate",
+				"type": "uint256"
+			}
+		],
+		"name": "setOperationsTaxRate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newRecipient",
+				"type": "address"
+			}
+		],
+		"name": "setOperationsTaxRecipient",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bool",
+				"name": "_shouldPause",
+				"type": "bool"
+			}
+		],
+		"name": "setPause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_newTaxRate",
+				"type": "uint256"
+			}
+		],
+		"name": "setSupporterTaxRate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newRecipient",
+				"type": "address"
+			}
+		],
+		"name": "setSupporterTaxRecipient",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "supporterTaxRate",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "supporterTaxRecipient",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "symbol",
-		"outputs": [{ "internalType": "string", "name": "", "type": "string" }],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "totalSupply",
-		"outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
-			{ "internalType": "address", "name": "recipient", "type": "address" },
-			{ "internalType": "uint256", "name": "amount", "type": "uint256" }
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
 		],
 		"name": "transfer",
-		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
-			{ "internalType": "address", "name": "sender", "type": "address" },
-			{ "internalType": "address", "name": "recipient", "type": "address" },
-			{ "internalType": "uint256", "name": "amount", "type": "uint256" }
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
 		],
 		"name": "transferFrom",
-		"outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
-			{ "internalType": "address", "name": "newOwner", "type": "address" }
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
 		],
 		"name": "transferOwnership",
 		"outputs": [],
-		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_lpPoolAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "_isLPPool",
+				"type": "bool"
+			}
+		],
+		"name": "updateLiquidityPoolAddresses",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "_shouldExempt",
+				"type": "bool"
+			}
+		],
+		"name": "updatePauseExempt",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "_shouldExempt",
+				"type": "bool"
+			}
+		],
+		"name": "updateTaxExempt",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
